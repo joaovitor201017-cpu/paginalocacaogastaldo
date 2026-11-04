@@ -1,0 +1,45 @@
+---
+interface Props {
+  href: string;
+  variante?: 'primario' | 'secundario' | 'claro' | 'whatsapp';
+  tamanho?: 'm' | 'g';
+  externo?: boolean;
+}
+const { href, variante = 'primario', tamanho = 'm', externo = href.startsWith('http') } = Astro.props;
+---
+
+<a
+  class:list={['botao', `botao--${variante}`, `botao--${tamanho}`]}
+  href={href}
+  {...(externo ? { target: '_blank', rel: 'noopener' } : {})}
+>
+  {variante === 'whatsapp' && (
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>
+  )}
+  <slot />
+</a>
+
+<style>
+  .botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    line-height: 1.2;
+    transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  }
+  .botao--m { padding: 0.7rem 1.35rem; font-size: 0.975rem; }
+  .botao--g { padding: 0.95rem 1.75rem; font-size: 1.05rem; }
+  .botao--primario { background: var(--azul); color: var(--branco); }
+  .botao--primario:hover { background: var(--azul-escuro); }
+  .botao--secundario { border-color: var(--marinho); color: var(--marinho); background: transparent; }
+  .botao--secundario:hover { background: var(--marinho); color: var(--branco); }
+  .botao--claro { background: var(--branco); color: var(--marinho); }
+  .botao--claro:hover { background: var(--azul-ceu); }
+  .botao--whatsapp { background: #1fae54; color: var(--branco); }
+  .botao--whatsapp:hover { background: #178f45; }
+</style>

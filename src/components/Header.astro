@@ -1,0 +1,85 @@
+---
+import Botao from './Botao.astro';
+import { site } from '../data/site';
+import { linkWhatsApp } from '../lib/whatsapp';
+
+const links = [
+  { href: '/#solucoes', rotulo: 'Soluções' },
+  { href: '/#imobiliarias', rotulo: 'Para Imobiliárias' },
+  { href: '/#sobre', rotulo: 'Sobre' },
+  { href: '/#contato', rotulo: 'Contato' },
+];
+---
+
+<header class="topo">
+  <div class="container topo__barra">
+    <a href="/" class="topo__logo" aria-label="Gastaldo Seguros, página inicial">
+      <img src="/brand/logo-gastaldo.svg" alt="Gastaldo Seguros" width="150" height="50" />
+    </a>
+    <button class="topo__menu" type="button" aria-expanded="false" aria-controls="nav-principal">
+      <span class="sr-only">Abrir menu</span>
+      <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+    </button>
+    <nav id="nav-principal" class="topo__nav" aria-label="Principal">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.rotulo}</a></li>)}
+      </ul>
+      <Botao href={linkWhatsApp(site.mensagemWhatsApp, site.whatsapp)}>Falar com um consultor</Botao>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  // Menu mobile: abre/fecha a navegação
+  (() => {
+    const b = document.querySelector('.topo__menu');
+    const n = document.getElementById('nav-principal');
+    if (!b || !n) return;
+    const fechar = () => { b.setAttribute('aria-expanded', 'false'); n.classList.remove('aberto'); };
+    b.addEventListener('click', () => {
+      const abrir = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', String(abrir));
+      n.classList.toggle('aberto', abrir);
+    });
+    n.addEventListener('click', (e) => { if (e.target.closest('a')) fechar(); });
+  })();
+</script>
+
+<style>
+  .topo {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(255 255 255 / 0.96);
+    backdrop-filter: saturate(1.4) blur(8px);
+    border-bottom: 1px solid var(--cinza-linha);
+  }
+  .topo__barra { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 72px; }
+  .topo__logo img { width: 150px; height: auto; }
+  .topo__nav { display: flex; align-items: center; gap: 2rem; }
+  .topo__nav ul { display: flex; gap: 1.75rem; }
+  .topo__nav ul a { color: var(--marinho); text-decoration: none; font-weight: 500; font-size: 0.975rem; }
+  .topo__nav ul a:hover { color: var(--azul); }
+  .topo__menu { display: none; background: none; border: 0; padding: 0.4rem; color: var(--marinho); cursor: pointer; }
+
+  @media (max-width: 960px) {
+    .topo__menu { display: block; }
+    .topo__nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: -1.25rem;
+      right: -1.25rem;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      padding: 0.5rem 1.25rem 1.5rem;
+      background: var(--branco);
+      border-bottom: 1px solid var(--cinza-linha);
+      box-shadow: var(--sombra);
+    }
+    .topo__nav.aberto { display: flex; }
+    .topo__nav ul { flex-direction: column; gap: 0; }
+    .topo__nav ul a { display: block; padding: 0.85rem 0; border-bottom: 1px solid var(--cinza-fundo); }
+  }
+</style>

@@ -1,0 +1,56 @@
+---
+import Pendente from './Pendente.astro';
+import { site } from '../data/site';
+import { solucoes } from '../data/solucoes';
+
+const institucional = [
+  { href: '/#sobre', rotulo: 'Sobre nós' },
+  { href: '/#imobiliarias', rotulo: 'Para Imobiliárias' },
+  { href: '/blog', rotulo: 'Blog' },
+  { href: '/politica-de-privacidade', rotulo: 'Política de Privacidade' },
+];
+---
+
+<footer class="rodape">
+  <div class="container rodape__grade">
+    <div class="rodape__marca">
+      <img src="/brand/logo-gastaldo-branco.svg" alt="Gastaldo Seguros" width="170" height="57" loading="lazy" />
+      <p>Seguros e garantias para alugar no ABC Paulista.</p>
+    </div>
+    <div>
+      <p class="rodape__titulo">Soluções</p>
+      <ul>{solucoes.map((s) => <li><a href={s.saibaMais}>{s.titulo}</a></li>)}</ul>
+    </div>
+    <div>
+      <p class="rodape__titulo">Simuladores</p>
+      <ul>{solucoes.map((s) => <li><a href={s.acao.href}>{s.titulo}</a></li>)}</ul>
+    </div>
+    <div>
+      <p class="rodape__titulo">Institucional</p>
+      <ul>{institucional.map((l) => <li><a href={l.href}>{l.rotulo}</a></li>)}</ul>
+    </div>
+  </div>
+  <div class="container rodape__dados">
+    <p>
+      {site.nome} · CNPJ {site.cnpj ?? <Pendente rotulo="número" />} · SUSEP {site.susep ?? <Pendente rotulo="número" />} ·{' '}
+      {site.endereco ?? <Pendente rotulo="endereço" />} · {site.telefone ?? <Pendente rotulo="telefone" />}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .rodape { background: var(--marinho-profundo); color: rgb(255 255 255 / 0.8); padding: 4rem 0 2rem; font-size: var(--fs-pequeno); }
+  .rodape__grade { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 2.5rem; }
+  .rodape__marca img { width: 170px; height: auto; margin-bottom: 1rem; }
+  .rodape__marca p { max-width: 28ch; }
+  .rodape__titulo { color: var(--branco); font-weight: 600; margin-bottom: 0.9rem; }
+  .rodape li + li { margin-top: 0.5rem; }
+  .rodape a { color: inherit; text-decoration: none; }
+  .rodape a:hover { color: var(--azul-ceu); text-decoration: underline; }
+  .rodape__dados { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgb(255 255 255 / 0.14); font-size: 0.85rem; }
+  .rodape__dados p { margin: 0; }
+  @media (max-width: 860px) {
+    .rodape__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1.25rem; }
+    .rodape__marca { grid-column: 1 / -1; }
+  }
+</style>

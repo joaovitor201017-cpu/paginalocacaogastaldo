@@ -34,6 +34,9 @@ ul { padding: 0; margin: 0; list-style: none; }
 .intro { max-width: 62ch; color: var(--texto-suave); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
+.pular { position: absolute; left: 1rem; top: -100px; z-index: 100; padding: 0.6rem 1rem; background: var(--marinho); color: var(--branco); border-radius: var(--raio-p); }
+.pular:focus { top: 1rem; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }

@@ -1,0 +1,21 @@
+---
+// Marca visualmente um dado que ainda falta (campos [entre colchetes] do PDF)
+interface Props { rotulo: string }
+const { rotulo } = Astro.props;
+---
+
+<span class="pendente" title="Dado pendente: preencher em src/data">[{rotulo}]</span>
+
+<style>
+  .pendente {
+    display: inline-block;
+    padding: 0 0.4em;
+    border: 1.5px dashed #e0a000;
+    background: #fff8e1;
+    color: #7a5600;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85em;
+    letter-spacing: 0;
+  }
+</style>
