@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import FaixaLogos from '../components/home/FaixaLogos.astro';
 
 const title = 'Soluções para Alugar no ABC | Garantias Locatícias – Gastaldo';
 const description =
@@ -7,5 +9,8 @@ const description =
 ---
 
 <BaseLayout title={title} description={description} path="/">
-  <main id="conteudo"></main>
+  <main id="conteudo">
+    <Hero />
+    <FaixaLogos />
+  </main>
 </BaseLayout>

@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import { imobiliarias } from '../../data/imobiliarias';
+---
+
+<div class="faixa" role="region" aria-label="Imobiliárias parceiras">
+  <div class="container faixa__interna">
+    <p class="faixa__frase">Parceira das principais imobiliárias do ABC</p>
+    <ul class="faixa__lista">
+      {imobiliarias.map((i) => (
+        <li title={i.cidade ?? undefined}>
+          {i.logo ? <Image src={i.logo} alt={i.nome} height={40} loading="lazy" /> : <span>{i.nome}</span>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .faixa { border-block: 1px solid var(--cinza-linha); background: var(--branco); }
+  .faixa__interna { display: flex; align-items: center; gap: 2rem; padding-block: 1.4rem; }
+  .faixa__frase { flex: 0 0 auto; margin: 0; max-width: 24ch; font-size: 0.875rem; font-weight: 500; color: var(--texto-suave); line-height: 1.35; }
+  .faixa__lista { display: flex; align-items: center; gap: clamp(1.25rem, 3vw, 2.75rem); overflow-x: auto; scrollbar-width: none; flex: 1; }
+  .faixa__lista::-webkit-scrollbar { display: none; }
+  .faixa__lista li { flex: 0 0 auto; color: #8796a8; font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; white-space: nowrap; filter: grayscale(1); opacity: 0.9; }
+  .faixa__lista :global(img) { height: 40px; width: auto; }
+  @media (max-width: 700px) {
+    .faixa__interna { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .faixa__frase { max-width: none; }
+    .faixa__lista { width: 100%; }
+  }
+</style>
