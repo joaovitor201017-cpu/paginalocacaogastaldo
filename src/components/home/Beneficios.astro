@@ -1,0 +1,130 @@
+---
+import Botao from '../Botao.astro';
+import ImagemReservada from '../ImagemReservada.astro';
+import { beneficios } from '../../data/beneficios';
+import { site } from '../../data/site';
+import { linkWhatsApp } from '../../lib/whatsapp';
+---
+
+<section id="beneficios" class="secao beneficios" aria-labelledby="beneficios-titulo">
+  <div class="container">
+    <h2 id="beneficios-titulo">Alugar no ABC nunca foi tão fácil</h2>
+    <p class="intro">
+      Nossas soluções para alugar foram pensadas para dar agilidade e segurança a quem aluga, a quem é dono e a quem administra o imóvel.
+    </p>
+
+    <div class="abas__lista" role="tablist" aria-label="Benefícios por público">
+      {beneficios.map((g, i) => (
+        <button type="button" role="tab" id={`aba-${g.id}`} aria-controls={`painel-${g.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+          {g.aba}
+        </button>
+      ))}
+    </div>
+
+    {beneficios.map((g, i) => (
+      <div class="painel" role="tabpanel" id={`painel-${g.id}`} aria-labelledby={`aba-${g.id}`} tabindex="0">
+        <div class="painel__texto">
+          <h3>{g.titulo}</h3>
+          <ul>
+            {g.itens.map((it) => (
+              <li>
+                <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+                <span><strong>{it.destaque}</strong> {it.texto}</span>
+              </li>
+            ))}
+          </ul>
+          <Botao
+            href={g.botao.href ?? linkWhatsApp(g.botao.mensagemWhatsApp ?? site.mensagemWhatsApp, site.whatsapp)}
+            variante={g.botao.href ? 'primario' : 'whatsapp'}
+            tamanho="g"
+          >
+            {g.botao.rotulo}
+          </Botao>
+        </div>
+        <ImagemReservada class="painel__foto" descricao={`Foto: ${g.foto}`} proporcao="4/5" raio="escudo" sizes="(min-width: 900px) 40vw, 90vw" />
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  // Abas acessíveis. Sem JS os três painéis aparecem empilhados.
+  (() => {
+    const secao = document.getElementById('beneficios');
+    if (!secao) return;
+    const abas = [...secao.querySelectorAll('[role="tab"]')];
+    const paineis = abas.map((a) => document.getElementById(a.getAttribute('aria-controls')));
+    const ativar = (i, focar) => {
+      abas.forEach((a, j) => {
+        const ativa = i === j;
+        a.setAttribute('aria-selected', String(ativa));
+        a.tabIndex = ativa ? 0 : -1;
+        paineis[j].hidden = !ativa;
+      });
+      if (focar) abas[i].focus();
+    };
+    secao.classList.add('js-abas');
+    ativar(0, false);
+    abas.forEach((a, i) => {
+      a.addEventListener('click', () => ativar(i, false));
+      a.addEventListener('keydown', (e) => {
+        const ult = abas.length - 1;
+        const alvo = { ArrowRight: i === ult ? 0 : i + 1, ArrowLeft: i === 0 ? ult : i - 1, Home: 0, End: ult }[e.key];
+        if (alvo === undefined) return;
+        e.preventDefault();
+        ativar(alvo, true);
+      });
+    });
+  })();
+</script>
+
+<style>
+  .beneficios .intro { margin-bottom: 2.25rem; }
+
+  /* A lista de abas só aparece quando o JS está ativo */
+  .abas__lista { display: none; }
+  .js-abas .abas__lista {
+    display: inline-flex;
+    gap: 0.35rem;
+    padding: 0.35rem;
+    margin-bottom: 2.5rem;
+    background: var(--cinza-fundo);
+    border-radius: 999px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .abas__lista button {
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.975rem;
+    color: var(--marinho);
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.7rem 1.4rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .abas__lista button[aria-selected='true'] { background: var(--marinho); color: var(--branco); }
+  .abas__lista button:not([aria-selected='true']):hover { background: var(--branco); }
+
+  .painel { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .painel[hidden] { display: none; }
+  .painel + .painel { margin-top: var(--respiro); }
+  .js-abas .painel + .painel { margin-top: 0; }
+  .painel:focus-visible { outline-offset: 8px; }
+  .painel ul { display: grid; gap: 0.95rem; margin-bottom: 2rem; }
+  .painel li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 0.85rem; align-items: start; }
+  .painel li svg { color: var(--azul); margin-top: 0.2em; }
+  .painel li strong { color: var(--marinho); }
+  .painel :global(.painel__foto) { max-width: 460px; width: 100%; justify-self: end; }
+
+  @media (max-width: 560px) {
+    .js-abas .abas__lista { display: flex; width: 100%; }
+    .abas__lista button { flex: 1 1 0; padding: 0.65rem 0.4rem; font-size: 0.875rem; }
+  }
+  @media (max-width: 900px) {
+    .painel { grid-template-columns: minmax(0, 1fr); }
+    .painel :global(.painel__foto) { display: none; }
+  }
+</style>

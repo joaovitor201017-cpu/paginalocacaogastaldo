@@ -57,3 +57,33 @@ test('link para o comparativo de garantias', () => {
 test('trilha do carrossel é focável por teclado', () => {
   assert.match(secao(html, 'solucoes'), /class="[^"]*trilha[^"]*"[^>]*tabindex="0"|tabindex="0"[^>]*class="[^"]*trilha/);
 });
+
+// --- Benefícios em abas (Task 5)
+test('H2 e parágrafo da seção de benefícios', () => {
+  const s = secao(html, 'beneficios');
+  assert.match(s, /<h2[^>]*>Alugar no ABC nunca foi tão fácil<\/h2>/);
+  assert.ok(s.includes('Nossas soluções para alugar foram pensadas para dar agilidade e segurança a quem aluga, a quem é dono e a quem administra o imóvel.'));
+});
+
+test('tablist com 3 abas ligadas a painéis existentes', () => {
+  const s = secao(html, 'beneficios');
+  assert.equal(contar(s, /role="tablist"/g), 1);
+  const controles = [...s.matchAll(/role="tab"[^>]*aria-controls="([^"]+)"|aria-controls="([^"]+)"[^>]*role="tab"/g)].map((m) => m[1] || m[2]);
+  assert.equal(controles.length, 3);
+  for (const id of controles) assert.match(s, new RegExp(`id="${id}"[^>]*role="tabpanel"|role="tabpanel"[^>]*id="${id}"`), id);
+});
+
+test('sem JS os 3 painéis ficam visíveis (nenhum hidden no HTML)', () => {
+  const s = secao(html, 'beneficios');
+  const paineis = s.match(/<[^>]*role="tabpanel"[^>]*>/g) || [];
+  assert.equal(paineis.length, 3);
+  for (const p of paineis) assert.doesNotMatch(p, /\shidden[\s>=]/);
+});
+
+test('os 3 H3 e os 21 benefícios', () => {
+  const s = secao(html, 'beneficios');
+  for (const t of ['Benefícios para inquilinos', 'Benefícios para proprietários', 'Benefícios para imobiliárias']) {
+    assert.match(s, new RegExp(`<h3[^>]*>${t}</h3>`), t);
+  }
+  assert.equal(contar(s, /<li[\s>]/g), 21);
+});
