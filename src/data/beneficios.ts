@@ -18,7 +18,7 @@ export const beneficios: GrupoBeneficios[] = [
       { destaque: 'Alugue sem fiador.', texto: 'Nada de pedir favor a parente ou amigo.' },
       { destaque: 'Sem dinheiro parado.', texto: 'Com o seguro fiança, você não precisa deixar 3 aluguéis de caução.' },
       { destaque: 'Opção para quem tem restrição.', texto: 'O título de capitalização não tem análise de crédito.' },
-      { destaque: 'Aprovação rápida.', texto: 'Análise online e apólice ágil para não atrasar a entrega das chaves.' },
+      { destaque: 'Análise online.', texto: 'Apólice ágil para não atrasar a entrega das chaves.' },
       { destaque: 'Pagamento facilitado.', texto: 'Parcelamento conforme a seguradora.' },
       { destaque: 'Assistências para o imóvel.', texto: 'Chaveiro, encanador e eletricista em muitos planos.' },
       { destaque: 'Tudo com uma corretora só.', texto: 'Garantia, seguro incêndio e seguro residencial no mesmo atendimento.' },

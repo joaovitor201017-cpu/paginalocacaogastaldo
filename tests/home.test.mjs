@@ -118,3 +118,34 @@ test('seção #cidades com H2 e as 7 cidades, sede marcada', () => {
   for (const c of ['São Bernardo do Campo', 'Santo André', 'São Caetano do Sul', 'Diadema', 'Mauá', 'Ribeirão Pires', 'Rio Grande da Serra']) assert.ok(s.includes(c), c);
   assert.ok(s.includes('Sede'));
 });
+
+// --- Contato, FAQ, CTA final e JSON-LD (Task 7)
+test('seção #contato com H2 e formulário completo', () => {
+  const s = secao(html, 'contato');
+  assert.match(s, /<h2[^>]*>Fale com a gente<\/h2>/);
+  for (const n of ['nome', 'whatsapp', 'perfil', 'mensagem']) assert.match(s, new RegExp(`name="${n}"`), n);
+  for (const o of ['Inquilino', 'Proprietário', 'Imobiliária']) assert.ok(s.includes(`>${o}</option>`), o);
+});
+
+test('mapa não carrega iframe no HTML estático', () => {
+  assert.doesNotMatch(html, /<iframe/);
+});
+
+test('CTA final com os dois botões', () => {
+  const s = secao(html, 'cta-final');
+  assert.match(s, /<h2[^>]*>Pronto para alugar sem fiador\?<\/h2>/);
+  assert.ok(s.includes('Simular minha garantia'));
+  assert.ok(s.includes('Falar no WhatsApp'));
+});
+
+test('FAQ visível com as perguntas do cliente', () => {
+  const s = secao(html, 'perguntas');
+  assert.match(s, /<h2[^>]*>Perguntas frequentes<\/h2>/);
+  assert.ok(s.includes('O que é garantia locatícia?'));
+  assert.ok(s.includes('Como minha imobiliária pode ser parceira da Gastaldo?'));
+});
+
+test('todo JSON-LD é válido e inclui InsuranceAgency', () => {
+  const blocos = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
+  assert.ok(blocos.some((b) => b['@type'] === 'InsuranceAgency'));
+});

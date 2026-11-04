@@ -1,0 +1,106 @@
+---
+import Pendente from '../Pendente.astro';
+import MapaFachada from '../MapaFachada.astro';
+import { site } from '../../data/site';
+import { linkWhatsApp } from '../../lib/whatsapp';
+
+const canais = [
+  { rotulo: 'WhatsApp', valor: site.whatsapp, href: site.whatsapp ? linkWhatsApp(site.mensagemWhatsApp, site.whatsapp) : null, pendente: 'número' },
+  { rotulo: 'Telefone', valor: site.telefone, href: site.telefone ? `tel:+55${site.telefone.replace(/\D/g, '')}` : null, pendente: 'número' },
+  { rotulo: 'E-mail', valor: site.email, href: site.email ? `mailto:${site.email}` : null, pendente: 'e-mail' },
+  { rotulo: 'Endereço', valor: site.endereco, href: null, pendente: 'endereço completo em São Bernardo do Campo, igual ao Google Meu Negócio' },
+  { rotulo: 'Horário', valor: site.horario, href: null, pendente: 'dias e horários' },
+];
+// Sem JS o formulário cai no WhatsApp com a mensagem padrão
+const acaoPadrao = linkWhatsApp(site.mensagemWhatsApp, site.whatsapp);
+---
+
+<section id="contato" class="secao contato" aria-labelledby="contato-titulo">
+  <div class="container contato__grade">
+    <div>
+      <h2 id="contato-titulo">Fale com a gente</h2>
+      <dl class="contato__canais">
+        {canais.map((c) => (
+          <div>
+            <dt>{c.rotulo}</dt>
+            <dd>{c.valor ? (c.href ? <a href={c.href}>{c.valor}</a> : c.valor) : <Pendente rotulo={c.pendente} />}</dd>
+          </div>
+        ))}
+      </dl>
+      <MapaFachada consulta={site.endereco ? `${site.endereco}, ${site.cidadeSede} - SP` : `${site.nome}, ${site.cidadeSede} - SP`} rotulo={`${site.nome} · ${site.cidadeSede}`} />
+    </div>
+
+    <form class="contato__form" action={acaoPadrao} method="get" target="_blank" data-whatsapp={site.whatsapp ?? ''}>
+      <p class="contato__form-titulo">Mande sua mensagem e a gente responde no WhatsApp.</p>
+      <label>
+        Nome
+        <input name="nome" type="text" autocomplete="name" required />
+      </label>
+      <label>
+        WhatsApp
+        <input name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="(11) 90000-0000" required />
+      </label>
+      <label>
+        Você é
+        <select name="perfil" required>
+          <option value="">Selecione</option>
+          <option>Inquilino</option>
+          <option>Proprietário</option>
+          <option>Imobiliária</option>
+        </select>
+      </label>
+      <label>
+        Mensagem
+        <textarea name="mensagem" rows="4"></textarea>
+      </label>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</section>
+
+<script is:inline>
+  // Monta a mensagem com os dados do formulário e abre o WhatsApp
+  (() => {
+    const form = document.querySelector('.contato__form');
+    if (!form) return;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const perfil = String(d.get('perfil')).toLowerCase();
+      const texto = `Olá! Sou ${perfil}, meu nome é ${d.get('nome')} (WhatsApp ${d.get('whatsapp')}). ${d.get('mensagem') || ''}`.trim();
+      const numero = form.dataset.whatsapp.replace(/\D/g, '');
+      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+    });
+  })();
+</script>
+
+<style>
+  .contato__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .contato__canais { display: grid; gap: 0.9rem; margin: 1.5rem 0 2rem; }
+  .contato__canais div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--cinza-linha); }
+  .contato__canais dt { font-weight: 600; color: var(--marinho); }
+  .contato__canais dd { margin: 0; }
+
+  .contato__form { display: grid; gap: 1.1rem; padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); background: var(--cinza-fundo); border-radius: var(--raio-g); }
+  .contato__form-titulo { margin: 0; font-weight: 600; color: var(--marinho); font-size: 1.1rem; }
+  .contato__form label { display: grid; gap: 0.4rem; font-weight: 500; font-size: var(--fs-pequeno); color: var(--marinho); }
+  .contato__form :is(input, select, textarea) {
+    font: inherit; font-weight: 400; color: var(--texto);
+    padding: 0.8rem 1rem; border: 1.5px solid var(--cinza-linha); border-radius: var(--raio-p); background: var(--branco); width: 100%;
+  }
+  .contato__form :is(input, select, textarea):focus-visible { border-color: var(--azul); outline: 3px solid rgb(108 184 255 / 0.45); outline-offset: 0; }
+  .contato__form textarea { resize: vertical; }
+  .contato__form button {
+    font: inherit; font-weight: 600; font-size: 1.05rem; color: var(--branco); background: var(--azul);
+    border: 0; border-radius: 999px; padding: 0.95rem 1.5rem; cursor: pointer; justify-self: start; min-width: 10rem;
+  }
+  .contato__form button:hover { background: var(--azul-escuro); }
+
+  @media (max-width: 900px) {
+    .contato__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .contato__canais div { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
+    .contato__form button { justify-self: stretch; }
+  }
+</style>
