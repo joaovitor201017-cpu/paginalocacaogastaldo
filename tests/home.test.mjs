@@ -87,3 +87,34 @@ test('os 3 H3 e os 21 benefícios', () => {
   }
   assert.equal(contar(s, /<li[\s>]/g), 21);
 });
+
+// --- Parceiras, Sobre e Cidades (Task 6)
+test('seção #imobiliarias com H2 e os 3 H3', () => {
+  const s = secao(html, 'imobiliarias');
+  assert.match(s, /<h2[^>]*>Referência em seguros locatícios no ABC<\/h2>/);
+  for (const t of ['Imobiliárias parceiras', 'Números da parceria', 'O que as imobiliárias dizem']) {
+    assert.match(s, new RegExp(`<h3[^>]*>${t}</h3>`), t);
+  }
+  assert.ok(s.includes('Quero ser uma imobiliária parceira'));
+});
+
+test('grade de parceiras traz as 8 imobiliárias e os 4 números', () => {
+  const s = secao(html, 'imobiliarias');
+  assert.equal(contar(s, /class="[^"]*parceira-card/g), 8);
+  for (const r of ['imobiliárias parceiras', 'contratos de aluguel garantidos', 'corretores de imóveis treinados', 'cidades atendidas no ABC']) assert.ok(s.includes(r), r);
+});
+
+test('seção #sobre com H2, texto e 4 diferenciais', () => {
+  const s = secao(html, 'sobre');
+  assert.match(s, /<h2[^>]*>Sobre a Gastaldo Seguros<\/h2>/);
+  assert.ok(s.includes('corretora de São Bernardo do Campo especializada em seguros e garantias para o aluguel'));
+  assert.match(s, /<h3[^>]*>Nossos diferenciais<\/h3>/);
+  for (const d of ['Especialização em seguros locatícios.', 'Suporte ativo e próximo.', 'Treinamento presencial para imobiliárias.', 'Várias seguradoras parceiras.']) assert.ok(s.includes(d), d);
+});
+
+test('seção #cidades com H2 e as 7 cidades, sede marcada', () => {
+  const s = secao(html, 'cidades');
+  assert.match(s, /<h2[^>]*>Atendemos todo o ABC Paulista<\/h2>/);
+  for (const c of ['São Bernardo do Campo', 'Santo André', 'São Caetano do Sul', 'Diadema', 'Mauá', 'Ribeirão Pires', 'Rio Grande da Serra']) assert.ok(s.includes(c), c);
+  assert.ok(s.includes('Sede'));
+});

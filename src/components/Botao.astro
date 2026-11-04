@@ -43,4 +43,7 @@ const { href, variante = 'primario', tamanho = 'm', externo = href.startsWith('h
   .botao--claro:hover { background: var(--azul-ceu); }
   .botao--whatsapp { background: #1fae54; color: var(--branco); }
   .botao--whatsapp:hover { background: #178f45; }
+  @media (max-width: 480px) {
+    .botao { white-space: normal; text-align: center; max-width: 100%; }
+  }
 </style>

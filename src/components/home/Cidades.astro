@@ -1,0 +1,44 @@
+---
+import { cidades } from '../../data/cidades';
+---
+
+<section id="cidades" class="secao cidades" aria-labelledby="cidades-titulo">
+  <div class="container cidades__grade">
+    <div>
+      <h2 id="cidades-titulo">Atendemos todo o ABC Paulista</h2>
+      <p class="intro">
+        Atendemos inquilinos, proprietários e imobiliárias em todas as cidades do ABC Paulista: São Bernardo do Campo, onde fica a nossa sede, Santo André, São Caetano do Sul, Diadema, Mauá, Ribeirão Pires e Rio Grande da Serra.
+      </p>
+    </div>
+    <ul class="cidades__lista">
+      {cidades.map((c) => (
+        <li class:list={{ sede: c.sede }}>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21Z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+          {c.href ? <a href={c.href}>{c.nome}</a> : <span>{c.nome}</span>}
+          {c.sede && <em>Sede</em>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cidades { background: var(--cinza-fundo); }
+  .cidades__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .cidades .intro { margin: 0; }
+  .cidades__lista { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+  .cidades__lista li {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.6rem 1rem; border-radius: 999px;
+    background: var(--branco); border: 1px solid var(--cinza-linha);
+    color: var(--marinho); font-weight: 500; font-size: 0.95rem;
+  }
+  .cidades__lista li svg { color: var(--azul); }
+  .cidades__lista li.sede { background: var(--marinho); border-color: var(--marinho); color: var(--branco); }
+  .cidades__lista li.sede svg { color: var(--azul-claro); }
+  .cidades__lista em { font-style: normal; font-size: 0.75rem; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: 999px; background: var(--amarelo); color: var(--marinho-profundo); }
+  .cidades__lista a { color: inherit; }
+  @media (max-width: 900px) {
+    .cidades__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
