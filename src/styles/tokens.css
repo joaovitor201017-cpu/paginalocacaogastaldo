@@ -1,0 +1,35 @@
+/* Tokens da identidade Gastaldo (ver docs/superpowers/specs/2026-11-04-home-design.md) */
+:root {
+  --marinho: #043967;
+  --marinho-profundo: #0b2550;
+  --azul: #1a7df0;
+  --azul-escuro: #0a6fd6;
+  --azul-claro: #6cb8ff;
+  --azul-ceu: #a8dbff;
+  --azul-vivo: #1fb0ff;
+  --amarelo: #ffc53d;
+  --cinza-fundo: #f4f7fb;
+  --cinza-linha: #dde5ef;
+  --texto: #1b2a3a;
+  --texto-suave: #4a5b6e;
+  --branco: #ffffff;
+
+  --fonte: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Escala tipográfica fluida (360px → 1280px) */
+  --fs-h1: clamp(2.25rem, 1.6rem + 2.9vw, 3.75rem);
+  --fs-h2: clamp(1.75rem, 1.35rem + 1.75vw, 2.75rem);
+  --fs-h3: clamp(1.2rem, 1.1rem + 0.45vw, 1.45rem);
+  --fs-corpo: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --fs-pequeno: 0.9375rem;
+
+  --raio-g: 28px;
+  --raio-m: 20px;
+  --raio-p: 12px;
+  /* Moldura em escudo: topo reto, curva grande embaixo à esquerda, como o símbolo do logo */
+  --raio-escudo: 14px 14px 14px clamp(64px, 12vw, 140px);
+
+  --sombra: 0 10px 30px -12px rgb(4 57 103 / 0.18);
+  --largura: 1200px;
+  --respiro: clamp(4rem, 3rem + 4vw, 7rem);
+}
