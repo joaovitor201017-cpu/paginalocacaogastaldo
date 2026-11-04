@@ -1,0 +1,28 @@
+---
+import Botao from './Botao.astro';
+import ImagemReservada from './ImagemReservada.astro';
+import type { Solucao } from '../data/solucoes';
+
+interface Props { solucao: Solucao }
+const { solucao: s } = Astro.props;
+---
+
+<article class="card">
+  <ImagemReservada descricao={`Foto: ${s.foto}`} proporcao="4/3" raio="m" sizes="(min-width: 1100px) 280px, 80vw" />
+  <div class="card__corpo">
+    <h3>{s.titulo}</h3>
+    <p>{s.texto}</p>
+    <div class="card__acoes">
+      <Botao href={s.saibaMais} variante="secundario">Saiba mais</Botao>
+      <Botao href={s.acao.href} variante="primario">{s.acao.rotulo}</Botao>
+    </div>
+  </div>
+</article>
+
+<style>
+  .card { display: flex; flex-direction: column; height: 100%; background: var(--branco); border: 1px solid var(--cinza-linha); border-radius: var(--raio-g); padding: 0.75rem; }
+  .card__corpo { display: flex; flex-direction: column; flex: 1; padding: 1.1rem 0.6rem 0.6rem; }
+  .card__corpo p { color: var(--texto-suave); font-size: var(--fs-pequeno); flex: 1; }
+  .card__acoes { display: flex; gap: 0.6rem; margin-top: 0.5rem; }
+  .card__acoes :global(.botao) { flex: 1 1 auto; padding-inline: 0.9rem; }
+</style>

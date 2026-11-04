@@ -1,0 +1,83 @@
+---
+import CardSolucao from '../CardSolucao.astro';
+import { solucoes } from '../../data/solucoes';
+---
+
+<section id="solucoes" class="secao solucoes" aria-labelledby="solucoes-titulo">
+  <div class="container">
+    <div class="solucoes__topo">
+      <div>
+        <h2 id="solucoes-titulo">Seguros e garantias para alugar sem fiador</h2>
+        <p class="intro">Cada contrato de aluguel pede uma solução. Escolha a sua e veja como funciona.</p>
+      </div>
+      <div class="solucoes__setas" hidden>
+        <button type="button" data-dir="-1" aria-label="Ver soluções anteriores">
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        </button>
+        <button type="button" data-dir="1" aria-label="Ver próximas soluções">
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <ul class="trilha" tabindex="0" aria-label="Soluções para alugar (role para ver todas)">
+      {solucoes.map((s) => <li><CardSolucao solucao={s} /></li>)}
+    </ul>
+
+    <p class="solucoes__comparativo">
+      <a href="/blog/fiador-seguro-fianca-ou-caucao">Fiador, seguro fiança ou caução: qual escolher no ABC</a>
+    </p>
+  </div>
+</section>
+
+<script is:inline>
+  // Setas do carrossel: só aparecem quando os cards não cabem na tela
+  (() => {
+    const trilha = document.querySelector('#solucoes .trilha');
+    const setas = document.querySelector('.solucoes__setas');
+    if (!trilha || !setas) return;
+    const atualizar = () => { setas.hidden = trilha.scrollWidth <= trilha.clientWidth + 4; };
+    setas.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      const passo = trilha.querySelector('li').offsetWidth + 20;
+      trilha.scrollBy({ left: passo * Number(b.dataset.dir), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+    addEventListener('resize', atualizar);
+    atualizar();
+  })();
+</script>
+
+<style>
+  .solucoes { background: var(--cinza-fundo); }
+  .solucoes__topo { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 2.5rem; }
+  .solucoes__topo .intro { margin: 0; }
+  .solucoes__setas { display: flex; gap: 0.6rem; }
+  .solucoes__setas[hidden] { display: none; }
+  .solucoes__setas button {
+    display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
+    border: 2px solid var(--marinho); background: var(--branco); color: var(--marinho); cursor: pointer;
+  }
+  .solucoes__setas button:hover { background: var(--marinho); color: var(--branco); }
+
+  .trilha {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(260px, 1fr);
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0;
+    padding-bottom: 0.75rem;
+    scrollbar-width: thin;
+  }
+  .trilha > li { scroll-snap-align: start; }
+  .trilha:focus-visible { outline-offset: 6px; }
+
+  .solucoes__comparativo { margin: 1.75rem 0 0; font-weight: 600; }
+
+  @media (max-width: 700px) {
+    .solucoes__setas { display: none !important; }
+    .trilha { grid-auto-columns: 84%; margin-inline: -1.25rem; padding-inline: 1.25rem; scroll-padding-inline: 1.25rem; }
+  }
+</style>
