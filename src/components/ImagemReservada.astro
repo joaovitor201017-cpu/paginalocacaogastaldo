@@ -12,9 +12,10 @@ interface Props {
   prioridade?: boolean;
   sizes?: string;
   fundo?: string;
+  posicao?: string; // object-position da foto no recorte
   class?: string;
 }
-const { descricao, proporcao, raio = 'm', src, alt = '', prioridade = false, sizes = '(min-width: 1024px) 50vw, 100vw', fundo, class: classe } = Astro.props;
+const { descricao, proporcao, raio = 'm', src, alt = '', prioridade = false, sizes = '(min-width: 1024px) 50vw, 100vw', fundo, posicao, class: classe } = Astro.props;
 ---
 
 <figure class:list={['foto', `foto--${raio}`, classe]} style={`aspect-ratio: ${proporcao};${fundo ? ` background:${fundo};` : ''}`}>
@@ -27,6 +28,7 @@ const { descricao, proporcao, raio = 'm', src, alt = '', prioridade = false, siz
       widths={[480, 800, 1200]}
       loading={prioridade ? 'eager' : 'lazy'}
       fetchpriority={prioridade ? 'high' : 'auto'}
+      style={posicao ? `object-position: ${posicao}` : undefined}
     />
   ) : (
     <figcaption class="foto__reserva">
