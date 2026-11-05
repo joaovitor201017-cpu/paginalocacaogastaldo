@@ -27,3 +27,7 @@ test('nenhum script externo', () => {
 test('CSS respeita prefers-reduced-motion', () => {
   assert.match(lerCssGerado(), /prefers-reduced-motion/);
 });
+
+test('sem domínio final o site pede para não indexar', () => {
+  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+});

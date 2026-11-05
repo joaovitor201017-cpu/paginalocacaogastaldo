@@ -10,12 +10,14 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "astro build && node --test \"tests/*.test.mjs\""
+    "test": "astro build && node --test \"tests/*.test.mjs\"",
+    "deploy": "astro build && wrangler pages deploy dist --project-name gastaldo-seguros --branch master"
   },
   "dependencies": {
     "astro": "^7.4.4"
   },
   "devDependencies": {
-    "@fontsource/poppins": "^5.3.0"
+    "@fontsource/poppins": "^5.3.0",
+    "wrangler": "^4.158.0"
   }
 }
