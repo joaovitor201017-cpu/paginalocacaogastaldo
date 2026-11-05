@@ -25,7 +25,17 @@ import { linkWhatsApp } from '../../lib/whatsapp';
 
     {beneficios.map((g) => (
       <div class="painel" role="tabpanel" id={`painel-${g.id}`} aria-labelledby={`aba-${g.id}`}>
-        <h3>{g.titulo}</h3>
+        <div class="painel__cabeca">
+          <h3>{g.titulo}</h3>
+          <div class="painel__setas">
+            <button type="button" data-dir="-1" aria-label="Benefícios anteriores">
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <button type="button" data-dir="1" aria-label="Próximos benefícios">
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+          </div>
+        </div>
         <ul class="painel__grade" tabindex="0" aria-label={`${g.titulo} (role para o lado para ver todos)`}>
           {g.itens.map((it) => (
             <li class="beneficio">
@@ -77,6 +87,16 @@ import { linkWhatsApp } from '../../lib/whatsapp';
         ativar(alvo, true);
       });
     });
+
+    paineis.forEach((p) => {
+      const g = p.querySelector('.painel__grade'), [a, b] = p.querySelectorAll('.painel__setas button');
+      const at = () => { a.disabled = g.scrollLeft < 5; b.disabled = g.scrollLeft + g.clientWidth > g.scrollWidth - 5; };
+      a.onclick = b.onclick = (e) => g.scrollBy({ left: e.currentTarget.dataset.dir * g.clientWidth * 0.8, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      g.addEventListener('scroll', at, { passive: true });
+      addEventListener('resize', at);
+      abas.forEach((x) => x.addEventListener('click', at));
+      at();
+    });
   })();
 </script>
 
@@ -109,13 +129,23 @@ import { linkWhatsApp } from '../../lib/whatsapp';
   .painel[hidden] { display: none; }
   .painel + .painel { margin-top: 3rem; }
   .js-abas .painel + .painel { margin-top: 0; }
-  .painel h3 { font-size: 1rem; margin-bottom: 0.75rem; }
+  .painel__cabeca { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.75rem; }
+  .painel h3 { font-size: 1rem; margin: 0; }
+  /* Setas só fazem sentido com JS */
+  .painel__setas { display: none; gap: 0.4rem; }
+  :global(.js) .painel__setas { display: flex; }
+  .painel__setas button {
+    display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+    border: 1.5px solid #bccbdd; background: var(--branco); color: var(--marinho); cursor: pointer;
+  }
+  .painel__setas button:hover:not(:disabled) { background: var(--marinho); border-color: var(--marinho); color: var(--branco); }
+  .painel__setas button:disabled { opacity: 0.35; cursor: default; }
 
   /* Benefícios na horizontal: ícone em cima, título e texto embaixo; rola quando não cabe */
   .painel__grade {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: minmax(148px, 1fr);
+    grid-auto-columns: 220px;
     gap: 0.75rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -145,7 +175,8 @@ import { linkWhatsApp } from '../../lib/whatsapp';
   .beneficio p { margin: 0; font-size: 0.875rem; line-height: 1.5; color: var(--texto-suave); }
 
   @media (max-width: 560px) {
-    .painel__grade { grid-auto-columns: 62%; margin-inline: -1.25rem; padding-inline: 1.25rem; scroll-padding-inline: 1.25rem; }
+    .painel__setas { display: none !important; }
+    .painel__grade { grid-auto-columns: 72%; margin-inline: -1.25rem; padding-inline: 1.25rem; scroll-padding-inline: 1.25rem; }
     .abas__lista button { flex: 1 1 0; padding: 0.7rem 0.4rem; font-size: 0.9375rem; }
   }
 </style>

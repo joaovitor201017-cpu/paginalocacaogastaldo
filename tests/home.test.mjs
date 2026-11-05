@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { lerHome, contar } from './helpers.mjs';
+import { lerHome, contar, lerCssGerado } from './helpers.mjs';
 
 const html = lerHome();
 
@@ -243,4 +243,12 @@ test('carrossel de treinamentos com as 5 fotos reais e legenda da Casari', () =>
   assert.ok(!s.includes('treinamento-5'), 'foto 5 removida');
   assert.ok(!s.includes('foto__reserva'), 'sem espaços reservados');
   assert.match(s, /Treinamento na Casari Imóveis/);
+});
+
+test('benefícios com cards mais largos e setas em cada painel', () => {
+  const s = secao(html, 'beneficios');
+  assert.equal(contar(s, /aria-label="Benefícios anteriores"/g), 3);
+  assert.equal(contar(s, /aria-label="Próximos benefícios"/g), 3);
+  const css = lerCssGerado();
+  assert.match(css, /\.painel__grade[^{]*\{[^}]*grid-auto-columns:220px/);
 });

@@ -88,11 +88,7 @@ const acaoPadrao = `https://wa.me/${numeroWhatsApp(site.whatsapp)}`;
   .contato__canais { display: grid; gap: 0.9rem; margin: 1.5rem 0 2rem; }
   .contato__canais div { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1rem; align-items: center; padding-bottom: 0.9rem; border-bottom: 1px solid var(--cinza-linha); }
   .contato__canais dt { display: flex; align-items: center; gap: 0.7rem; font-weight: 600; color: var(--marinho); }
-  .contato__icone {
-    flex: 0 0 auto; display: grid; place-items: center; width: 38px; height: 38px;
-    color: var(--marinho); background: var(--azul-ceu);
-    border-radius: 9px 9px 9px 16px; /* eco do escudo do logo */
-  }
+  .contato__icone { flex: 0 0 auto; display: grid; place-items: center; width: 22px; color: var(--azul-escuro); }
   .contato__canais dd { margin: 0; }
 
   .contato__form { display: grid; gap: 1.1rem; padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); background: var(--cinza-fundo); border-radius: var(--raio-g); }
@@ -115,7 +111,7 @@ const acaoPadrao = `https://wa.me/${numeroWhatsApp(site.whatsapp)}`;
   }
   @media (max-width: 480px) {
     .contato__canais div { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
-    .contato__canais dd { padding-left: calc(38px + 0.7rem); }
+    .contato__canais dd { padding-left: calc(22px + 0.7rem); }
     .contato__form button { justify-self: stretch; }
   }
 </style>

@@ -42,3 +42,9 @@ test('textos do hero um pouco maiores', () => {
   const hero = html.slice(html.indexOf('class="hero'), html.indexOf('class="hero__fotos'));
   assert.equal((hero.match(/botao--g/g) || []).length, 2);
 });
+
+test('ícones dos contatos sem o quadrado azul de fundo', () => {
+  const regra = lerCssGerado().match(/\.contato__icone[^{]*\{([^}]*)\}/);
+  assert.ok(regra, 'regra do ícone existe');
+  assert.ok(!/background/.test(regra[1]), regra[1]);
+});
