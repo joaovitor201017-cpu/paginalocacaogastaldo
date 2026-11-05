@@ -17,6 +17,7 @@ import { site } from '../data/site';
 import { cidades } from '../data/cidades';
 import { schemaServico } from '../lib/schema';
 import { solucoes } from '../data/solucoes';
+import { icones } from '../lib/icones';
 
 const caminho = `/${s.slug}`;
 // Foto do topo: a mesma do card deste serviço na Home
@@ -43,6 +44,8 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
     <Coberturas coberturas={s.coberturas} />
 
     <section id="pagamento" class="secao pagamento" aria-labelledby="pagamento-titulo">
+      <!-- Textura: cartão grande em tom pouco mais escuro que o fundo (decorativo) -->
+      <svg class="pagamento__marca" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d={icones.cartao}></path></svg>
       <div class="container pagamento__grade">
         <div>
           <h2 id="pagamento-titulo">{s.pagamento.titulo}</h2>
@@ -70,7 +73,15 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
 <style>
   .texto-servico p { max-width: 70ch; }
   .texto-servico p { color: var(--texto); }
-  .pagamento { background: var(--cinza-fundo); }
+  .pagamento { background: var(--cinza-fundo); position: relative; overflow: hidden; }
+  .pagamento__grade { position: relative; }
+  .pagamento__marca {
+    position: absolute; right: 18%; top: 50%; width: clamp(220px, 26vw, 360px); height: auto;
+    color: #dbe4ef; transform: translateY(-50%) rotate(-12deg); pointer-events: none;
+  }
+  @media (max-width: 760px) {
+    .pagamento__marca { right: -60px; top: auto; bottom: -40px; transform: rotate(-12deg); width: 240px; }
+  }
   .pagamento__grade { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem 4rem; align-items: center; }
   .pagamento p { max-width: 64ch; margin: 0; }
   @media (max-width: 760px) {

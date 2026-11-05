@@ -151,3 +151,8 @@ test('nenhum link vazio para posts que ainda não existem', () => {
   assert.ok(!html.includes('href="null"'));
   assert.ok(!html.includes('Guia completo do seguro fiança'));
 });
+
+test('formas de pagamento com ícone decorativo de fundo', () => {
+  const s = secao(html, 'pagamento');
+  assert.match(s, /<svg[^>]*class="pagamento__marca"[^>]*aria-hidden="true"|<svg[^>]*aria-hidden="true"[^>]*class="pagamento__marca"/);
+});
