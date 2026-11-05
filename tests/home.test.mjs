@@ -152,3 +152,19 @@ test('todo JSON-LD é válido e inclui InsuranceAgency', () => {
   const blocos = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]));
   assert.ok(blocos.some((b) => b['@type'] === 'InsuranceAgency'));
 });
+
+// --- Dados de contato reais
+test('contato mostra os dados reais e links clicáveis', () => {
+  const s = secao(html, 'contato');
+  assert.ok(s.includes('href="tel:+5511993226252"'), 'telefone');
+  assert.ok(s.includes('href="mailto:contato@gastaldoseguros.com.br"'), 'e-mail');
+  assert.ok(s.includes('Av. Pereira Barreto, 1395 - Sl 65B - Paraíso, Santo André - SP, 09751-000'), 'endereço');
+  assert.ok(s.includes('Segunda a sexta, das 9h às 18h'), 'horário');
+  assert.ok(!s.includes('class="pendente"'), 'sem pendências no contato');
+});
+
+test('todos os links de WhatsApp apontam para 5511993226252', () => {
+  const links = [...html.matchAll(/href="(https:\/\/wa\.me\/[^"?]*)/g)].map((m) => m[1]);
+  assert.ok(links.length > 0);
+  for (const l of links) assert.equal(l, 'https://wa.me/5511993226252');
+});

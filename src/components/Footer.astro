@@ -2,6 +2,7 @@
 import Pendente from './Pendente.astro';
 import { site } from '../data/site';
 import { solucoes } from '../data/solucoes';
+import { enderecoCompleto } from '../lib/endereco';
 
 const institucional = [
   { href: '/#sobre', rotulo: 'Sobre nós' },
@@ -33,7 +34,7 @@ const institucional = [
   <div class="container rodape__dados">
     <p>
       {site.nome} · CNPJ {site.cnpj ?? <Pendente rotulo="número" />} · SUSEP {site.susep ?? <Pendente rotulo="número" />} ·{' '}
-      {site.endereco ?? <Pendente rotulo="endereço" />} · {site.telefone ?? <Pendente rotulo="telefone" />}
+      {site.endereco ? enderecoCompleto(site.endereco) : <Pendente rotulo="endereço" />} · {site.telefone ?? <Pendente rotulo="telefone" />}
     </p>
   </div>
 </footer>

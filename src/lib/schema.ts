@@ -4,8 +4,8 @@ interface SiteSchema {
   dominio: string | null;
   telefone: string | null;
   email: string | null;
-  endereco: string | null;
-  horario: string | null;
+  endereco: { logradouro: string; bairro: string; cidade: string; uf: string; cep: string } | null;
+  horarioSchema?: string | null;
   cidadeSede: string;
 }
 
@@ -28,9 +28,16 @@ export function schemaHome(
     url,
     telephone: site.telefone,
     email: site.email,
-    openingHours: site.horario,
+    openingHours: site.horarioSchema,
     address: site.endereco
-      ? { '@type': 'PostalAddress', streetAddress: site.endereco, addressLocality: site.cidadeSede, addressRegion: 'SP', addressCountry: 'BR' }
+      ? {
+          '@type': 'PostalAddress',
+          streetAddress: `${site.endereco.logradouro} - ${site.endereco.bairro}`,
+          addressLocality: site.endereco.cidade,
+          addressRegion: site.endereco.uf,
+          postalCode: site.endereco.cep,
+          addressCountry: 'BR',
+        }
       : null,
     areaServed: cidades.map((c) => ({ '@type': 'City', name: c.nome })),
   });

@@ -30,3 +30,21 @@ test('com FAQ: inclui FAQPage com Question/Answer', () => {
   assert.equal(s[2]['@type'], 'FAQPage');
   assert.deepEqual(s[2].mainEntity[0], { '@type': 'Question', name: 'P?', acceptedAnswer: { '@type': 'Answer', text: 'R.' } });
 });
+
+test('endereço completo vira PostalAddress estruturado e horário vira openingHours', () => {
+  const comEndereco = {
+    ...site,
+    endereco: { logradouro: 'Av. Pereira Barreto, 1395 - Sl 65B', bairro: 'Paraíso', cidade: 'Santo André', uf: 'SP', cep: '09751-000' },
+    horarioSchema: 'Mo-Fr 09:00-18:00',
+  };
+  const [agencia] = schemaHome(comEndereco, [], cidades);
+  assert.deepEqual(agencia.address, {
+    '@type': 'PostalAddress',
+    streetAddress: 'Av. Pereira Barreto, 1395 - Sl 65B - Paraíso',
+    addressLocality: 'Santo André',
+    addressRegion: 'SP',
+    postalCode: '09751-000',
+    addressCountry: 'BR',
+  });
+  assert.equal(agencia.openingHours, 'Mo-Fr 09:00-18:00');
+});

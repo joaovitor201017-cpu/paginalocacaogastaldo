@@ -2,17 +2,19 @@
 import Pendente from '../Pendente.astro';
 import MapaFachada from '../MapaFachada.astro';
 import { site } from '../../data/site';
-import { linkWhatsApp } from '../../lib/whatsapp';
+import { linkWhatsApp, numeroWhatsApp } from '../../lib/whatsapp';
+import { enderecoCompleto } from '../../lib/endereco';
 
+const endereco = site.endereco ? enderecoCompleto(site.endereco) : null;
 const canais = [
   { rotulo: 'WhatsApp', valor: site.whatsapp, href: site.whatsapp ? linkWhatsApp(site.mensagemWhatsApp, site.whatsapp) : null, pendente: 'número' },
-  { rotulo: 'Telefone', valor: site.telefone, href: site.telefone ? `tel:+55${site.telefone.replace(/\D/g, '')}` : null, pendente: 'número' },
+  { rotulo: 'Telefone', valor: site.telefone, href: site.telefone ? `tel:+${numeroWhatsApp(site.telefone)}` : null, pendente: 'número' },
   { rotulo: 'E-mail', valor: site.email, href: site.email ? `mailto:${site.email}` : null, pendente: 'e-mail' },
-  { rotulo: 'Endereço', valor: site.endereco, href: null, pendente: 'endereço completo em Santo André, igual ao Google Meu Negócio' },
+  { rotulo: 'Endereço', valor: endereco, href: null, pendente: 'endereço completo, igual ao Google Meu Negócio' },
   { rotulo: 'Horário', valor: site.horario, href: null, pendente: 'dias e horários' },
 ];
 // Sem JS o formulário envia para o WhatsApp com a mensagem padrão no campo oculto "text"
-const acaoPadrao = `https://wa.me/${(site.whatsapp ?? '').replace(/\D/g, '')}`;
+const acaoPadrao = `https://wa.me/${numeroWhatsApp(site.whatsapp)}`;
 ---
 
 <section id="contato" class="secao contato" aria-labelledby="contato-titulo">
@@ -27,10 +29,10 @@ const acaoPadrao = `https://wa.me/${(site.whatsapp ?? '').replace(/\D/g, '')}`;
           </div>
         ))}
       </dl>
-      <MapaFachada consulta={site.endereco ? `${site.endereco}, ${site.cidadeSede} - SP` : `${site.nome}, ${site.cidadeSede} - SP`} rotulo={`${site.nome} · ${site.cidadeSede}`} />
+      <MapaFachada consulta={endereco ?? `${site.nome}, ${site.cidadeSede} - SP`} rotulo={`${site.nome} · ${site.endereco ? `${site.endereco.bairro}, ${site.endereco.cidade}` : site.cidadeSede}`} />
     </div>
 
-    <form class="contato__form" action={acaoPadrao} method="get" target="_blank" data-whatsapp={site.whatsapp ?? ''}>
+    <form class="contato__form" action={acaoPadrao} method="get" target="_blank" data-whatsapp={numeroWhatsApp(site.whatsapp)}>
       <input type="hidden" name="text" value={site.mensagemWhatsApp} />
       <p class="contato__form-titulo">Mande sua mensagem e a gente responde no WhatsApp.</p>
       <label>
