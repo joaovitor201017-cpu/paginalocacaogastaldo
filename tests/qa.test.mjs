@@ -48,3 +48,9 @@ test('ícones dos contatos sem o quadrado azul de fundo', () => {
   assert.ok(regra, 'regra do ícone existe');
   assert.ok(!/background/.test(regra[1]), regra[1]);
 });
+
+test('títulos com mais espaço entre linhas e cabeçalho das abas mais largo', () => {
+  const css = lerCssGerado();
+  assert.match(css, /h2[^{]*\{[^}]*line-height:1\.22/);
+  assert.match(css, /\.beneficios__topo[^{]*\{[^}]*max-width:78ch/);
+});
