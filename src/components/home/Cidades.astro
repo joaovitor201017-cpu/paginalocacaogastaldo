@@ -1,14 +1,19 @@
 ---
 import { cidades } from '../../data/cidades';
+
+interface Props { titulo?: string; texto?: string }
+const {
+  titulo = 'Atendemos todo o ABC Paulista',
+  texto = 'Atendemos inquilinos, proprietários e imobiliárias em todas as cidades do ABC Paulista: Santo André, onde fica a nossa sede, São Bernardo do Campo, São Caetano do Sul, Diadema, Mauá, Ribeirão Pires e Rio Grande da Serra.',
+} = Astro.props;
 ---
 
 <section id="cidades" class="secao cidades" aria-labelledby="cidades-titulo">
   <div class="container cidades__grade">
     <div>
-      <h2 id="cidades-titulo">Atendemos todo o ABC Paulista</h2>
-      <p class="intro">
-        Atendemos inquilinos, proprietários e imobiliárias em todas as cidades do ABC Paulista: Santo André, onde fica a nossa sede, São Bernardo do Campo, São Caetano do Sul, Diadema, Mauá, Ribeirão Pires e Rio Grande da Serra.
-      </p>
+      <h2 id="cidades-titulo">{titulo}</h2>
+      <p class="intro">{texto}</p>
+      <slot />
     </div>
     <ul class="cidades__lista">
       {cidades.map((c) => (
@@ -20,6 +25,7 @@ import { cidades } from '../../data/cidades';
       ))}
     </ul>
   </div>
+  <slot name="abaixo" />
 </section>
 
 <style>

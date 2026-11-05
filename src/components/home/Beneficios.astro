@@ -1,30 +1,41 @@
 ---
 import Botao from '../Botao.astro';
-import { beneficios } from '../../data/beneficios';
+import { beneficios, type GrupoBeneficios } from '../../data/beneficios';
 import { site } from '../../data/site';
 import { icones } from '../../lib/icones';
 import { linkWhatsApp } from '../../lib/whatsapp';
+
+// Abas de benefícios por público. Sem props, mostra o conteúdo da Home;
+// as páginas de serviço passam id, títulos e grupos próprios.
+interface Props { id?: string; titulo?: string; intro?: string; grupos?: GrupoBeneficios[]; rotuloAbas?: string }
+const {
+  id = 'beneficios',
+  titulo = 'Alugar no ABC nunca foi tão fácil',
+  intro = 'Nossas soluções para alugar foram pensadas para dar agilidade e segurança a quem aluga, a quem é dono e a quem administra o imóvel.',
+  grupos = beneficios,
+  rotuloAbas = 'Benefícios por público',
+} = Astro.props;
+// Prefixo dos ids das abas fora da Home, para nunca colidir
+const p = id === 'beneficios' ? '' : `${id}-`;
 ---
 
-<section id="beneficios" class="secao beneficios" aria-labelledby="beneficios-titulo">
+<section id={id} class="secao beneficios" aria-labelledby={`${id}-titulo`} data-abas>
   <div class="container">
     <div class="beneficios__topo">
-      <h2 id="beneficios-titulo">Alugar no ABC nunca foi tão fácil</h2>
-      <p class="intro">
-        Nossas soluções para alugar foram pensadas para dar agilidade e segurança a quem aluga, a quem é dono e a quem administra o imóvel.
-      </p>
+      <h2 id={`${id}-titulo`}>{titulo}</h2>
+      <p class="intro">{intro}</p>
     </div>
 
-    <div class="abas__lista" role="tablist" aria-label="Benefícios por público">
-      {beneficios.map((g, i) => (
-        <button type="button" role="tab" id={`aba-${g.id}`} aria-controls={`painel-${g.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+    <div class="abas__lista" role="tablist" aria-label={rotuloAbas}>
+      {grupos.map((g, i) => (
+        <button type="button" role="tab" id={`aba-${p}${g.id}`} aria-controls={`painel-${p}${g.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
           {g.aba}
         </button>
       ))}
     </div>
 
-    {beneficios.map((g) => (
-      <div class="painel" role="tabpanel" id={`painel-${g.id}`} aria-labelledby={`aba-${g.id}`}>
+    {grupos.map((g) => (
+      <div class="painel" role="tabpanel" id={`painel-${p}${g.id}`} aria-labelledby={`aba-${p}${g.id}`}>
         <div class="painel__cabeca">
           <h3>{g.titulo}</h3>
           <div class="painel__setas">
@@ -62,7 +73,7 @@ import { linkWhatsApp } from '../../lib/whatsapp';
 <script is:inline>
   // Abas acessíveis. Sem JS os três painéis aparecem empilhados.
   (() => {
-    const secao = document.getElementById('beneficios');
+    const secao = document.querySelector('[data-abas]');
     if (!secao) return;
     const abas = [...secao.querySelectorAll('[role="tab"]')];
     const paineis = abas.map((a) => document.getElementById(a.getAttribute('aria-controls')));

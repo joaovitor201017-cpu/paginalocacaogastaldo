@@ -1,0 +1,22 @@
+---
+import ImagemReservada from './ImagemReservada.astro';
+import fotoPrincipal from '../assets/fotos/hero-principal.jpg';
+import fotoChaves from '../assets/fotos/hero-chaves.jpg';
+
+// Colagem do topo (Home e páginas de serviço): foto principal com moldura em escudo
+// e o quadro das chaves sobreposto.
+---
+
+<div class="hero__fotos">
+  <ImagemReservada class="hero__foto1" descricao="Foto: pessoas felizes na mudança para o imóvel alugado" proporcao="4/5" raio="escudo" prioridade src={fotoPrincipal} alt="Casal sorrindo carregando caixas de mudança no apartamento alugado" sizes="(min-width: 900px) 370px, 78vw" />
+  <ImagemReservada class="hero__foto2" descricao="Foto: chaves com chaveiro de casa" proporcao="1/1" raio="g" fundo="var(--azul-claro)" src={fotoChaves} alt="Entrega das chaves do imóvel alugado" sizes="(min-width: 900px) 220px, 46vw" />
+</div>
+
+<style>
+  .hero__fotos { position: relative; padding: 0 0 10% 0; max-width: 470px; width: 100%; justify-self: end; }
+  .hero__fotos :global(.hero__foto1) { width: 78%; margin-left: auto; }
+  .hero__fotos :global(.hero__foto2) { position: absolute; left: 0; bottom: 0; width: 46%; border: 5px solid var(--branco); }
+  @media (max-width: 900px) {
+    .hero__fotos { max-width: 400px; justify-self: center; }
+  }
+</style>

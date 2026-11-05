@@ -10,9 +10,10 @@ interface Props {
   description: string;
   path: string;
   jsonLd?: object[];
+  mensagemWhatsApp?: string; // mensagem do botão flutuante (padrão: a do site)
 }
 
-const { title, description, path, jsonLd = [] } = Astro.props;
+const { title, description, path, jsonLd = [], mensagemWhatsApp } = Astro.props;
 const canonical = site.dominio ? new URL(path, site.dominio).href : null;
 ---
 
@@ -43,6 +44,6 @@ const canonical = site.dominio ? new URL(path, site.dominio).href : null;
     <Header />
     <slot />
     <Footer />
-    <WhatsAppFlutuante />
+    <WhatsAppFlutuante mensagem={mensagemWhatsApp} />
   </body>
 </html>
