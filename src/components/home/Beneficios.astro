@@ -24,9 +24,9 @@ import { linkWhatsApp } from '../../lib/whatsapp';
     </div>
 
     {beneficios.map((g) => (
-      <div class="painel" role="tabpanel" id={`painel-${g.id}`} aria-labelledby={`aba-${g.id}`} tabindex="0">
+      <div class="painel" role="tabpanel" id={`painel-${g.id}`} aria-labelledby={`aba-${g.id}`}>
         <h3>{g.titulo}</h3>
-        <ul class="painel__grade">
+        <ul class="painel__grade" tabindex="0" aria-label={`${g.titulo} (role para o lado para ver todos)`}>
           {g.itens.map((it) => (
             <li class="beneficio">
               <span class="beneficio__icone" aria-hidden="true">
@@ -85,54 +85,67 @@ import { linkWhatsApp } from '../../lib/whatsapp';
   .beneficios__topo { max-width: 62ch; margin-bottom: 2rem; }
   .beneficios__topo .intro { margin: 0; }
 
-  /* A lista de abas só aparece quando o JS está ativo */
+  /* Abas em linha com sublinhado (só aparecem com JS) */
   .abas__lista { display: none; }
   .js-abas .abas__lista {
-    display: inline-flex;
-    gap: 0.25rem;
-    padding: 0.3rem;
-    margin-bottom: 2rem;
-    background: var(--cinza-fundo);
-    border-radius: 999px;
-    max-width: 100%;
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+    box-shadow: inset 0 -2px 0 var(--cinza-linha);
   }
   .abas__lista button {
     font: inherit;
     font-weight: 600;
-    font-size: 0.9375rem;
-    color: var(--marinho);
+    font-size: 1rem;
+    color: var(--texto-suave);
     background: transparent;
     border: 0;
-    border-radius: 999px;
-    padding: 0.6rem 1.25rem;
+    padding: 0.75rem 1rem;
     cursor: pointer;
     white-space: nowrap;
   }
-  .abas__lista button[aria-selected='true'] { background: var(--marinho); color: var(--branco); }
-  .abas__lista button:not([aria-selected='true']):hover { background: var(--branco); }
+  .abas__lista button[aria-selected='true'] { color: var(--marinho); box-shadow: inset 0 -3px 0 var(--azul-escuro); }
+  .abas__lista button:not([aria-selected='true']):hover { color: var(--marinho); }
 
   .painel[hidden] { display: none; }
   .painel + .painel { margin-top: 3rem; }
   .js-abas .painel + .painel { margin-top: 0; }
-  .painel:focus-visible { outline-offset: 8px; }
-  .painel h3 { font-size: 1.125rem; margin-bottom: 1.25rem; }
+  .painel h3 { font-size: 1rem; margin-bottom: 0.75rem; }
 
-  /* Grade de benefícios: ícone ao lado, título e texto empilhados */
-  .painel__grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2.5rem; margin-bottom: 2rem; }
-  .beneficio { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0.9rem; align-items: start; padding: 0.9rem 0; border-top: 1px solid var(--cinza-linha); }
+  /* Benefícios na horizontal: ícone em cima, título e texto embaixo; rola quando não cabe */
+  .painel__grade {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(148px, 1fr);
+    gap: 0.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.75rem;
+    scrollbar-width: thin;
+  }
+  .painel__grade:focus-visible { outline-offset: 4px; }
+  .beneficio {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.9rem 0.85rem;
+    border: 1px solid transparent;
+    border-radius: var(--raio-p);
+    scroll-snap-align: start;
+    transition: border-color 0.18s ease;
+  }
+  .beneficio:hover { border-color: var(--cinza-linha); }
   .beneficio__icone {
     display: grid; place-items: center; width: 44px; height: 44px;
     color: var(--marinho); background: var(--azul-ceu);
     border-radius: 10px 10px 10px 20px; /* eco do escudo do logo */
   }
-  .beneficio strong { display: block; color: var(--marinho); font-size: 0.9875rem; line-height: 1.35; margin-bottom: 0.2rem; }
-  .beneficio p { margin: 0; font-size: 0.9375rem; line-height: 1.5; color: var(--texto-suave); }
+  .beneficio strong { display: block; color: var(--marinho); font-size: 0.9375rem; line-height: 1.3; margin-bottom: 0.25rem; }
+  .beneficio p { margin: 0; font-size: 0.875rem; line-height: 1.5; color: var(--texto-suave); }
 
-  @media (max-width: 760px) {
-    .painel__grade { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  }
   @media (max-width: 560px) {
-    .js-abas .abas__lista { display: flex; width: 100%; }
-    .abas__lista button { flex: 1 1 0; padding: 0.6rem 0.4rem; font-size: 0.875rem; }
+    .painel__grade { grid-auto-columns: 62%; margin-inline: -1.25rem; padding-inline: 1.25rem; scroll-padding-inline: 1.25rem; }
+    .abas__lista button { flex: 1 1 0; padding: 0.7rem 0.4rem; font-size: 0.9375rem; }
   }
 </style>
