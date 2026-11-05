@@ -1,0 +1,43 @@
+---
+// Perguntas frequentes em sanfona: <details> abre e fecha sem JavaScript.
+// Cada pergunta é um H3 (as mesmas perguntas vão no schema FAQPage).
+interface Props { titulo: string; itens: { pergunta: string; resposta: string }[] }
+const { titulo, itens } = Astro.props;
+---
+
+<section id="faq" class="secao faq" aria-labelledby="faq-titulo">
+  <div class="container faq__grade">
+    <h2 id="faq-titulo">{titulo}</h2>
+    <div class="faq__lista">
+      {itens.map((f) => (
+        <details>
+          <summary><h3>{f.pergunta}</h3></summary>
+          <p>{f.resposta}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__grade { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr); gap: clamp(1.5rem, 5vw, 4.5rem); align-items: start; }
+  .faq__lista { border-top: 1px solid var(--cinza-linha); }
+  .faq details { border-bottom: 1px solid var(--cinza-linha); }
+  .faq summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 0; cursor: pointer; list-style: none; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary h3 { margin: 0; font-size: 1rem; line-height: 1.4; }
+  .faq summary::after {
+    content: ''; flex: 0 0 auto; width: 12px; height: 12px; margin-right: 0.35rem;
+    border-right: 2px solid var(--azul-escuro); border-bottom: 2px solid var(--azul-escuro);
+    transform: translateY(-3px) rotate(45deg); transition: transform 0.2s ease;
+  }
+  .faq details[open] summary::after { transform: translateY(3px) rotate(-135deg); }
+  .faq summary:hover h3 { color: var(--azul-escuro); }
+  .faq details p { margin: 0 0 1.25rem; max-width: 64ch; color: var(--texto-suave); }
+  @media (max-width: 900px) {
+    .faq__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq summary::after { transition: none; }
+  }
+</style>

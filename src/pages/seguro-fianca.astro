@@ -7,6 +7,14 @@ import TabelaCoberturas from '../components/servico/TabelaCoberturas.astro';
 import ListaDocumentos from '../components/servico/ListaDocumentos.astro';
 import Beneficios from '../components/home/Beneficios.astro';
 import Botao from '../components/Botao.astro';
+import OutrasGarantias from '../components/servico/OutrasGarantias.astro';
+import Diferenciais from '../components/servico/Diferenciais.astro';
+import Faq from '../components/servico/Faq.astro';
+import ChamadoFinal from '../components/servico/ChamadoFinal.astro';
+import Cidades from '../components/home/Cidades.astro';
+import MapaFachada from '../components/MapaFachada.astro';
+import { enderecoCompleto } from '../lib/endereco';
+import { linkWhatsApp } from '../lib/whatsapp';
 import { seguroFianca as s } from '../data/servicos/seguro-fianca';
 import { site } from '../data/site';
 import { cidades } from '../data/cidades';
@@ -46,6 +54,25 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
     </section>
 
     <ListaDocumentos quemPode={s.quemPode} />
+
+    <OutrasGarantias outras={s.outras} />
+
+    <Diferenciais porQue={s.porQue} />
+
+    <Cidades titulo={s.cidades.titulo} texto={s.cidades.texto}>
+      <p class="contato-linha">
+        {site.endereco && <span><strong>Endereço:</strong> {enderecoCompleto(site.endereco)}</span>}
+        {site.whatsapp && <span><strong>Telefone/WhatsApp:</strong> <a href={linkWhatsApp(s.mensagemWhatsApp, site.whatsapp)}>{site.whatsapp}</a></span>}
+        {site.horario && <span><strong>Horário:</strong> {site.horario}</span>}
+      </p>
+      <div slot="abaixo" class="container mapa-servico">
+        <MapaFachada consulta={site.endereco ? enderecoCompleto(site.endereco) : `${site.nome}, ${site.cidadeSede} - SP`} rotulo={`${site.nome} · ${site.endereco ? `${site.endereco.bairro}, ${site.endereco.cidade}` : site.cidadeSede}`} />
+      </div>
+    </Cidades>
+
+    <Faq titulo={s.faq.titulo} itens={s.faq.itens} />
+
+    <ChamadoFinal titulo={s.final.titulo} texto={s.final.texto} principal={s.topo.botaoPrincipal} secundario={s.final.botaoSecundario} mensagemWhatsApp={s.mensagemWhatsApp} />
   </main>
 </BaseLayout>
 
@@ -55,6 +82,9 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
   .pagamento { background: var(--cinza-fundo); }
   .pagamento__grade { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem 4rem; align-items: center; }
   .pagamento p { max-width: 64ch; margin: 0; }
+  .contato-linha { display: grid; gap: 0.35rem; margin: 1.25rem 0 0; font-size: 0.9375rem; }
+  .contato-linha strong { color: var(--marinho); }
+  .mapa-servico { margin-top: 2.5rem; }
   @media (max-width: 760px) {
     .pagamento__grade { grid-template-columns: minmax(0, 1fr); justify-items: start; }
   }

@@ -1,0 +1,38 @@
+---
+import Botao from '../Botao.astro';
+import { site } from '../../data/site';
+import { linkWhatsApp } from '../../lib/whatsapp';
+import type { Acao } from '../../data/servicos/tipos';
+
+// Chamado final da página de serviço: painel marinho com simulação e WhatsApp
+interface Props { titulo: string; texto: string; principal: Acao; secundario: string; mensagemWhatsApp: string }
+const { titulo, texto, principal, secundario, mensagemWhatsApp } = Astro.props;
+---
+
+<section id="chamado-final" class="secao chamado" aria-labelledby="chamado-titulo">
+  <div class="container">
+    <div class="chamado__painel">
+      <h2 id="chamado-titulo">{titulo}</h2>
+      <p>{texto}</p>
+      <div class="chamado__acoes">
+        <Botao href={principal.href} variante="claro" tamanho="g">{principal.rotulo}</Botao>
+        <Botao href={linkWhatsApp(mensagemWhatsApp, site.whatsapp)} variante="whatsapp" tamanho="g">{secundario}</Botao>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .chamado { padding-block: calc(var(--respiro) * 0.5) var(--respiro); }
+  .chamado__painel {
+    padding: clamp(2rem, 1.5rem + 3vw, 3.5rem);
+    background: var(--marinho-profundo); color: rgb(255 255 255 / 0.85);
+    border-radius: var(--raio-escudo); text-align: center;
+  }
+  .chamado h2 { color: var(--branco); margin-bottom: 0.75rem; }
+  .chamado p { max-width: 58ch; margin: 0 auto 1.75rem; }
+  .chamado__acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
+  @media (max-width: 480px) {
+    .chamado__acoes :global(.botao) { flex: 1 1 100%; }
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+import LinkBlog from './LinkBlog.astro';
+import type { Servico } from '../../data/servicos/tipos';
+
+// Links para as outras páginas de garantia (amarra as páginas de serviço entre si)
+interface Props { outras: Servico['outras'] }
+const { outras: o } = Astro.props;
+---
+
+<section id="outras-garantias" class="secao outras" aria-labelledby="outras-titulo">
+  <div class="container">
+    <h2 id="outras-titulo">{o.titulo}</h2>
+    <p class="intro">{o.intro}</p>
+    <ul class="outras__lista">
+      {o.itens.map((i) => (
+        <li>
+          <a href={i.href}>
+            <strong>{i.titulo}</strong>
+            <span>{i.texto}</span>
+            <em>Saiba mais</em>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <LinkBlog link={o.link} />
+  </div>
+</section>
+
+<style>
+  .outras { background: var(--cinza-fundo); }
+  .outras .intro { max-width: 62ch; margin-bottom: 1.75rem; }
+  .outras__lista { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  .outras__lista a {
+    display: flex; flex-direction: column; gap: 0.4rem; height: 100%;
+    padding: 1.25rem; background: var(--branco); border: 1.5px solid #bccbdd; border-radius: var(--raio-p);
+    text-decoration: none; transition: border-color 0.18s ease;
+  }
+  .outras__lista a:hover { border-color: var(--azul-claro); }
+  .outras__lista strong { color: var(--marinho); font-size: 1rem; }
+  .outras__lista span { color: var(--texto-suave); font-size: 0.9rem; flex: 1; }
+  .outras__lista em { font-style: normal; font-weight: 600; font-size: 0.875rem; color: var(--azul-escuro); text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 800px) {
+    .outras__lista { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

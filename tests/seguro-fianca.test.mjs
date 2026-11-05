@@ -78,6 +78,49 @@ test('formas de pagamento com Simular agora e documentos', () => {
   assert.equal(contar(q.slice(q.indexOf('<ul')), /<li[\s>]/g), 3);
 });
 
+// --- Task 5: outras garantias, por que a Gastaldo, cidades, FAQ, chamado final
+test('outras garantias com 3 links', () => {
+  const s = secao(html, 'outras-garantias');
+  assert.match(s, /<h2[^>]*>Outras garantias locatícias<\/h2>/);
+  for (const href of ['/titulo-de-capitalizacao', '/seguro-fianca-empresarial', '/seguro-incendio']) assert.ok(s.includes(`href="${href}"`), href);
+});
+
+test('por que a Gastaldo: 5 diferenciais e bloco para imobiliárias', () => {
+  const s = secao(html, 'por-que');
+  assert.match(s, /<h2[^>]*>Por que contratar seu seguro fiança com a Gastaldo Seguros<\/h2>/);
+  assert.match(s, /<h3[^>]*>Nossos diferenciais<\/h3>/);
+  assert.equal(contar(s, /class="diferencial"/g), 5);
+  assert.match(s, /<h3[^>]*>Seguro fiança para imobiliárias do ABC<\/h3>/);
+  assert.ok(s.includes('Quero ser imobiliária parceira'));
+});
+
+test('cidades com sede em Santo André, endereço real e mapa', () => {
+  const s = secao(html, 'cidades');
+  assert.match(s, /<h2[^>]*>Seguro fiança no ABC Paulista: cidades atendidas<\/h2>/);
+  assert.ok(s.includes('Santo André, onde fica a nossa sede'));
+  assert.ok(html.includes('Av. Pereira Barreto, 1395'));
+  assert.ok(html.includes('class="mapa'), 'fachada do mapa presente');
+});
+
+test('FAQ em sanfona com as 9 perguntas', () => {
+  const s = secao(html, 'faq');
+  assert.match(s, /<h2[^>]*>Perguntas frequentes sobre seguro fiança<\/h2>/);
+  assert.equal(contar(s, /<details/g), 9);
+  assert.equal(contar(s, /<summary[^>]*>\s*<h3/g), 9);
+  assert.ok(s.includes('Como acionar o seguro fiança?'));
+});
+
+test('chamado final com os dois botões', () => {
+  const s = secao(html, 'chamado-final');
+  assert.match(s, /<h2[^>]*>Alugue sem fiador hoje mesmo<\/h2>/);
+  assert.ok(s.includes('Simular meu seguro fiança online') && s.includes('Falar no WhatsApp'));
+});
+
+test('JS da página dentro do orçamento de 5 KB', () => {
+  const js = [...html.matchAll(/<script(?![^>]*application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)].reduce((t, m) => t + Buffer.byteLength(m[1]), 0);
+  assert.ok(js <= 5 * 1024, `JS = ${js} bytes`);
+});
+
 test('nenhum link vazio para posts que ainda não existem', () => {
   assert.ok(!html.includes('href="null"'));
   assert.ok(!html.includes('Guia completo do seguro fiança'));
