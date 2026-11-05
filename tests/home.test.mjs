@@ -182,3 +182,13 @@ test('botões dos três públicos de benefícios têm o mesmo estilo', () => {
 test('SUSEP não aparece no site', () => {
   assert.doesNotMatch(html, /SUSEP/);
 });
+
+// --- Sobre: diferenciais à esquerda, carrossel de treinamentos à direita
+test('sobre tem diferenciais na coluna do texto e carrossel de treinamentos', () => {
+  const s = secao(html, 'sobre');
+  const texto = s.slice(s.indexOf('sobre__texto'), s.indexOf('sobre__treinamentos'));
+  assert.ok(texto.includes('Nossos diferenciais'), 'diferenciais ficam na coluna do texto');
+  assert.ok(s.indexOf('sobre__treinamentos') > s.indexOf('Nossos diferenciais'), 'carrossel vem depois, à direita');
+  assert.ok(contar(s, /class="treino__slide/g) >= 3, 'ao menos 3 fotos de treinamento');
+  assert.match(s, /aria-label="Fotos dos treinamentos[^"]*"/);
+});

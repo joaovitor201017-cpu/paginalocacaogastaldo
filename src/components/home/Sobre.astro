@@ -1,23 +1,13 @@
 ---
 import Pendente from '../Pendente.astro';
+import ImagemReservada from '../ImagemReservada.astro';
+import { treinamentos } from '../../data/treinamentos';
 
 const diferenciais = [
-  {
-    destaque: 'Especialização em seguros locatícios',
-    icone: 'M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Zm-3.5 9 2.5 2.5 4.5-4.5',
-  },
-  {
-    destaque: 'Suporte ativo e próximo',
-    icone: 'M20 15.5a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9.5ZM8.5 9.5h7M8.5 13h4',
-  },
-  {
-    destaque: 'Treinamento presencial para imobiliárias',
-    icone: 'M3 9.5 12 5l9 4.5-9 4.5-9-4.5Zm4 2v4.5c1.5 1.3 3.2 2 5 2s3.5-.7 5-2v-4.5M21 9.5v5',
-  },
-  {
-    destaque: 'Várias seguradoras parceiras',
-    icone: 'M4 7h16M4 12h16M4 17h10M17 15l2 2 3-3.5',
-  },
+  { destaque: 'Especialização em seguros locatícios', icone: 'M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Zm-3.5 9 2.5 2.5 4.5-4.5' },
+  { destaque: 'Suporte ativo e próximo', icone: 'M20 15.5a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9.5ZM8.5 9.5h7M8.5 13h4' },
+  { destaque: 'Treinamento presencial para imobiliárias', icone: 'M3 9.5 12 5l9 4.5-9 4.5-9-4.5Zm4 2v4.5c1.5 1.3 3.2 2 5 2s3.5-.7 5-2v-4.5M21 9.5v5' },
+  { destaque: 'Várias seguradoras parceiras', icone: 'M4 7h16M4 12h16M4 17h10M17 15l2 2 3-3.5' },
 ];
 ---
 
@@ -29,48 +19,107 @@ const diferenciais = [
       <p>
         Desde 2015, oferecemos proteção personalizada e atendimento próximo, daqui de Santo André. No aluguel, somos especialistas e trabalhamos lado a lado com as imobiliárias do ABC.
       </p>
-      <p class="sobre__link">
-        <a href="/blog/gastaldo-seguros-corretora-especializada">Gastaldo Seguros: corretora especializada em seguros e garantias para o aluguel</a>
-      </p>
-    </div>
 
-    <div class="sobre__diferenciais">
       <h3>Nossos diferenciais</h3>
-      <ul>
+      <ul class="sobre__diferenciais">
         {diferenciais.map((d) => (
           <li>
             <span class="sobre__icone" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={d.icone}></path></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d={d.icone}></path></svg>
             </span>
             <strong>{d.destaque}</strong>
           </li>
         ))}
       </ul>
       <p class="sobre__seguradoras"><Pendente rotulo="logos das seguradoras parceiras" /></p>
+
+      <p class="sobre__link">
+        <a href="/blog/gastaldo-seguros-corretora-especializada">Gastaldo Seguros: corretora especializada em seguros e garantias para o aluguel</a>
+      </p>
+    </div>
+
+    <div class="sobre__treinamentos">
+      <ul class="treino__trilha" tabindex="0" aria-label="Fotos dos treinamentos nas imobiliárias (role para o lado)">
+        {treinamentos.map((t, i) => (
+          <li class="treino__slide">
+            <ImagemReservada
+              descricao={`Foto ${i + 1}: treinamento presencial em imobiliária`}
+              proporcao="4/3"
+              raio="escudo"
+              src={t.foto ?? undefined}
+              alt={t.legenda}
+              sizes="(min-width: 900px) 520px, 90vw"
+            />
+            <p class="treino__legenda">{t.legenda}</p>
+          </li>
+        ))}
+      </ul>
+      <div class="treino__setas">
+        <button type="button" data-dir="-1" aria-label="Foto anterior">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        </button>
+        <button type="button" data-dir="1" aria-label="Próxima foto">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>
 
+<script is:inline>
+  // Setas do carrossel de treinamentos (volta ao início no fim)
+  (() => {
+    const t = document.querySelector('.treino__trilha');
+    const setas = document.querySelector('.treino__setas');
+    if (!t || !setas) return;
+    setas.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      const passo = t.clientWidth;
+      const fim = t.scrollLeft + passo >= t.scrollWidth - 4;
+      const inicio = t.scrollLeft <= 4;
+      const dir = Number(b.dataset.dir);
+      const destino = dir > 0 && fim ? 0 : dir < 0 && inicio ? t.scrollWidth : t.scrollLeft + passo * dir;
+      t.scrollTo({ left: destino, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  })();
+</script>
+
 <style>
-  .sobre__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
-  .sobre__texto p { max-width: 58ch; }
+  .sobre__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .sobre__texto p { max-width: 54ch; }
   .sobre__abertura { font-size: 1.125rem; font-weight: 500; color: var(--marinho); line-height: 1.45; }
-  .sobre__link { font-weight: 600; margin-top: 1.5rem; }
-  .sobre__diferenciais h3 { margin-bottom: 1.5rem; }
-  .sobre__diferenciais ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-  /* fundo cinza bem leve para destacar ícone e título */
-  .sobre__diferenciais li { display: flex; align-items: center; gap: 0.9rem; padding: 1rem 1.1rem; background: var(--cinza-fundo); border-radius: var(--raio-m); }
-  .sobre__diferenciais li strong { color: var(--marinho); font-size: 0.975rem; line-height: 1.35; }
+  .sobre__texto h3 { font-size: 0.975rem; margin: 1.75rem 0 0.75rem; }
+
+  /* Diferenciais em formato compacto */
+  .sobre__diferenciais { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+  .sobre__diferenciais li { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.75rem; background: var(--cinza-fundo); border-radius: var(--raio-p); }
+  .sobre__diferenciais strong { color: var(--marinho); font-size: 0.8125rem; font-weight: 600; line-height: 1.3; }
   .sobre__icone {
-    flex: 0 0 auto; display: grid; place-items: center; width: 46px; height: 46px;
+    flex: 0 0 auto; display: grid; place-items: center; width: 32px; height: 32px;
     color: var(--marinho); background: var(--azul-ceu);
-    border-radius: 10px 10px 10px 22px; /* eco do escudo do logo */
+    border-radius: 8px 8px 8px 14px; /* eco do escudo do logo */
   }
-  .sobre__seguradoras { margin-top: 2rem; }
+  .sobre__seguradoras { margin: 0.9rem 0 0; }
+  .sobre__link { font-weight: 600; margin-top: 1.25rem; font-size: 0.9375rem; }
+
+  /* Carrossel de fotos dos treinamentos */
+  .sobre__treinamentos { position: relative; min-width: 0; }
+  .treino__trilha { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .treino__trilha::-webkit-scrollbar { display: none; }
+  .treino__slide { scroll-snap-align: start; }
+  .treino__legenda { margin: 0.6rem 0 0; font-size: 0.8125rem; color: var(--texto-suave); }
+  .treino__setas { position: absolute; right: 0.75rem; bottom: 2.6rem; display: flex; gap: 0.4rem; }
+  .treino__setas button {
+    display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    border: 0; background: var(--branco); color: var(--marinho); cursor: pointer; box-shadow: var(--sombra);
+  }
+  .treino__setas button:hover { background: var(--marinho); color: var(--branco); }
+
   @media (max-width: 900px) {
     .sobre__grade { grid-template-columns: minmax(0, 1fr); }
   }
-  @media (max-width: 520px) {
-    .sobre__diferenciais ul { grid-template-columns: minmax(0, 1fr); }
+  @media (max-width: 420px) {
+    .sobre__diferenciais { grid-template-columns: minmax(0, 1fr); }
   }
 </style>
