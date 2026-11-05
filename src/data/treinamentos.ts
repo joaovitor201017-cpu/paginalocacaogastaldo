@@ -3,7 +3,6 @@ import casari from '../assets/treinamentos/treinamento-casari.png';
 import t2 from '../assets/treinamentos/treinamento-2.jpg';
 import t3 from '../assets/treinamentos/treinamento-3.jpg';
 import t4 from '../assets/treinamentos/treinamento-4.jpg';
-import t5 from '../assets/treinamentos/treinamento-5.jpg';
 import t6 from '../assets/treinamentos/treinamento-6.jpg';
 
 // Fotos reais dos treinamentos presenciais nas imobiliárias (enviadas pelo João).
@@ -22,6 +21,5 @@ export const treinamentos: Treinamento[] = [
   { legenda: generica, foto: t2 },
   { legenda: generica, foto: t3 },
   { legenda: generica, foto: t4 },
-  { legenda: generica, foto: t5, posicao: '50% 70%' },
   { legenda: generica, foto: t6, posicao: '50% 75%' },
 ];

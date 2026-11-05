@@ -236,10 +236,11 @@ test('sobre sem a reserva de logos das seguradoras e sem o link do blog', () => 
   assert.ok(!s.includes('gastaldo-seguros-corretora-especializada'));
 });
 
-test('carrossel de treinamentos com as 6 fotos reais e legenda da Casari', () => {
+test('carrossel de treinamentos com as 5 fotos reais e legenda da Casari', () => {
   const s = secao(html, 'sobre');
-  assert.equal(contar(s, /class="treino__slide/g), 6);
-  assert.equal(contar(s, /<picture/g), 6);
+  assert.equal(contar(s, /class="treino__slide/g), 5);
+  assert.equal(contar(s, /<picture/g), 5);
+  assert.ok(!s.includes('treinamento-5'), 'foto 5 removida');
   assert.ok(!s.includes('foto__reserva'), 'sem espaços reservados');
   assert.match(s, /Treinamento na Casari Imóveis/);
 });
