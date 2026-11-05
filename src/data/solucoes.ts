@@ -1,7 +1,7 @@
 import type { ImageMetadata } from 'astro';
 import fotoTitulo from '../assets/fotos/card-titulo-capitalizacao.jpg';
 import fotoFianca from '../assets/fotos/card-seguro-fianca.jpg';
-import fotoIncendio from '../assets/fotos/card-seguro-incendio.jpg';
+import fotoIncendio from '../assets/fotos/card-seguro-incendio-cozinha.jpg';
 import fotoResidencial from '../assets/fotos/card-seguro-residencial.jpg';
 
 // As 4 soluções da Home, com as URLs definidas no PDF
