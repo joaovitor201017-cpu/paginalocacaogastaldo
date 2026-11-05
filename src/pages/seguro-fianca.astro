@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TopoServico from '../components/servico/TopoServico.astro';
+import Passos from '../components/servico/Passos.astro';
+import LinkBlog from '../components/servico/LinkBlog.astro';
+import { seguroFianca as s } from '../data/servicos/seguro-fianca';
+import { site } from '../data/site';
+import { cidades } from '../data/cidades';
+import { schemaServico } from '../lib/schema';
+
+const caminho = `/${s.slug}`;
+const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description, caminho, rotulo: s.rotuloTrilha }, s.faq.itens, cidades);
+---
+
+<BaseLayout title={s.seo.title} description={s.seo.description} path={caminho} jsonLd={jsonLd} mensagemWhatsApp={s.mensagemWhatsApp}>
+  <main id="conteudo">
+    <TopoServico servico={s} />
+
+    <section id="o-que-e" class="secao texto-servico" aria-labelledby="o-que-e-titulo">
+      <div class="container estreito">
+        <h2 id="o-que-e-titulo">{s.oQueE.titulo}</h2>
+        {s.oQueE.paragrafos.map((p) => <p>{p}</p>)}
+        <LinkBlog link={s.oQueE.link} />
+      </div>
+    </section>
+
+    <Passos id="como-funciona" titulo={s.comoFunciona.titulo} intro={s.comoFunciona.intro} passos={s.comoFunciona.passos} />
+  </main>
+</BaseLayout>
+
+<style>
+  .estreito { max-width: 760px; }
+  .texto-servico p { color: var(--texto); }
+</style>

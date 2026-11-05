@@ -23,3 +23,8 @@ export function secao(html, id) {
   const fim = html.indexOf('</section>', ini);
   return html.slice(ini, fim);
 }
+
+// Lê o HTML gerado de qualquer rota (ex.: '/seguro-fianca')
+export function lerPagina(rota) {
+  return readFileSync(join('dist', rota, 'index.html'), 'utf8');
+}

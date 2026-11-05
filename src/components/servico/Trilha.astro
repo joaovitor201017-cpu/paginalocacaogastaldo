@@ -1,0 +1,20 @@
+---
+// Trilha de navegação (Início › página atual). Igual ao BreadcrumbList do schema.
+interface Props { atual: string }
+const { atual } = Astro.props;
+---
+
+<nav class="trilha" aria-label="Trilha">
+  <ol>
+    <li><a href="/">Início</a></li>
+    <li><span aria-current="page">{atual}</span></li>
+  </ol>
+</nav>
+
+<style>
+  .trilha ol { display: flex; flex-wrap: wrap; gap: 0.4rem; font-size: 0.8125rem; color: var(--texto-suave); margin-bottom: 1.25rem; }
+  .trilha li + li::before { content: '›'; margin-right: 0.4rem; color: var(--azul); }
+  .trilha a { color: var(--texto-suave); }
+  .trilha a:hover { color: var(--marinho); }
+  .trilha [aria-current] { color: var(--marinho); font-weight: 500; }
+</style>

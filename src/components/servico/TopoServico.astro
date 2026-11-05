@@ -1,0 +1,53 @@
+---
+import Botao from '../Botao.astro';
+import ColagemFotos from '../ColagemFotos.astro';
+import Trilha from './Trilha.astro';
+import { site } from '../../data/site';
+import { linkWhatsApp } from '../../lib/whatsapp';
+import type { Servico } from '../../data/servicos/tipos';
+
+// Topo da página de serviço: trilha, H1, subtítulo, botões, selos e a colagem de fotos da Home
+interface Props { servico: Servico }
+const { servico: s } = Astro.props;
+---
+
+<section class="hero" aria-labelledby="hero-titulo">
+  <div class="container hero__grade">
+    <div class="hero__texto">
+      <Trilha atual={s.rotuloTrilha} />
+      <h1 id="hero-titulo">{s.topo.h1}</h1>
+      <p class="hero__sub">{s.topo.subtitulo}</p>
+      <div class="hero__acoes">
+        <Botao href={s.topo.botaoPrincipal.href} tamanho="g">{s.topo.botaoPrincipal.rotulo}</Botao>
+        <Botao href={linkWhatsApp(s.mensagemWhatsApp, site.whatsapp)} variante="secundario" tamanho="g">{s.topo.botaoSecundario}</Botao>
+      </div>
+      <ul class="selos">
+        {s.topo.selos.map((selo) => (
+          <li>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+            {selo}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <ColagemFotos />
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(2rem, 1.5rem + 2vw, 3rem); }
+  .hero__grade { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 4rem); align-items: center; }
+  .hero h1 { max-width: 20ch; margin-bottom: 1rem; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); }
+  .hero__sub { font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem); color: var(--texto-suave); max-width: 50ch; margin-bottom: 1.75rem; }
+  .hero__acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .selos { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 1.5rem; font-size: 0.875rem; font-weight: 500; color: var(--marinho); }
+  .selos li { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .selos svg { color: var(--azul-escuro); flex: 0 0 auto; }
+  @media (max-width: 900px) {
+    .hero__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .hero__acoes :global(.botao) { flex: 1 1 100%; }
+    .selos { flex-direction: column; }
+  }
+</style>

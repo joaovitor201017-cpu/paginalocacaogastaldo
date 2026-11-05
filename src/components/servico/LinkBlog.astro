@@ -1,0 +1,12 @@
+---
+import type { LinkBlog } from '../../data/servicos/tipos';
+// Link para post do blog: só aparece quando o post existe (href preenchido)
+interface Props { link: LinkBlog }
+const { link } = Astro.props;
+---
+
+{link.href && <p class="link-blog"><a href={link.href}>{link.rotulo}</a></p>}
+
+<style>
+  .link-blog { font-weight: 600; font-size: 0.9375rem; margin-top: 1rem; }
+</style>

@@ -1,0 +1,41 @@
+---
+// Passo a passo numerado (é uma sequência real: a numeração tem sentido)
+interface Props { id: string; titulo: string; intro: string; passos: { titulo: string; texto: string }[] }
+const { id, titulo, intro, passos } = Astro.props;
+---
+
+<section id={id} class="secao passos" aria-labelledby={`${id}-titulo`}>
+  <div class="container">
+    <h2 id={`${id}-titulo`}>{titulo}</h2>
+    <p class="intro">{intro}</p>
+    <ol class="passos__lista">
+      {passos.map((p, i) => (
+        <li>
+          <span class="passos__num" aria-hidden="true">{i + 1}</span>
+          <strong>{p.titulo}</strong>
+          <p>{p.texto}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .passos { background: var(--cinza-fundo); }
+  .passos .intro { max-width: 62ch; margin-bottom: 2rem; }
+  .passos__lista { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; counter-reset: none; }
+  .passos__lista li { position: relative; padding: 1.25rem 1rem 1.1rem; background: var(--branco); border: 1.5px solid #bccbdd; border-radius: var(--raio-p); }
+  .passos__num {
+    display: grid; place-items: center; width: 36px; height: 36px; margin-bottom: 0.85rem;
+    font-weight: 700; color: var(--branco); background: var(--marinho);
+    border-radius: 9px 9px 9px 16px; /* eco do escudo do logo */
+  }
+  .passos__lista strong { display: block; color: var(--marinho); font-size: 0.9375rem; margin-bottom: 0.35rem; }
+  .passos__lista p { margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--texto-suave); }
+  @media (max-width: 1000px) {
+    .passos__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    .passos__lista { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
