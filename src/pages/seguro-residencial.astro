@@ -3,4 +3,13 @@ import PaginaServico from '../components/servico/PaginaServico.astro';
 import { seguroResidencial } from '../data/servicos/seguro-residencial';
 ---
 
-<PaginaServico servico={seguroResidencial} passos="depois" idPassos="como-contratar" />
+<PaginaServico
+  servico={seguroResidencial}
+  passos="depois"
+  idPassos="como-contratar"
+  fotosOQueE={[
+    // Fotos a gerar: salve em src/assets/fotos/ e preencha o src (import)
+    { alt: 'Casa térrea com jardim no ABC Paulista', descricao: 'Foto: casa' },
+    { alt: 'Prédio residencial de apartamentos no ABC Paulista', descricao: 'Foto: apartamento' },
+  ]}
+/>

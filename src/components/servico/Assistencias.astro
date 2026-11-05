@@ -1,11 +1,12 @@
 ---
+import Botao from '../Botao.astro';
 import { icones } from '../../lib/icones';
-import type { Servico } from '../../data/servicos/tipos';
+import type { Acao, Servico } from '../../data/servicos/tipos';
 
 // Assistências 24 horas: dois grupos de serviços em cards, faixa cinza com
 // uma ferramenta grande e suave ao fundo (mesma textura da faixa de pagamento).
-interface Props { assistencias: NonNullable<Servico['assistencias']> }
-const { assistencias: a } = Astro.props;
+interface Props { assistencias: NonNullable<Servico['assistencias']>; botao: Acao }
+const { assistencias: a, botao } = Astro.props;
 ---
 
 <section id="assistencias" class="secao assist" aria-labelledby="assistencias-titulo">
@@ -29,6 +30,7 @@ const { assistencias: a } = Astro.props;
       ))}
     </div>
     <p class="assist__nota">{a.nota}</p>
+    <div class="assist__acao"><Botao href={botao.href} tamanho="g">{botao.rotulo}</Botao></div>
   </div>
 </section>
 
@@ -48,6 +50,7 @@ const { assistencias: a } = Astro.props;
   .assist__grupo li svg { flex: 0 0 auto; margin-top: 0.15rem; color: var(--azul-escuro); }
   .assist__grupo strong { color: var(--marinho); }
   .assist__nota { margin: 1rem 0 0; font-size: 0.8125rem; color: var(--texto-suave); }
+  .assist__acao { margin-top: 1.5rem; }
   @media (max-width: 760px) {
     .assist__grupos { grid-template-columns: minmax(0, 1fr); }
   }

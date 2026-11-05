@@ -82,3 +82,13 @@ test('vantagens sem o texto da Home e passo a passo em fundo branco depois das a
   assert.ok(!secao(html, 'vantagens').includes('Nossas soluções para alugar foram pensadas'));
   assert.match(html, /id="como-contratar" class="[^"]*passos--branco/);
 });
+
+test('casa e apartamento com duas imagens ao lado do texto', () => {
+  const s = secao(html, 'o-que-e');
+  assert.equal(contar(s, /class="foto /g), 2);
+  assert.ok(s.includes('texto-servico__fotos'));
+});
+
+test('assistências com botão de simulação', () => {
+  assert.match(secao(html, 'assistencias'), /href="\/cotacao-seguro-residencial"[^>]*>\s*Fazer simulação/);
+});
