@@ -60,3 +60,7 @@ test('Seguro Residencial: estrutura do documento e regras do site', () => {
   for (const proibido of ['São Bernardo do Campo, onde fica', 'com sede em São Bernardo', 'SUSEP', 'Google', '[', 'Cotar', 'Porto']) assert.ok(!t.includes(proibido), proibido);
   assert.ok(r.porQue.texto.includes('com sede em Santo André'));
 });
+
+test('subtítulo do Seguro Residencial', () => {
+  assert.equal(r.topo.subtitulo, 'Proteja seu imóvel contra incêndio, roubo e danos elétricos, com assistência 24 horas. Faça a cotação grátis, compare as seguradoras no WhatsApp e contrate o seguro do seu jeito.');
+});
