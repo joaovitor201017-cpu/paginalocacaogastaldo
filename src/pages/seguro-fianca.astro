@@ -76,11 +76,11 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
   .pagamento { background: var(--cinza-fundo); position: relative; overflow: hidden; }
   .pagamento__grade { position: relative; }
   .pagamento__marca {
-    position: absolute; right: 18%; top: 50%; width: clamp(220px, 26vw, 360px); height: auto;
+    position: absolute; left: clamp(6rem, 22vw, 24rem); top: 50%; width: clamp(320px, 38vw, 500px); height: auto;
     color: #dbe4ef; transform: translateY(-50%) rotate(-12deg); pointer-events: none;
   }
   @media (max-width: 760px) {
-    .pagamento__marca { right: -60px; top: auto; bottom: -40px; transform: rotate(-12deg); width: 240px; }
+    .pagamento__marca { left: 15%; top: 32%; width: 340px; }
   }
   .pagamento__grade { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem 4rem; align-items: center; }
   .pagamento p { max-width: 64ch; margin: 0; }
