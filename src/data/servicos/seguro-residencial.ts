@@ -14,7 +14,7 @@ export const seguroResidencial: Servico = {
   mensagemWhatsApp: 'Olá! Quero uma cotação de seguro residencial.',
 
   topo: {
-    h1: 'Seguro Residencial: proteja sua casa ou apartamento, próprio ou alugado',
+    h1: 'Seguro Residencial: proteja sua casa ou apartamento',
     subtitulo: 'Proteja sua casa ou apartamento contra incêndio, roubo e danos elétricos, com assistência 24 horas. Faça a cotação grátis, compare as seguradoras no WhatsApp e contrate o seguro do seu jeito.',
     botaoPrincipal: { rotulo: 'Simular meu seguro residencial online', href: '/cotacao-seguro-residencial' },
     botaoSecundario: 'Falar com um corretor no WhatsApp',

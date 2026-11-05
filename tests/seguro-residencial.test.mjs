@@ -9,7 +9,7 @@ test('SEO, noindex e um H1', () => {
   assert.match(html, /<title>Seguro Residencial: Casa e Apartamento \| Cotação<\/title>/);
   assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
   assert.equal(contar(html, /<h1[\s>]/g), 1);
-  assert.match(html, /<h1[^>]*>Seguro Residencial: proteja sua casa ou apartamento, próprio ou alugado<\/h1>/);
+  assert.match(html, /<h1[^>]*>Seguro Residencial: proteja sua casa ou apartamento<\/h1>/);
 });
 
 test('topo com 5 selos, botão de simulação e uma foto (a do card Residencial)', () => {
