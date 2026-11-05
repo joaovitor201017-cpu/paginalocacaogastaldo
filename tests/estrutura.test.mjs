@@ -7,11 +7,11 @@ const header = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
 const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'));
 
 test('header usa o logo marinho', () => {
-  assert.match(header, /logo-gastaldo\.svg/);
+  assert.match(header, /\/brand\/logo-gastaldo\.png/);
 });
 
 test('footer usa o logo branco e as colunas do PDF', () => {
-  assert.match(footer, /logo-gastaldo-branco\.svg/);
+  assert.match(footer, /\/brand\/logo-gastaldo-branco\.png/);
   for (const t of ['Soluções', 'Simuladores', 'Institucional']) assert.ok(footer.includes(t), t);
 });
 
