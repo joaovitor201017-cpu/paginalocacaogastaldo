@@ -121,6 +121,16 @@ test('JS da página dentro do orçamento de 5 KB', () => {
   assert.ok(js <= 5 * 1024, `JS = ${js} bytes`);
 });
 
+// --- Task 6: ajustes da revisão visual
+test('listas numeradas sem os números padrão do navegador e mapa em faixa baixa', async () => {
+  const { lerCssGerado } = await import('./helpers.mjs');
+  const css = lerCssGerado() + html;
+  assert.match(css, /\.trilha[^{]*ol[^{]*\{[^}]*list-style:none/);
+  assert.match(css, /\.passos__lista[^{]*\{[^}]*list-style:none/);
+  assert.match(css, /\.mapa-servico[^{]*\.mapa[^{]*\{[^}]*aspect-ratio:3(\s*\/\s*1)?[;}]/);
+  assert.ok(!/class="container estreito"/.test(html), 'o que é alinhado à esquerda como as outras seções');
+});
+
 test('nenhum link vazio para posts que ainda não existem', () => {
   assert.ok(!html.includes('href="null"'));
   assert.ok(!html.includes('Guia completo do seguro fiança'));

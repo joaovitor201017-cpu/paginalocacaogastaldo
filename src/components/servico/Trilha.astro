@@ -12,7 +12,7 @@ const { atual } = Astro.props;
 </nav>
 
 <style>
-  .trilha ol { display: flex; flex-wrap: wrap; gap: 0.4rem; font-size: 0.8125rem; color: var(--texto-suave); margin-bottom: 1.25rem; }
+  .trilha ol { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; font-size: 0.8125rem; color: var(--texto-suave); margin-bottom: 1.25rem; }
   .trilha li + li::before { content: '›'; margin-right: 0.4rem; color: var(--azul); }
   .trilha a { color: var(--texto-suave); }
   .trilha a:hover { color: var(--marinho); }

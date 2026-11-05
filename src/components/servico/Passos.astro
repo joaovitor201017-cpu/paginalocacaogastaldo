@@ -23,7 +23,7 @@ const { id, titulo, intro, passos } = Astro.props;
 <style>
   .passos { background: var(--cinza-fundo); }
   .passos .intro { max-width: 62ch; margin-bottom: 2rem; }
-  .passos__lista { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; counter-reset: none; }
+  .passos__lista { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; }
   .passos__lista li { position: relative; padding: 1.25rem 1rem 1.1rem; background: var(--branco); border: 1.5px solid #bccbdd; border-radius: var(--raio-p); }
   .passos__num {
     display: grid; place-items: center; width: 36px; height: 36px; margin-bottom: 0.85rem;
