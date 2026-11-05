@@ -13,12 +13,13 @@ const src = `https://www.google.com/maps?q=${encodeURIComponent(consulta)}&outpu
   </div>
 </div>
 
-<script is:inline>
-  // Troca a fachada pelo iframe do Google Maps no clique
-  document.querySelectorAll('.mapa').forEach((m) => {
+<script>
+  // Fachada do mapa: o iframe do Google Maps só carrega no clique.
+  // Script processado pelo Astro: vai uma vez por página, mesmo com vários mapas.
+  document.querySelectorAll<HTMLElement>('.mapa').forEach((m) => {
     m.querySelector('.mapa__botao')?.addEventListener('click', () => {
       const f = document.createElement('iframe');
-      f.src = m.dataset.src;
+      f.src = m.dataset.src ?? '';
       f.title = 'Mapa da Gastaldo Seguros';
       f.loading = 'lazy';
       f.referrerPolicy = 'no-referrer-when-downgrade';

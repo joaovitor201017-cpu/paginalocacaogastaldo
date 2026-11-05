@@ -104,7 +104,7 @@ test('cidades igual à Home, sem endereço e mapa', () => {
   const s = secao(html, 'cidades');
   assert.match(s, /<h2[^>]*>Atendemos todo o ABC Paulista<\/h2>/);
   assert.ok(s.includes('Santo André, onde fica a nossa sede'));
-  assert.ok(!html.includes('class="mapa'), 'sem mapa');
+  assert.ok(!s.includes('class="mapa'), 'sem mapa na seção de cidades');
   assert.ok(!html.includes('contato-linha'), 'sem linha de endereço');
 });
 

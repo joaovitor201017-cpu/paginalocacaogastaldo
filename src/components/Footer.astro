@@ -1,8 +1,11 @@
 ---
 import Pendente from './Pendente.astro';
+import MapaFachada from './MapaFachada.astro';
 import { site } from '../data/site';
 import { solucoes } from '../data/solucoes';
 import { enderecoCompleto } from '../lib/endereco';
+import { icones } from '../lib/icones';
+import { linkWhatsApp, numeroWhatsApp } from '../lib/whatsapp';
 
 const institucional = [
   { href: '/#sobre', rotulo: 'Sobre nós' },
@@ -10,6 +13,16 @@ const institucional = [
   { href: '/blog', rotulo: 'Blog' },
   { href: '/politica-de-privacidade', rotulo: 'Política de Privacidade' },
 ];
+
+// Canais de contato (os mesmos do "Fale com a gente"); só os que têm dado aparecem
+const endereco = site.endereco ? enderecoCompleto(site.endereco) : null;
+const canais = [
+  { rotulo: 'WhatsApp', icone: icones.mensagem, valor: site.whatsapp, href: site.whatsapp ? linkWhatsApp(site.mensagemWhatsApp, site.whatsapp) : null },
+  { rotulo: 'Telefone', icone: icones.telefone, valor: site.telefone, href: site.telefone ? `tel:+${numeroWhatsApp(site.telefone)}` : null },
+  { rotulo: 'E-mail', icone: icones.email, valor: site.email, href: site.email ? `mailto:${site.email}` : null },
+  { rotulo: 'Endereço', icone: icones.pin, valor: endereco, href: null },
+  { rotulo: 'Horário', icone: icones.relogio, valor: site.horario, href: null },
+].filter((c) => c.valor);
 ---
 
 <footer class="rodape">
@@ -31,6 +44,25 @@ const institucional = [
       <ul>{institucional.map((l) => <li><a href={l.href}>{l.rotulo}</a></li>)}</ul>
     </div>
   </div>
+
+  <div class="container rodape__contato">
+    <div>
+      <p class="rodape__titulo">Fale com a gente</p>
+      <dl class="rodape__canais">
+        {canais.map((c) => (
+          <div>
+            <dt>
+              <svg class="rodape__contato-icone" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={c.icone}></path></svg>
+              {c.rotulo}
+            </dt>
+            <dd>{c.href ? <a href={c.href}>{c.valor}</a> : c.valor}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+    <MapaFachada consulta={endereco ?? `${site.nome}, ${site.cidadeSede} - SP`} rotulo={`${site.nome} · ${site.endereco ? `${site.endereco.bairro}, ${site.endereco.cidade}` : site.cidadeSede}`} />
+  </div>
+
   <div class="container rodape__dados">
     <p>
       {site.nome} · CNPJ {site.cnpj ?? <Pendente rotulo="número" />} ·{' '}
@@ -48,10 +80,26 @@ const institucional = [
   .rodape li + li { margin-top: 0.5rem; }
   .rodape a { color: inherit; text-decoration: none; }
   .rodape a:hover { color: var(--azul-ceu); text-decoration: underline; }
-  .rodape__dados { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgb(255 255 255 / 0.14); font-size: 0.85rem; }
+
+  /* Contatos e mapa */
+  .rodape__contato { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid rgb(255 255 255 / 0.14); }
+  .rodape__canais { display: grid; gap: 0.7rem; margin: 0; }
+  .rodape__canais div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; align-items: start; }
+  .rodape__canais dt { display: flex; align-items: center; gap: 0.55rem; color: var(--branco); font-weight: 600; }
+  .rodape__canais dd { margin: 0; }
+  .rodape__contato-icone { flex: 0 0 auto; color: var(--azul-ceu); }
+  .rodape__contato :global(.mapa) { aspect-ratio: 16 / 8; border-color: rgb(255 255 255 / 0.14); }
+
+  .rodape__dados { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgb(255 255 255 / 0.14); font-size: 0.85rem; }
   .rodape__dados p { margin: 0; }
   @media (max-width: 860px) {
     .rodape__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1.25rem; }
     .rodape__marca { grid-column: 1 / -1; }
+    .rodape__contato { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .rodape__canais div { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
+    .rodape__canais dd { padding-left: calc(18px + 0.55rem); }
+    .rodape__contato :global(.mapa) { aspect-ratio: 4 / 3; }
   }
 </style>

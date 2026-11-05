@@ -21,3 +21,15 @@ test('um único botão flutuante de WhatsApp com a mensagem padrão', () => {
   const m = html.match(/<a[^>]*aria-label="Falar no WhatsApp"[^>]*>/)[0];
   assert.ok(m.includes(`text=${msg.replace(/&/g, '&amp;')}`), m);
 });
+
+test('rodapé com os contatos (ícones) e o mapa', () => {
+  for (const t of ['WhatsApp', 'Telefone', 'E-mail', 'Endereço', 'Horário']) assert.ok(footer.includes(`>${t}<`) || footer.includes(`${t}</`), t);
+  assert.ok(footer.includes('contato@gastaldoseguros.com.br'));
+  assert.ok(footer.includes('Segunda a sexta, das 9h às 18h'));
+  assert.ok(footer.includes('class="mapa'), 'mapa no rodapé');
+  assert.equal((footer.match(/class="rodape__contato-icone"/g) || []).length, 5);
+});
+
+test('script do mapa vai uma vez só, mesmo com dois mapas na página', () => {
+  assert.equal((html.match(/Troca a fachada pelo iframe/g) || []).length, 0, 'não fica mais inline repetido');
+});
