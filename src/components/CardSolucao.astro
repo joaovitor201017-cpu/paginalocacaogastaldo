@@ -8,23 +8,19 @@ const { solucao: s } = Astro.props;
 ---
 
 <article class="card">
-  <ImagemReservada descricao={`Foto: ${s.foto}`} proporcao="4/3" raio="m" sizes="(min-width: 1100px) 280px, 80vw" />
+  <ImagemReservada descricao={`Foto: ${s.foto}`} proporcao="16/10" raio="m" sizes="(min-width: 1100px) 260px, 80vw" />
   <div class="card__corpo">
     <h3>{s.titulo}</h3>
     <p>{s.texto}</p>
-    <div class="card__acoes">
-      <Botao href={s.saibaMais} variante="secundario">Saiba mais</Botao>
-      <Botao href={s.acao.href} variante="primario">{s.acao.rotulo}</Botao>
-    </div>
+    <Botao href={s.saibaMais} variante="secundario">Saiba mais</Botao>
   </div>
 </article>
 
 <style>
-  .card { display: flex; flex-direction: column; height: 100%; background: var(--branco); border: 1px solid var(--cinza-linha); border-radius: var(--raio-g); padding: 0.75rem; }
+  .card { display: flex; flex-direction: column; height: 100%; background: var(--branco); border: 1px solid var(--cinza-linha); border-radius: var(--raio-m); padding: 0.6rem; }
   /* raio concêntrico ao do card */
-  .card :global(.foto) { border-radius: calc(var(--raio-g) - 0.75rem); }
-  .card__corpo { display: flex; flex-direction: column; flex: 1; padding: 1.1rem 0.6rem 0.6rem; }
-  .card__corpo p { color: var(--texto-suave); font-size: var(--fs-pequeno); flex: 1; }
-  .card__acoes { display: flex; gap: 0.6rem; margin-top: 0.5rem; }
-  .card__acoes :global(.botao) { flex: 1 1 auto; padding-inline: 0.9rem; }
+  .card :global(.foto) { border-radius: calc(var(--raio-m) - 0.6rem); }
+  .card__corpo { display: flex; flex-direction: column; align-items: flex-start; flex: 1; padding: 0.9rem 0.5rem 0.5rem; }
+  .card__corpo h3 { font-size: 1.0625rem; margin-bottom: 0.4rem; }
+  .card__corpo p { color: var(--texto-suave); font-size: 0.875rem; line-height: 1.55; flex: 1; margin-bottom: 1rem; }
 </style>

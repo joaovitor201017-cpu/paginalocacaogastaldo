@@ -8,10 +8,7 @@ import Parceiras from '../components/home/Parceiras.astro';
 import Sobre from '../components/home/Sobre.astro';
 import Cidades from '../components/home/Cidades.astro';
 import Contato from '../components/home/Contato.astro';
-import Faq from '../components/home/Faq.astro';
-import CtaFinal from '../components/home/CtaFinal.astro';
 import { site } from '../data/site';
-import { faq } from '../data/faq';
 import { cidades } from '../data/cidades';
 import { schemaHome } from '../lib/schema';
 
@@ -20,7 +17,7 @@ const description =
   'Soluções para alugar sem fiador ou caução no ABC: seguro fiança, título de capitalização, seguro incêndio e residencial. Corretora parceira das imobiliárias da região.';
 ---
 
-<BaseLayout title={title} description={description} path="/" jsonLd={schemaHome(site, faq, cidades)}>
+<BaseLayout title={title} description={description} path="/" jsonLd={schemaHome(site, [], cidades)}>
   <main id="conteudo">
     <Hero />
     <FaixaLogos />
@@ -29,8 +26,6 @@ const description =
     <Parceiras />
     <Sobre />
     <Cidades />
-    <Faq />
     <Contato />
-    <CtaFinal />
   </main>
 </BaseLayout>

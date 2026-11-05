@@ -1,31 +1,31 @@
 ---
 import { Image } from 'astro:assets';
+import Marquee from '../Marquee.astro';
 import { imobiliarias } from '../../data/imobiliarias';
 ---
 
-<div class="faixa" role="region" aria-label="Imobiliárias parceiras">
+<div class="faixa">
   <div class="container faixa__interna">
     <p class="faixa__frase">Parceira das principais imobiliárias do ABC</p>
-    <ul class="faixa__lista">
+    <Marquee class="faixa__marquee" rotulo="Imobiliárias parceiras" duracao={30}>
       {imobiliarias.map((i) => (
-        <li title={i.cidade ?? undefined}>
-          {i.logo ? <Image src={i.logo} alt={i.nome} height={40} loading="lazy" /> : <span>{i.nome}</span>}
+        <li class="faixa__item" title={i.cidade ?? undefined}>
+          {i.logo ? <Image src={i.logo} alt={i.nome} height={32} loading="lazy" /> : <span>{i.nome}</span>}
         </li>
       ))}
-    </ul>
+    </Marquee>
   </div>
 </div>
 
 <style>
   .faixa { border-block: 1px solid var(--cinza-linha); background: var(--branco); }
-  .faixa__interna { display: flex; align-items: center; gap: 2rem; padding-block: 1.4rem; }
-  .faixa__frase { flex: 0 0 auto; margin: 0; max-width: 24ch; font-size: 0.875rem; font-weight: 500; color: var(--texto-suave); line-height: 1.35; }
-  .faixa__lista { display: flex; align-items: center; gap: clamp(1.25rem, 3vw, 2.75rem); flex-wrap: wrap; row-gap: 0.6rem; flex: 1; }
-  .faixa__lista li { flex: 0 0 auto; color: var(--texto-suave); font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; white-space: nowrap; filter: grayscale(1); }
-  .faixa__lista :global(img) { height: 40px; width: auto; }
+  .faixa__interna { display: flex; align-items: center; gap: 2rem; padding-block: 1.1rem; }
+  .faixa__frase { flex: 0 0 auto; margin: 0; max-width: 22ch; font-size: 0.8125rem; font-weight: 500; color: var(--texto-suave); line-height: 1.35; }
+  .faixa :global(.faixa__marquee) { flex: 1; min-width: 0; }
+  .faixa :global(.faixa__item) { flex: 0 0 auto; color: var(--texto-suave); font-weight: 600; font-size: 0.9375rem; letter-spacing: -0.01em; white-space: nowrap; filter: grayscale(1); }
+  .faixa :global(.faixa__item img) { height: 32px; width: auto; }
   @media (max-width: 700px) {
-    .faixa__interna { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .faixa__interna { flex-direction: column; align-items: stretch; gap: 0.6rem; }
     .faixa__frase { max-width: none; }
-    .faixa__lista { width: 100%; }
   }
 </style>

@@ -6,8 +6,8 @@ export interface Cidade {
 }
 
 export const cidades: Cidade[] = [
-  { nome: 'São Bernardo do Campo', sede: true, href: null },
-  { nome: 'Santo André', href: null },
+  { nome: 'Santo André', sede: true, href: null },
+  { nome: 'São Bernardo do Campo', href: null },
   { nome: 'São Caetano do Sul', href: null },
   { nome: 'Diadema', href: null },
   { nome: 'Mauá', href: null },

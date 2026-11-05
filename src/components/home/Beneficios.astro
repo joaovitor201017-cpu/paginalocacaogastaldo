@@ -1,17 +1,19 @@
 ---
 import Botao from '../Botao.astro';
-import ImagemReservada from '../ImagemReservada.astro';
 import { beneficios } from '../../data/beneficios';
 import { site } from '../../data/site';
+import { icones } from '../../lib/icones';
 import { linkWhatsApp } from '../../lib/whatsapp';
 ---
 
 <section id="beneficios" class="secao beneficios" aria-labelledby="beneficios-titulo">
   <div class="container">
-    <h2 id="beneficios-titulo">Alugar no ABC nunca foi tão fácil</h2>
-    <p class="intro">
-      Nossas soluções para alugar foram pensadas para dar agilidade e segurança a quem aluga, a quem é dono e a quem administra o imóvel.
-    </p>
+    <div class="beneficios__topo">
+      <h2 id="beneficios-titulo">Alugar no ABC nunca foi tão fácil</h2>
+      <p class="intro">
+        Nossas soluções para alugar foram pensadas para dar agilidade e segurança a quem aluga, a quem é dono e a quem administra o imóvel.
+      </p>
+    </div>
 
     <div class="abas__lista" role="tablist" aria-label="Benefícios por público">
       {beneficios.map((g, i) => (
@@ -21,27 +23,28 @@ import { linkWhatsApp } from '../../lib/whatsapp';
       ))}
     </div>
 
-    {beneficios.map((g, i) => (
+    {beneficios.map((g) => (
       <div class="painel" role="tabpanel" id={`painel-${g.id}`} aria-labelledby={`aba-${g.id}`} tabindex="0">
-        <div class="painel__texto">
-          <h3>{g.titulo}</h3>
-          <ul>
-            {g.itens.map((it) => (
-              <li>
-                <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
-                <span><strong>{it.destaque}</strong> {it.texto}</span>
-              </li>
-            ))}
-          </ul>
-          <Botao
-            href={g.botao.href ?? linkWhatsApp(g.botao.mensagemWhatsApp ?? site.mensagemWhatsApp, site.whatsapp)}
-            variante={g.botao.href ? 'primario' : 'whatsapp'}
-            tamanho="g"
-          >
-            {g.botao.rotulo}
-          </Botao>
-        </div>
-        <ImagemReservada class="painel__foto" descricao={`Foto: ${g.foto}`} proporcao="4/5" raio="escudo" sizes="(min-width: 900px) 40vw, 90vw" />
+        <h3>{g.titulo}</h3>
+        <ul class="painel__grade">
+          {g.itens.map((it) => (
+            <li class="beneficio">
+              <span class="beneficio__icone" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icones[it.icone]}></path></svg>
+              </span>
+              <div>
+                <strong>{it.destaque}</strong>
+                <p>{it.texto}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <Botao
+          href={g.botao.href ?? linkWhatsApp(g.botao.mensagemWhatsApp ?? site.mensagemWhatsApp, site.whatsapp)}
+          variante={g.botao.href ? 'primario' : 'whatsapp'}
+        >
+          {g.botao.rotulo}
+        </Botao>
       </div>
     ))}
   </div>
@@ -79,52 +82,57 @@ import { linkWhatsApp } from '../../lib/whatsapp';
 </script>
 
 <style>
-  .beneficios .intro { margin-bottom: 2.25rem; }
+  .beneficios__topo { max-width: 62ch; margin-bottom: 2rem; }
+  .beneficios__topo .intro { margin: 0; }
 
   /* A lista de abas só aparece quando o JS está ativo */
   .abas__lista { display: none; }
   .js-abas .abas__lista {
     display: inline-flex;
-    gap: 0.35rem;
-    padding: 0.35rem;
-    margin-bottom: 2.5rem;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    margin-bottom: 2rem;
     background: var(--cinza-fundo);
     border-radius: 999px;
     max-width: 100%;
-    overflow-x: auto;
   }
   .abas__lista button {
     font: inherit;
     font-weight: 600;
-    font-size: 0.975rem;
+    font-size: 0.9375rem;
     color: var(--marinho);
     background: transparent;
     border: 0;
     border-radius: 999px;
-    padding: 0.7rem 1.4rem;
+    padding: 0.6rem 1.25rem;
     cursor: pointer;
     white-space: nowrap;
   }
   .abas__lista button[aria-selected='true'] { background: var(--marinho); color: var(--branco); }
   .abas__lista button:not([aria-selected='true']):hover { background: var(--branco); }
 
-  .painel { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
   .painel[hidden] { display: none; }
-  .painel + .painel { margin-top: var(--respiro); }
+  .painel + .painel { margin-top: 3rem; }
   .js-abas .painel + .painel { margin-top: 0; }
   .painel:focus-visible { outline-offset: 8px; }
-  .painel ul { display: grid; gap: 0.95rem; margin-bottom: 2rem; }
-  .painel li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 0.85rem; align-items: start; }
-  .painel li svg { color: var(--azul); margin-top: 0.2em; }
-  .painel li strong { color: var(--marinho); }
-  .painel :global(.painel__foto) { max-width: 460px; width: 100%; justify-self: end; }
+  .painel h3 { font-size: 1.125rem; margin-bottom: 1.25rem; }
 
+  /* Grade de benefícios: ícone ao lado, título e texto empilhados */
+  .painel__grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2.5rem; margin-bottom: 2rem; }
+  .beneficio { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0.9rem; align-items: start; padding: 0.9rem 0; border-top: 1px solid var(--cinza-linha); }
+  .beneficio__icone {
+    display: grid; place-items: center; width: 44px; height: 44px;
+    color: var(--marinho); background: var(--azul-ceu);
+    border-radius: 10px 10px 10px 20px; /* eco do escudo do logo */
+  }
+  .beneficio strong { display: block; color: var(--marinho); font-size: 0.9875rem; line-height: 1.35; margin-bottom: 0.2rem; }
+  .beneficio p { margin: 0; font-size: 0.9375rem; line-height: 1.5; color: var(--texto-suave); }
+
+  @media (max-width: 760px) {
+    .painel__grade { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  }
   @media (max-width: 560px) {
     .js-abas .abas__lista { display: flex; width: 100%; }
-    .abas__lista button { flex: 1 1 0; padding: 0.65rem 0.4rem; font-size: 0.875rem; }
-  }
-  @media (max-width: 900px) {
-    .painel { grid-template-columns: minmax(0, 1fr); }
-    .painel :global(.painel__foto) { display: none; }
+    .abas__lista button { flex: 1 1 0; padding: 0.6rem 0.4rem; font-size: 0.875rem; }
   }
 </style>

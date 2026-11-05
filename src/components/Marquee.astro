@@ -1,0 +1,45 @@
+---
+// Carrossel infinito só com CSS: a lista é renderizada duas vezes (a cópia fica oculta para leitores de tela)
+// e desliza em loop. Pausa no hover e fica parada para quem pede menos movimento.
+interface Props {
+  duracao?: number; // segundos para uma volta completa
+  class?: string;
+  rotulo: string;
+}
+const { duracao = 35, class: classe, rotulo } = Astro.props;
+const itens = await Astro.slots.render('default');
+---
+
+<div class:list={['marquee', classe]} style={`--duracao: ${duracao}s`} role="region" aria-label={rotulo}>
+  <ul class="marquee__lista" set:html={itens} />
+  <ul class="marquee__lista" aria-hidden="true" set:html={itens} />
+</div>
+
+<style>
+  .marquee {
+    --espaco: clamp(1.25rem, 3vw, 2.5rem);
+    display: flex;
+    gap: var(--espaco);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+  .marquee__lista {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--espaco);
+    min-width: 100%;
+    justify-content: space-around;
+    animation: rolar var(--duracao) linear infinite;
+  }
+  .marquee:hover .marquee__lista { animation-play-state: paused; }
+  @keyframes rolar {
+    to { transform: translateX(calc(-100% - var(--espaco))); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { -webkit-mask-image: none; mask-image: none; }
+    .marquee__lista { animation: none; flex-wrap: wrap; justify-content: center; row-gap: 0.75rem; }
+    .marquee__lista[aria-hidden='true'] { display: none; }
+  }
+</style>

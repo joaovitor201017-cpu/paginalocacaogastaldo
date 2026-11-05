@@ -14,10 +14,11 @@ test('botão secundário desce para #solucoes', () => {
   assert.match(html, /href="#solucoes"[^>]*>\s*Conhecer as soluções/);
 });
 
-test('os 4 selos do hero estão presentes', () => {
-  for (const r of ['imobiliárias parceiras no ABC', 'contratos de aluguel garantidos', 'anos de mercado', 'no Google com']) {
-    assert.ok(html.includes(r), r);
-  }
+test('hero mostra só a avaliação do Google, sem selos de números', () => {
+  const hero = html.slice(html.indexOf('class="hero'), html.indexOf('</section>', html.indexOf('class="hero')));
+  assert.ok(hero.includes('4,5'), 'nota');
+  assert.ok(hero.includes('27 avaliações no Google'), 'avaliações');
+  for (const r of ['imobiliárias parceiras no ABC', 'contratos de aluguel garantidos', 'anos de mercado']) assert.ok(!hero.includes(r), r);
 });
 
 test('faixa de logos com a frase e as 8 imobiliárias', () => {
@@ -43,11 +44,16 @@ test('4 cards de solução com H3', () => {
   }
 });
 
-test('os 8 links de Saiba mais / Simular / Cotar do PDF', () => {
-  const s = secao(html, 'solucoes');
-  for (const h of ['/seguro-fianca', '/simulador-seguro-fianca', '/titulo-de-capitalizacao', '/simulador-titulo-de-capitalizacao-aluguel', '/seguro-incendio', '/cotacao-seguro-incendio', '/seguro-residencial', '/cotacao-seguro-residencial']) {
-    assert.ok(s.includes(`href="${h}"`), h);
-  }
+test('cards de soluções só têm Saiba mais', () => {
+  const s2 = secao(html, 'solucoes');
+  for (const h of ['/seguro-fianca', '/titulo-de-capitalizacao', '/seguro-incendio', '/seguro-residencial']) assert.ok(s2.includes(`href="${h}"`), h);
+  assert.equal(contar(s2, />\s*Saiba mais\s*</g), 4);
+  assert.doesNotMatch(s2, />\s*(Simular|Cotar)\s*</);
+});
+
+test('nenhum botão Cotar e simulação padronizada', () => {
+  assert.doesNotMatch(html, />\s*Cotar\s*</);
+  assert.ok(html.includes('Fazer simulação'));
 });
 
 test('link para o comparativo de garantias', () => {
@@ -89,25 +95,25 @@ test('os 3 H3 e os 21 benefícios', () => {
 });
 
 // --- Parceiras, Sobre e Cidades (Task 6)
-test('seção #imobiliarias com H2 e os 3 H3', () => {
-  const s = secao(html, 'imobiliarias');
-  assert.match(s, /<h2[^>]*>Referência em seguros locatícios no ABC<\/h2>/);
-  for (const t of ['Imobiliárias parceiras', 'Números da parceria', 'O que as imobiliárias dizem']) {
-    assert.match(s, new RegExp(`<h3[^>]*>${t}</h3>`), t);
-  }
-  assert.ok(s.includes('Quero ser uma imobiliária parceira'));
+test('seção #imobiliarias sem números nem depoimentos', () => {
+  const s2 = secao(html, 'imobiliarias');
+  assert.match(s2, /<h2[^>]*>Referência em seguros locatícios no ABC<\/h2>/);
+  assert.match(s2, /<h3[^>]*>Imobiliárias parceiras<\/h3>/);
+  assert.ok(!s2.includes('Números da parceria') && !s2.includes('O que as imobiliárias dizem'));
+  assert.ok(s2.includes('Quero ser uma imobiliária parceira'));
 });
 
-test('grade de parceiras traz as 8 imobiliárias e os 4 números', () => {
-  const s = secao(html, 'imobiliarias');
-  assert.equal(contar(s, /class="[^"]*parceira-card/g), 8);
-  for (const r of ['imobiliárias parceiras', 'contratos de aluguel garantidos', 'corretores de imóveis treinados', 'cidades atendidas no ABC']) assert.ok(s.includes(r), r);
+test('logos em carrossel infinito no topo e na seção de parceiras', () => {
+  for (const trecho of [html.slice(html.indexOf('class="faixa'), html.indexOf('</div>', html.indexOf('faixa__frase')) + 4000), secao(html, 'imobiliarias')]) {
+    assert.match(trecho, /class="[^"]*marquee/);
+    assert.match(trecho, /aria-hidden="true"[^>]*class="[^"]*marquee__lista|class="[^"]*marquee__lista[^"]*"[^>]*aria-hidden="true"/);
+  }
 });
 
 test('seção #sobre com H2, texto e 4 diferenciais', () => {
   const s = secao(html, 'sobre');
   assert.match(s, /<h2[^>]*>Sobre a Gastaldo Seguros<\/h2>/);
-  assert.ok(s.includes('corretora de São Bernardo do Campo especializada em seguros e garantias para o aluguel'));
+  assert.ok(s.includes('corretora de Santo André especializada em seguros e garantias para o aluguel'));
   assert.match(s, /<h3[^>]*>Nossos diferenciais<\/h3>/);
   for (const d of ['Especialização em seguros locatícios.', 'Suporte ativo e próximo.', 'Treinamento presencial para imobiliárias.', 'Várias seguradoras parceiras.']) assert.ok(s.includes(d), d);
 });
@@ -131,18 +137,15 @@ test('mapa não carrega iframe no HTML estático', () => {
   assert.doesNotMatch(html, /<iframe/);
 });
 
-test('CTA final com os dois botões', () => {
-  const s = secao(html, 'cta-final');
-  assert.match(s, /<h2[^>]*>Pronto para alugar sem fiador\?<\/h2>/);
-  assert.ok(s.includes('Simular minha garantia'));
-  assert.ok(s.includes('Falar no WhatsApp'));
+test('sem FAQ e sem CTA final', () => {
+  assert.ok(!html.includes('id="perguntas"') && !html.includes('Perguntas frequentes'));
+  assert.ok(!html.includes('Pronto para alugar sem fiador?'));
+  assert.doesNotMatch(html, /"@type":"FAQPage"/);
 });
 
-test('FAQ visível com as perguntas do cliente', () => {
-  const s = secao(html, 'perguntas');
-  assert.match(s, /<h2[^>]*>Perguntas frequentes<\/h2>/);
-  assert.ok(s.includes('O que é garantia locatícia?'));
-  assert.ok(s.includes('Como minha imobiliária pode ser parceira da Gastaldo?'));
+test('benefícios têm ícone ao lado de cada item', () => {
+  const s2 = secao(html, 'beneficios');
+  assert.equal(contar(s2, /<li[^>]*class="[^"]*beneficio[^"]*"[^>]*>\s*<span[^>]*class="[^"]*beneficio__icone/g), 21);
 });
 
 test('todo JSON-LD é válido e inclui InsuranceAgency', () => {

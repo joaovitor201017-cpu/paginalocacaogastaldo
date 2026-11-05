@@ -6,10 +6,12 @@ import { lerHome, lerCssGerado } from './helpers.mjs';
 const html = lerHome();
 const css = lerCssGerado();
 
-test('faixa de imobiliárias quebra linha em vez de esconder nomes', () => {
-  const regra = css.match(/\.faixa__lista\[[^\]]+\]\{[^}]*\}|\.faixa__lista[^{,]*\{[^}]*\}/g).join(' ');
+test('carrossel de logos anima em loop e fica parado (quebrando linha) com movimento reduzido', () => {
+  assert.match(css, /\.marquee__lista[^{]*\{[^}]*animation:[^;}]*infinite/);
+  const blocos = css.split('prefers-reduced-motion').slice(1).map((b) => b.slice(0, 600));
+  const regra = blocos.map((b) => (b.match(/\.marquee__lista[^{]*\{([^}]*)\}/) || [])[1]).find(Boolean) || '';
+  assert.match(regra, /animation:\s*none/);
   assert.match(regra, /flex-wrap:\s*wrap/);
-  assert.doesNotMatch(regra, /overflow-x:\s*auto/);
 });
 
 test('formulário sem JS leva a mensagem no parâmetro text', () => {

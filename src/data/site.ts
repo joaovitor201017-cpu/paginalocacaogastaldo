@@ -9,7 +9,9 @@ export const site = {
   horario: null as string | null,
   cnpj: null as string | null,
   susep: null as string | null,
-  cidadeSede: 'São Bernardo do Campo',
+  cidadeSede: 'Santo André',
+  // Avaliação real do perfil no Google (atualizar quando mudar)
+  google: { nota: '4,5', avaliacoes: 27 },
   mensagemWhatsApp: 'Olá! Quero saber sobre as soluções para alugar.',
 };
 

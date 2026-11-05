@@ -8,7 +8,7 @@ const canais = [
   { rotulo: 'WhatsApp', valor: site.whatsapp, href: site.whatsapp ? linkWhatsApp(site.mensagemWhatsApp, site.whatsapp) : null, pendente: 'número' },
   { rotulo: 'Telefone', valor: site.telefone, href: site.telefone ? `tel:+55${site.telefone.replace(/\D/g, '')}` : null, pendente: 'número' },
   { rotulo: 'E-mail', valor: site.email, href: site.email ? `mailto:${site.email}` : null, pendente: 'e-mail' },
-  { rotulo: 'Endereço', valor: site.endereco, href: null, pendente: 'endereço completo em São Bernardo do Campo, igual ao Google Meu Negócio' },
+  { rotulo: 'Endereço', valor: site.endereco, href: null, pendente: 'endereço completo em Santo André, igual ao Google Meu Negócio' },
   { rotulo: 'Horário', valor: site.horario, href: null, pendente: 'dias e horários' },
 ];
 // Sem JS o formulário envia para o WhatsApp com a mensagem padrão no campo oculto "text"
@@ -76,8 +76,6 @@ const acaoPadrao = `https://wa.me/${(site.whatsapp ?? '').replace(/\D/g, '')}`;
 </script>
 
 <style>
-  /* FAQ (branca) vem logo antes: evita respiro dobrado */
-  .contato { padding-top: 0; }
   .contato__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
   .contato__canais { display: grid; gap: 0.9rem; margin: 1.5rem 0 2rem; }
   .contato__canais div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--cinza-linha); }
@@ -100,9 +98,7 @@ const acaoPadrao = `https://wa.me/${(site.whatsapp ?? '').replace(/\D/g, '')}`;
   .contato__form button:hover { background: var(--marinho); }
 
   @media (max-width: 900px) {
-    /* FAQ (branca) vem logo antes: evita respiro dobrado */
-  .contato { padding-top: 0; }
-  .contato__grade { grid-template-columns: minmax(0, 1fr); }
+    .contato__grade { grid-template-columns: minmax(0, 1fr); }
   }
   @media (max-width: 480px) {
     .contato__canais div { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }

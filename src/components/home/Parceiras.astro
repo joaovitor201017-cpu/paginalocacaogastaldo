@@ -1,9 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import Botao from '../Botao.astro';
-import Pendente from '../Pendente.astro';
+import Marquee from '../Marquee.astro';
 import { imobiliarias } from '../../data/imobiliarias';
-import { numerosParceria } from '../../data/numeros';
 import { site } from '../../data/site';
 import { linkWhatsApp } from '../../lib/whatsapp';
 ---
@@ -19,41 +18,15 @@ import { linkWhatsApp } from '../../lib/whatsapp';
       </div>
 
       <h3>Imobiliárias parceiras</h3>
-      <ul class="parceiras__grade">
+      <Marquee class="parceiras__marquee" rotulo="Imobiliárias parceiras da Gastaldo" duracao={40}>
         {imobiliarias.map((i) => (
           <li class="parceira-card" title={i.cidade ?? undefined}>
-            {i.logo ? <Image src={i.logo} alt={i.nome} height={56} loading="lazy" /> : <span>{i.nome}</span>}
+            {i.logo ? <Image src={i.logo} alt={i.nome} height={48} loading="lazy" /> : <span>{i.nome}</span>}
           </li>
         ))}
-      </ul>
+      </Marquee>
 
-      <div class="parceiras__numeros">
-        <h3>Números da parceria</h3>
-        <ul>
-          {numerosParceria.map((n) => (
-            <li>
-              <strong>{n.valor ?? <Pendente rotulo="número" />}</strong>
-              <span>{n.rotulo}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="parceiras__depoimentos">
-        <h3>O que as imobiliárias dizem</h3>
-        <ul>
-          {[1, 2, 3].map(() => (
-            <li>
-              <figure>
-                <blockquote><p><Pendente rotulo="depoimento real do gestor" /></p></blockquote>
-                <figcaption><Pendente rotulo="nome, cargo, imobiliária, cidade" /></figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <Botao href={linkWhatsApp('Olá! Quero ser uma imobiliária parceira da Gastaldo.', site.whatsapp)} variante="claro" tamanho="g">
+      <Botao href={linkWhatsApp('Olá! Quero ser uma imobiliária parceira da Gastaldo.', site.whatsapp)} variante="claro">
         Quero ser uma imobiliária parceira
       </Botao>
     </div>
@@ -66,45 +39,30 @@ import { linkWhatsApp } from '../../lib/whatsapp';
     background: var(--marinho-profundo);
     color: rgb(255 255 255 / 0.82);
     border-radius: var(--raio-g);
-    padding: clamp(2rem, 1.5rem + 3vw, 4.5rem);
+    padding: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
   }
   .parceiras h2, .parceiras h3 { color: var(--branco); }
-  .parceiras__topo { max-width: 60ch; margin-bottom: 2.5rem; }
-  .parceiras__topo p { font-size: 1.075rem; }
-
-  .parceiras__grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-bottom: 3.5rem; }
-  .parceira-card {
+  .parceiras h3 { font-size: 1.05rem; margin-bottom: 1rem; }
+  .parceiras__topo { max-width: 60ch; margin-bottom: 2rem; }
+  .parceiras :global(.parceiras__marquee) { margin-bottom: 2.25rem; }
+  .parceiras :global(.parceira-card) {
+    flex: 0 0 auto;
     display: grid;
     place-items: center;
-    min-height: 96px;
-    padding: 1rem;
+    min-width: 170px;
+    min-height: 76px;
+    padding: 0.75rem 1.25rem;
     background: var(--branco);
     border-radius: var(--raio-p);
     color: var(--marinho);
     font-weight: 600;
-    text-align: center;
-    line-height: 1.25;
+    font-size: 0.9375rem;
+    white-space: nowrap;
   }
-  .parceira-card :global(img) { max-height: 56px; width: auto; }
-
-  .parceiras__numeros { margin-bottom: 3.5rem; }
-  .parceiras__numeros ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; border-top: 1px solid rgb(255 255 255 / 0.16); padding-top: 1.5rem; }
-  .parceiras__numeros li { display: grid; gap: 0.25rem; }
-  .parceiras__numeros strong { font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem); color: var(--azul-vivo); line-height: 1.1; letter-spacing: -0.02em; }
-  .parceiras__numeros span { font-size: var(--fs-pequeno); }
-
-  .parceiras__depoimentos { margin-bottom: 2.75rem; }
-  .parceiras__depoimentos ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-  .parceiras__depoimentos blockquote { margin: 0; }
-  .parceiras__depoimentos figure { margin: 0; height: 100%; padding: 1.5rem; border-radius: var(--raio-m); background: rgb(255 255 255 / 0.06); border: 1px solid rgb(255 255 255 / 0.12); }
-  .parceiras__depoimentos figcaption { margin-top: 0.5rem; font-size: 0.875rem; }
+  .parceiras :global(.parceira-card img) { max-height: 48px; width: auto; }
 
   @media (max-width: 560px) {
-    .parceiras__painel { padding: 2.25rem 1.25rem; }
-  }
-  @media (max-width: 900px) {
-    .parceiras__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .parceiras__numeros ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .parceiras__depoimentos ul { grid-template-columns: minmax(0, 1fr); }
+    .parceiras__painel { padding: 2rem 1.25rem; }
+    .parceiras :global(.parceira-card) { min-width: 140px; min-height: 64px; }
   }
 </style>

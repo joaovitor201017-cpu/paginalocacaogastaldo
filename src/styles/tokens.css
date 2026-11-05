@@ -17,19 +17,19 @@
   --fonte: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Escala tipográfica fluida (360px → 1280px) */
-  --fs-h1: clamp(2.25rem, 1.6rem + 2.9vw, 3.75rem);
-  --fs-h2: clamp(1.75rem, 1.35rem + 1.75vw, 2.75rem);
-  --fs-h3: clamp(1.2rem, 1.1rem + 0.45vw, 1.45rem);
-  --fs-corpo: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-  --fs-pequeno: 0.9375rem;
+  --fs-h1: clamp(2rem, 1.55rem + 2vw, 3rem);
+  --fs-h2: clamp(1.5rem, 1.25rem + 1.1vw, 2.125rem);
+  --fs-h3: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --fs-corpo: clamp(0.9375rem, 0.92rem + 0.1vw, 1rem);
+  --fs-pequeno: 0.875rem;
 
-  --raio-g: 28px;
-  --raio-m: 20px;
+  --raio-g: 24px;
+  --raio-m: 16px;
   --raio-p: 12px;
   /* Moldura em escudo: topo reto, curva grande embaixo à esquerda, como o símbolo do logo */
-  --raio-escudo: 14px 14px 14px clamp(64px, 12vw, 140px);
+  --raio-escudo: 12px 12px 12px clamp(56px, 10vw, 110px);
 
   --sombra: 0 10px 30px -12px rgb(4 57 103 / 0.18);
-  --largura: 1200px;
-  --respiro: clamp(4rem, 3rem + 4vw, 7rem);
+  --largura: 1140px;
+  --respiro: clamp(3rem, 2.4rem + 2.6vw, 5rem);
 }
