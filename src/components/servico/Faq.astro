@@ -20,7 +20,9 @@ const { titulo, itens } = Astro.props;
 </section>
 
 <style>
-  .faq__grade { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr); gap: clamp(1.5rem, 5vw, 4.5rem); align-items: start; }
+  /* Título centralizado e a lista logo abaixo, numa coluna central */
+  .faq__grade { max-width: 860px; }
+  .faq h2 { text-align: center; margin-bottom: 1.75rem; }
   .faq__lista { border-top: 1px solid var(--cinza-linha); }
   .faq details { border-bottom: 1px solid var(--cinza-linha); }
   .faq summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 0; cursor: pointer; list-style: none; }
@@ -34,9 +36,6 @@ const { titulo, itens } = Astro.props;
   .faq details[open] summary::after { transform: translateY(3px) rotate(-135deg); }
   .faq summary:hover h3 { color: var(--azul-escuro); }
   .faq details p { margin: 0 0 1.25rem; max-width: 64ch; color: var(--texto-suave); }
-  @media (max-width: 900px) {
-    .faq__grade { grid-template-columns: minmax(0, 1fr); }
-  }
   @media (prefers-reduced-motion: reduce) {
     .faq summary::after { transition: none; }
   }

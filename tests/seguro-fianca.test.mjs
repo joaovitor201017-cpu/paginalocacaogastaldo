@@ -79,27 +79,41 @@ test('formas de pagamento com Simular agora e documentos', () => {
 });
 
 // --- Task 5: outras garantias, por que a Gastaldo, cidades, FAQ, chamado final
-test('outras garantias com 3 links', () => {
+test('outras garantias com 3 links e fotos como os cards da Home', () => {
   const s = secao(html, 'outras-garantias');
   assert.match(s, /<h2[^>]*>Outras garantias locatícias<\/h2>/);
   for (const href of ['/titulo-de-capitalizacao', '/seguro-fianca-empresarial', '/seguro-incendio']) assert.ok(s.includes(`href="${href}"`), href);
+  assert.match(s, /alt="Mulher etiquetando caixas da mudança no apartamento novo"/);
+  assert.match(s, /alt="Cozinha de apartamento alugado à noite, com detector de fumaça no teto"/);
+  assert.equal(contar(s, /class="foto /g), 3, 'os 3 cards têm espaço de foto');
 });
 
-test('por que a Gastaldo: 5 diferenciais e bloco para imobiliárias', () => {
+test('por que a Gastaldo igual ao Sobre da Home: diferenciais e carrossel de treinamentos', () => {
   const s = secao(html, 'por-que');
   assert.match(s, /<h2[^>]*>Por que contratar seu seguro fiança com a Gastaldo Seguros<\/h2>/);
   assert.match(s, /<h3[^>]*>Nossos diferenciais<\/h3>/);
   assert.equal(contar(s, /class="diferencial"/g), 5);
-  assert.match(s, /<h3[^>]*>Seguro fiança para imobiliárias do ABC<\/h3>/);
-  assert.ok(s.includes('Quero ser imobiliária parceira'));
+  assert.equal(contar(s, /class="treino__slide/g), 5);
+  assert.ok(!s.includes('Seguro fiança para imobiliárias do ABC'), 'sem o painel escuro');
 });
 
-test('cidades com sede em Santo André, endereço real e mapa', () => {
+test('cidades igual à Home, sem endereço e mapa', () => {
   const s = secao(html, 'cidades');
-  assert.match(s, /<h2[^>]*>Seguro fiança no ABC Paulista: cidades atendidas<\/h2>/);
+  assert.match(s, /<h2[^>]*>Atendemos todo o ABC Paulista<\/h2>/);
   assert.ok(s.includes('Santo André, onde fica a nossa sede'));
-  assert.ok(html.includes('Av. Pereira Barreto, 1395'));
-  assert.ok(html.includes('class="mapa'), 'fachada do mapa presente');
+  assert.ok(!html.includes('class="mapa'), 'sem mapa');
+  assert.ok(!html.includes('contato-linha'), 'sem linha de endereço');
+});
+
+test('topo com uma foto só: a do card Seguro Fiança', () => {
+  const topo = html.slice(html.indexOf('class="hero'), html.indexOf('id="o-que-e"'));
+  assert.equal(contar(topo, /<picture/g), 1);
+  assert.match(topo, /alt="Família recebendo as chaves do apartamento alugado com o corretor"/);
+});
+
+test('FAQ com o título centralizado acima das perguntas', async () => {
+  const { lerCssGerado } = await import('./helpers.mjs');
+  assert.match(lerCssGerado() + html, /\.faq[^{]*h2[^{]*\{[^}]*text-align:center/);
 });
 
 test('FAQ em sanfona com as 9 perguntas', () => {
@@ -122,12 +136,11 @@ test('JS da página dentro do orçamento de 5 KB', () => {
 });
 
 // --- Task 6: ajustes da revisão visual
-test('listas numeradas sem os números padrão do navegador e mapa em faixa baixa', async () => {
+test('listas numeradas sem os números padrão do navegador', async () => {
   const { lerCssGerado } = await import('./helpers.mjs');
   const css = lerCssGerado() + html;
   assert.match(css, /\.trilha[^{]*ol[^{]*\{[^}]*list-style:none/);
   assert.match(css, /\.passos__lista[^{]*\{[^}]*list-style:none/);
-  assert.match(css, /\.mapa-servico[^{]*\.mapa[^{]*\{[^}]*aspect-ratio:3(\s*\/\s*1)?[;}]/);
   assert.ok(!/class="container estreito"/.test(html), 'o que é alinhado à esquerda como as outras seções');
 });
 

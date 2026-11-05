@@ -13,7 +13,6 @@ const {
     <div>
       <h2 id="cidades-titulo">{titulo}</h2>
       <p class="intro">{texto}</p>
-      <slot />
     </div>
     <ul class="cidades__lista">
       {cidades.map((c) => (
@@ -25,7 +24,6 @@ const {
       ))}
     </ul>
   </div>
-  <slot name="abaixo" />
 </section>
 
 <style>

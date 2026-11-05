@@ -1,19 +1,17 @@
 ---
-import Botao from '../Botao.astro';
-import { site } from '../../data/site';
+import CarrosselTreinamentos from '../CarrosselTreinamentos.astro';
 import { icones } from '../../lib/icones';
-import { linkWhatsApp } from '../../lib/whatsapp';
 import type { Servico } from '../../data/servicos/tipos';
 
-// "Por que a Gastaldo": texto, diferenciais compactos (só ícone e título, como no Sobre da Home)
-// e o bloco para imobiliárias com o botão de parceria.
+// "Por que a Gastaldo", no mesmo formato do Sobre da Home:
+// texto e diferenciais compactos à esquerda, carrossel dos treinamentos à direita.
 interface Props { porQue: Servico['porQue'] }
 const { porQue: p } = Astro.props;
 ---
 
 <section id="por-que" class="secao por-que" aria-labelledby="por-que-titulo">
   <div class="container por-que__grade">
-    <div>
+    <div class="por-que__texto">
       <h2 id="por-que-titulo">{p.titulo}</h2>
       <p>{p.texto}</p>
       <h3>{p.diferenciaisTitulo}</h3>
@@ -28,17 +26,13 @@ const { porQue: p } = Astro.props;
         ))}
       </ul>
     </div>
-    <aside class="imob" aria-labelledby="imob-titulo">
-      <h3 id="imob-titulo">{p.imobiliarias.titulo}</h3>
-      <p>{p.imobiliarias.texto}</p>
-      <Botao href={linkWhatsApp('Olá! Quero ser uma imobiliária parceira da Gastaldo.', site.whatsapp)} variante="claro">{p.imobiliarias.botao}</Botao>
-    </aside>
+    <CarrosselTreinamentos />
   </div>
 </section>
 
 <style>
-  .por-que__grade { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
-  .por-que__grade > div > p { max-width: 58ch; }
+  .por-que__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .por-que__texto p { max-width: 54ch; }
   .por-que h3 { font-size: 0.975rem; margin: 1.75rem 0 0.75rem; }
   .diferenciais { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
   .diferencial { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.75rem; background: var(--cinza-fundo); border-radius: var(--raio-p); }
@@ -48,9 +42,6 @@ const { porQue: p } = Astro.props;
     color: var(--marinho); background: var(--azul-ceu);
     border-radius: 8px 8px 8px 14px; /* eco do escudo do logo */
   }
-  .imob { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); background: var(--marinho-profundo); color: rgb(255 255 255 / 0.85); border-radius: var(--raio-escudo); }
-  .imob h3 { color: var(--branco); font-size: 1.25rem; margin: 0 0 0.75rem; }
-  .imob p { margin: 0 0 1.5rem; }
   @media (max-width: 900px) {
     .por-que__grade { grid-template-columns: minmax(0, 1fr); }
   }

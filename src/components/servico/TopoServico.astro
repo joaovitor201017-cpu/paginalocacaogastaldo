@@ -1,14 +1,16 @@
 ---
 import Botao from '../Botao.astro';
-import ColagemFotos from '../ColagemFotos.astro';
+import ImagemReservada from '../ImagemReservada.astro';
 import Trilha from './Trilha.astro';
 import { site } from '../../data/site';
 import { linkWhatsApp } from '../../lib/whatsapp';
 import type { Servico } from '../../data/servicos/tipos';
+import type { ImageMetadata } from 'astro';
 
-// Topo da página de serviço: trilha, H1, subtítulo, botões, selos e a colagem de fotos da Home
-interface Props { servico: Servico }
-const { servico: s } = Astro.props;
+// Topo da página de serviço: trilha, H1, subtítulo, botões, selos e uma foto ao lado
+// (a mesma do card do serviço na Home), com a moldura em escudo.
+interface Props { servico: Servico; foto?: { src: ImageMetadata; alt: string } }
+const { servico: s, foto } = Astro.props;
 ---
 
 <section class="hero" aria-labelledby="hero-titulo">
@@ -30,7 +32,7 @@ const { servico: s } = Astro.props;
         ))}
       </ul>
     </div>
-    <ColagemFotos />
+    <ImagemReservada class="hero__foto" descricao={`Foto: ${s.rotuloTrilha}`} proporcao="4/3" raio="escudo" prioridade src={foto?.src} alt={foto?.alt} sizes="(min-width: 900px) 520px, 92vw" />
   </div>
 </section>
 
@@ -43,6 +45,7 @@ const { servico: s } = Astro.props;
   .selos { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 1.5rem; font-size: 0.875rem; font-weight: 500; color: var(--marinho); }
   .selos li { display: inline-flex; align-items: center; gap: 0.4rem; }
   .selos svg { color: var(--azul-escuro); flex: 0 0 auto; }
+  .hero :global(.hero__foto) { width: 100%; }
   @media (max-width: 900px) {
     .hero__grade { grid-template-columns: minmax(0, 1fr); }
   }
