@@ -1,12 +1,14 @@
 ---
 import LinkBlog from './LinkBlog.astro';
+import Botao from '../Botao.astro';
 import { icones } from '../../lib/icones';
-import type { Servico } from '../../data/servicos/tipos';
+import type { Acao, Servico } from '../../data/servicos/tipos';
 
 // Coberturas em cards, no mesmo formato dos benefícios: faixa que rola para o lado,
 // com setas no desktop e arrastar no celular.
-interface Props { coberturas: Servico['coberturas'] }
-const { coberturas: c } = Astro.props;
+// botao: chamada de simulação ao fim da seção (quando a página não tem assistências)
+interface Props { coberturas: Servico['coberturas']; botao?: Acao }
+const { coberturas: c, botao } = Astro.props;
 ---
 
 <section id="coberturas" class="secao coberturas" aria-labelledby="coberturas-titulo">
@@ -53,6 +55,7 @@ const { coberturas: c } = Astro.props;
       </div>
     )}
     <LinkBlog link={c.link} />
+    {botao && <div class="coberturas__acao"><Botao href={botao.href} tamanho="g">{botao.rotulo}</Botao></div>}
   </div>
 </section>
 
@@ -112,6 +115,7 @@ const { coberturas: c } = Astro.props;
   .coberturas__assist { margin-top: 2.25rem; max-width: 62ch; }
   .coberturas__assist h3 { font-size: 1.0625rem; margin-bottom: 0.6rem; }
   .coberturas__assist p { margin: 0; }
+  .coberturas__acao { margin-top: 1.75rem; }
 
   @media (max-width: 560px) {
     .coberturas__setas { display: none !important; }

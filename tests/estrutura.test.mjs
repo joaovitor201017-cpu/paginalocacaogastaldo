@@ -12,7 +12,7 @@ test('header usa o logo marinho', () => {
 
 test('footer usa o logo branco e as colunas do PDF', () => {
   assert.match(footer, /\/brand\/logo-gastaldo-branco\.png/);
-  for (const t of ['Soluções', 'Simuladores', 'Institucional']) assert.ok(footer.includes(t), t);
+  for (const t of ['Seguros', 'Simuladores', 'Institucional']) assert.ok(footer.includes(t), t);
 });
 
 test('um único botão flutuante de WhatsApp com a mensagem padrão', () => {
@@ -32,4 +32,10 @@ test('rodapé com os contatos (ícones) e o mapa', () => {
 
 test('script do mapa vai uma vez só, mesmo com dois mapas na página', () => {
   assert.equal((html.match(/Troca a fachada pelo iframe/g) || []).length, 0, 'não fica mais inline repetido');
+});
+
+test('menu chama a seção de produtos de Seguros', () => {
+  const header = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
+  assert.match(header, /href="\/#solucoes"[^>]*>Seguros<\/a>/);
+  assert.ok(!header.includes('>Soluções<'));
 });

@@ -157,6 +157,7 @@ test('formas de pagamento com ícone decorativo de fundo', () => {
   assert.match(s, /<svg[^>]*class="pagamento__marca"[^>]*aria-hidden="true"|<svg[^>]*aria-hidden="true"[^>]*class="pagamento__marca"/);
 });
 
-test('o que é do Seguro Fiança continua sem imagens', () => {
-  assert.equal(contar(secao(html, 'o-que-e'), /class="foto /g), 0);
+test('padrão das páginas de serviço: duas fotos no o que é e simulação nas coberturas', () => {
+  assert.equal(contar(secao(html, 'o-que-e'), /class="foto /g), 2);
+  assert.match(secao(html, 'coberturas'), /href="\/simulador-seguro-fianca"[^>]*>\s*Fazer simulação/);
 });
