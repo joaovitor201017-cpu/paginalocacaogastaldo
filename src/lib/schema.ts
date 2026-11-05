@@ -1,4 +1,4 @@
-// Dados estruturados (JSON-LD) da Home. Campos pendentes (null) são omitidos, nunca publicados vazios.
+// Dados estruturados (JSON-LD) da Home e das páginas de serviço. Campos pendentes (null) são omitidos, nunca publicados vazios.
 interface SiteSchema {
   nome: string;
   dominio: string | null;
@@ -14,14 +14,12 @@ type Obj = Record<string, unknown>;
 // Remove chaves com null/undefined
 const limpar = (o: Obj): Obj => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== null && v !== undefined));
 
-export function schemaHome(
-  site: SiteSchema,
-  faq: { pergunta: string; resposta: string }[],
-  cidades: { nome: string }[],
-): Obj[] {
-  const url = site.dominio ?? undefined;
+type Faq = { pergunta: string; resposta: string }[];
 
-  const agencia = limpar({
+// A corretora (dados locais, iguais ao Google Meu Negócio)
+function agencia(site: SiteSchema, cidades: { nome: string }[]): Obj {
+  const url = site.dominio ?? undefined;
+  return limpar({
     '@context': 'https://schema.org',
     '@type': 'InsuranceAgency',
     name: site.nome,
@@ -41,15 +39,50 @@ export function schemaHome(
       : null,
     areaServed: cidades.map((c) => ({ '@type': 'City', name: c.nome })),
   });
+}
 
-  const website = limpar({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.nome, url, inLanguage: 'pt-BR' });
-
-  if (faq.length === 0) return [agencia, website];
-
-  const faqPage = {
+function faqPage(faq: Faq): Obj {
+  return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.pergunta, acceptedAnswer: { '@type': 'Answer', text: f.resposta } })),
   };
-  return [agencia, website, faqPage];
+}
+
+export function schemaHome(site: SiteSchema, faq: Faq, cidades: { nome: string }[]): Obj[] {
+  const url = site.dominio ?? undefined;
+  const website = limpar({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.nome, url, inLanguage: 'pt-BR' });
+
+  const corretora = agencia(site, cidades);
+  return faq.length === 0 ? [corretora, website] : [corretora, website, faqPage(faq)];
+}
+
+// Página de serviço: corretora + serviço + FAQ + trilha (Início > serviço)
+export function schemaServico(
+  site: SiteSchema,
+  servico: { nome: string; descricao: string; caminho: string; rotulo: string },
+  faq: Faq,
+  cidades: { nome: string }[],
+): Obj[] {
+  const abs = (caminho: string) => (site.dominio ? new URL(caminho, site.dominio).href : undefined);
+  const corretora = agencia(site, cidades);
+  const service = limpar({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: servico.nome,
+    serviceType: servico.nome,
+    description: servico.descricao,
+    url: abs(servico.caminho),
+    provider: limpar({ '@type': 'InsuranceAgency', name: site.nome, telephone: site.telefone }),
+    areaServed: cidades.map((c) => ({ '@type': 'City', name: c.nome })),
+  });
+  const trilha = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      limpar({ '@type': 'ListItem', position: 1, name: 'Início', item: abs('/') }),
+      limpar({ '@type': 'ListItem', position: 2, name: servico.rotulo, item: abs(servico.caminho) }),
+    ],
+  };
+  return [corretora, service, faqPage(faq), trilha];
 }
