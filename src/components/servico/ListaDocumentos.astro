@@ -1,0 +1,43 @@
+---
+import { icones } from '../../lib/icones';
+import type { Servico } from '../../data/servicos/tipos';
+
+// Quem pode contratar + documentos (cada grupo de documentos em um card)
+interface Props { quemPode: Servico['quemPode'] }
+const { quemPode: q } = Astro.props;
+---
+
+<section id="quem-pode" class="secao quem-pode" aria-labelledby="quem-pode-titulo">
+  <div class="container quem-pode__grade">
+    <div>
+      <h2 id="quem-pode-titulo">{q.titulo}</h2>
+      <p>{q.texto}</p>
+    </div>
+    <div>
+      <h3>{q.documentosTitulo}</h3>
+      <ul class="docs">
+        {q.documentos.map((d) => (
+          <li>
+            <span class="docs__icone" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icones.documento}></path></svg>
+            </span>
+            <p><strong>{d.rotulo}:</strong> {d.texto}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quem-pode__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+  .quem-pode h3 { font-size: 1.0625rem; margin-bottom: 0.9rem; }
+  .docs { display: grid; gap: 0.6rem; }
+  .docs li { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.85rem 1rem; background: var(--cinza-fundo); border-radius: var(--raio-p); }
+  .docs p { margin: 0; font-size: 0.9375rem; }
+  .docs strong { color: var(--marinho); }
+  .docs__icone { flex: 0 0 auto; color: var(--azul-escuro); margin-top: 0.1rem; }
+  @media (max-width: 900px) {
+    .quem-pode__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

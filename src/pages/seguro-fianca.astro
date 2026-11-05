@@ -3,6 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import TopoServico from '../components/servico/TopoServico.astro';
 import Passos from '../components/servico/Passos.astro';
 import LinkBlog from '../components/servico/LinkBlog.astro';
+import TabelaCoberturas from '../components/servico/TabelaCoberturas.astro';
+import ListaDocumentos from '../components/servico/ListaDocumentos.astro';
+import Beneficios from '../components/home/Beneficios.astro';
+import Botao from '../components/Botao.astro';
 import { seguroFianca as s } from '../data/servicos/seguro-fianca';
 import { site } from '../data/site';
 import { cidades } from '../data/cidades';
@@ -25,10 +29,33 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
     </section>
 
     <Passos id="como-funciona" titulo={s.comoFunciona.titulo} intro={s.comoFunciona.intro} passos={s.comoFunciona.passos} />
+
+    <TabelaCoberturas coberturas={s.coberturas} />
+
+    <Beneficios id="vantagens" titulo={s.vantagens.titulo} intro={s.vantagens.intro} grupos={s.vantagens.grupos} rotuloAbas="Vantagens por público" />
+
+    <section id="pagamento" class="secao pagamento" aria-labelledby="pagamento-titulo">
+      <div class="container pagamento__grade">
+        <div>
+          <h2 id="pagamento-titulo">{s.pagamento.titulo}</h2>
+          <p>{s.pagamento.texto}</p>
+          <LinkBlog link={s.pagamento.link} />
+        </div>
+        <Botao href={s.pagamento.botao.href} tamanho="g">{s.pagamento.botao.rotulo}</Botao>
+      </div>
+    </section>
+
+    <ListaDocumentos quemPode={s.quemPode} />
   </main>
 </BaseLayout>
 
 <style>
   .estreito { max-width: 760px; }
   .texto-servico p { color: var(--texto); }
+  .pagamento { background: var(--cinza-fundo); }
+  .pagamento__grade { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem 4rem; align-items: center; }
+  .pagamento p { max-width: 64ch; margin: 0; }
+  @media (max-width: 760px) {
+    .pagamento__grade { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+  }
 </style>

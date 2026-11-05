@@ -47,3 +47,38 @@ test('schema com Service e BreadcrumbList', () => {
   assert.match(html, /"@type":"BreadcrumbList"/);
   assert.match(html, /"@type":"FAQPage"/);
 });
+
+// --- Task 4: coberturas, vantagens, pagamento, documentos
+test('tabela de coberturas acessível e pronta para virar cards no celular', () => {
+  const s = secao(html, 'coberturas');
+  assert.match(s, /<h2[^>]*>Coberturas do seguro fiança<\/h2>/);
+  assert.match(s, /<h3[^>]*>Cobertura básica e coberturas adicionais<\/h3>/);
+  const corpo = s.slice(s.indexOf('<tbody'), s.indexOf('</tbody>'));
+  assert.equal(contar(corpo, /<tr[\s>]/g), 6);
+  assert.equal(contar(s, /<th[^>]*scope="col"/g), 4);
+  assert.equal(contar(corpo, /<td[^>]*data-rotulo="/g), 18, 'as 3 colunas de dados de cada linha têm rótulo');
+  assert.ok(s.includes('do seguro fiança da Porto Seguro'));
+  assert.match(s, /<h3[^>]*>Assistências para o imóvel<\/h3>/);
+});
+
+test('vantagens em 3 abas com 7 cards cada e ids próprios', () => {
+  const s = secao(html, 'vantagens');
+  assert.match(s, /<h2[^>]*>Vantagens do seguro fiança para inquilino, proprietário e imobiliária<\/h2>/);
+  for (const t of ['Vantagens para o inquilino', 'Vantagens para o proprietário', 'Vantagens para a imobiliária']) assert.match(s, new RegExp(`<h3[^>]*>${t}</h3>`));
+  assert.equal(contar(s, /class="beneficio"/g), 21);
+  assert.match(s, /id="aba-vantagens-inquilinos"/);
+});
+
+test('formas de pagamento com Simular agora e documentos', () => {
+  const s = secao(html, 'pagamento');
+  assert.match(s, /<h2[^>]*>Formas de pagamento<\/h2>/);
+  assert.match(s, /href="\/simulador-seguro-fianca"[^>]*>\s*Simular agora/);
+  const q = secao(html, 'quem-pode');
+  assert.match(q, /<h3[^>]*>Documentos para o seguro fiança<\/h3>/);
+  assert.equal(contar(q.slice(q.indexOf('<ul')), /<li[\s>]/g), 3);
+});
+
+test('nenhum link vazio para posts que ainda não existem', () => {
+  assert.ok(!html.includes('href="null"'));
+  assert.ok(!html.includes('Guia completo do seguro fiança'));
+});

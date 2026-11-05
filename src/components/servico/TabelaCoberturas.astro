@@ -1,0 +1,74 @@
+---
+import LinkBlog from './LinkBlog.astro';
+import type { Servico } from '../../data/servicos/tipos';
+
+// Coberturas: tabela no desktop; abaixo de 640 px cada linha vira um card
+// (os rótulos das colunas aparecem via data-rotulo).
+interface Props { coberturas: Servico['coberturas'] }
+const { coberturas: c } = Astro.props;
+const colunas = ['Cobertura', 'Tipo', 'O que paga', 'Limite (exemplo: Porto Seguro)'];
+---
+
+<section id="coberturas" class="secao coberturas" aria-labelledby="coberturas-titulo">
+  <div class="container">
+    <div class="coberturas__topo">
+      <h2 id="coberturas-titulo">{c.titulo}</h2>
+      <p class="intro">{c.intro}</p>
+    </div>
+
+    <h3 id="coberturas-tabela">{c.tabelaTitulo}</h3>
+    <table class="tabela" aria-labelledby="coberturas-tabela">
+      <thead>
+        <tr>{colunas.map((col) => <th scope="col">{col}</th>)}</tr>
+      </thead>
+      <tbody>
+        {c.linhas.map((l) => (
+          <tr class:list={{ basica: l.tipo === 'Básica' }}>
+            <th scope="row">{l.cobertura}</th>
+            <td data-rotulo={colunas[1]}><span class="tipo">{l.tipo}</span></td>
+            <td data-rotulo={colunas[2]}>{l.paga}</td>
+            <td data-rotulo={colunas[3]}>{l.limite}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="coberturas__nota">{c.nota}</p>
+
+    <div class="coberturas__assist">
+      <h3>{c.assistencias.titulo}</h3>
+      <p>{c.assistencias.texto}</p>
+      <LinkBlog link={c.link} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .coberturas__topo { max-width: 62ch; margin-bottom: 1.75rem; }
+  .coberturas__topo .intro { margin: 0; }
+  .coberturas h3 { font-size: 1.0625rem; margin-bottom: 0.9rem; }
+
+  .tabela { width: 100%; border-collapse: separate; border-spacing: 0; border: 1.5px solid #bccbdd; border-radius: var(--raio-p); overflow: hidden; font-size: 0.9375rem; }
+  .tabela th, .tabela td { padding: 0.85rem 1rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--cinza-linha); }
+  .tabela tbody tr:last-child > * { border-bottom: 0; }
+  .tabela thead th { background: var(--marinho); color: var(--branco); font-weight: 600; font-size: 0.875rem; }
+  .tabela tbody th { color: var(--marinho); font-weight: 600; }
+  .tabela td { color: var(--texto-suave); }
+  .tabela tbody tr:nth-child(even) { background: var(--cinza-fundo); }
+  .tipo { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.8125rem; font-weight: 600; background: var(--cinza-fundo); color: var(--marinho); border: 1px solid var(--cinza-linha); }
+  .basica .tipo { background: var(--marinho); color: var(--branco); border-color: var(--marinho); }
+  .coberturas__nota { margin: 0.75rem 0 0; font-size: 0.8125rem; color: var(--texto-suave); max-width: 80ch; }
+
+  .coberturas__assist { margin-top: 2.25rem; max-width: 62ch; }
+  .coberturas__assist p { margin: 0; }
+
+  @media (max-width: 640px) {
+    .tabela, .tabela tbody, .tabela tr, .tabela th, .tabela td { display: block; }
+    .tabela { border: 0; border-radius: 0; overflow: visible; }
+    .tabela thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .tabela tbody { display: grid; gap: 0.75rem; }
+    .tabela tbody tr { border: 1.5px solid #bccbdd; border-radius: var(--raio-p); background: var(--branco) !important; padding: 0.4rem 0; }
+    .tabela tbody th, .tabela td { border: 0; padding: 0.4rem 1rem; }
+    .tabela tbody th { font-size: 1rem; }
+    .tabela td::before { content: attr(data-rotulo); display: block; font-size: 0.75rem; font-weight: 600; color: var(--marinho); margin-bottom: 0.1rem; }
+  }
+</style>
