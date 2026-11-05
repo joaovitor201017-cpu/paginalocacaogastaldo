@@ -99,6 +99,9 @@ import { linkWhatsApp } from '../../lib/whatsapp';
   .parceiras__depoimentos figure { margin: 0; height: 100%; padding: 1.5rem; border-radius: var(--raio-m); background: rgb(255 255 255 / 0.06); border: 1px solid rgb(255 255 255 / 0.12); }
   .parceiras__depoimentos figcaption { margin-top: 0.5rem; font-size: 0.875rem; }
 
+  @media (max-width: 560px) {
+    .parceiras__painel { padding: 2.25rem 1.25rem; }
+  }
   @media (max-width: 900px) {
     .parceiras__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .parceiras__numeros ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }

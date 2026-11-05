@@ -11,8 +11,8 @@ const canais = [
   { rotulo: 'Endereço', valor: site.endereco, href: null, pendente: 'endereço completo em São Bernardo do Campo, igual ao Google Meu Negócio' },
   { rotulo: 'Horário', valor: site.horario, href: null, pendente: 'dias e horários' },
 ];
-// Sem JS o formulário cai no WhatsApp com a mensagem padrão
-const acaoPadrao = linkWhatsApp(site.mensagemWhatsApp, site.whatsapp);
+// Sem JS o formulário envia para o WhatsApp com a mensagem padrão no campo oculto "text"
+const acaoPadrao = `https://wa.me/${(site.whatsapp ?? '').replace(/\D/g, '')}`;
 ---
 
 <section id="contato" class="secao contato" aria-labelledby="contato-titulo">
@@ -31,6 +31,7 @@ const acaoPadrao = linkWhatsApp(site.mensagemWhatsApp, site.whatsapp);
     </div>
 
     <form class="contato__form" action={acaoPadrao} method="get" target="_blank" data-whatsapp={site.whatsapp ?? ''}>
+      <input type="hidden" name="text" value={site.mensagemWhatsApp} />
       <p class="contato__form-titulo">Mande sua mensagem e a gente responde no WhatsApp.</p>
       <label>
         Nome
@@ -75,6 +76,8 @@ const acaoPadrao = linkWhatsApp(site.mensagemWhatsApp, site.whatsapp);
 </script>
 
 <style>
+  /* FAQ (branca) vem logo antes: evita respiro dobrado */
+  .contato { padding-top: 0; }
   .contato__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
   .contato__canais { display: grid; gap: 0.9rem; margin: 1.5rem 0 2rem; }
   .contato__canais div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--cinza-linha); }
@@ -86,18 +89,20 @@ const acaoPadrao = linkWhatsApp(site.mensagemWhatsApp, site.whatsapp);
   .contato__form label { display: grid; gap: 0.4rem; font-weight: 500; font-size: var(--fs-pequeno); color: var(--marinho); }
   .contato__form :is(input, select, textarea) {
     font: inherit; font-weight: 400; color: var(--texto);
-    padding: 0.8rem 1rem; border: 1.5px solid var(--cinza-linha); border-radius: var(--raio-p); background: var(--branco); width: 100%;
+    padding: 0.8rem 1rem; border: 1.5px solid #7a8a9e; border-radius: var(--raio-p); background: var(--branco); width: 100%;
   }
-  .contato__form :is(input, select, textarea):focus-visible { border-color: var(--azul); outline: 3px solid rgb(108 184 255 / 0.45); outline-offset: 0; }
+  .contato__form :is(input, select, textarea):focus-visible { border-color: var(--azul); outline: 2px solid var(--azul); outline-offset: 1px; }
   .contato__form textarea { resize: vertical; }
   .contato__form button {
-    font: inherit; font-weight: 600; font-size: 1.05rem; color: var(--branco); background: var(--azul);
+    font: inherit; font-weight: 600; font-size: 1.05rem; color: var(--branco); background: var(--azul-escuro);
     border: 0; border-radius: 999px; padding: 0.95rem 1.5rem; cursor: pointer; justify-self: start; min-width: 10rem;
   }
-  .contato__form button:hover { background: var(--azul-escuro); }
+  .contato__form button:hover { background: var(--marinho); }
 
   @media (max-width: 900px) {
-    .contato__grade { grid-template-columns: minmax(0, 1fr); }
+    /* FAQ (branca) vem logo antes: evita respiro dobrado */
+  .contato { padding-top: 0; }
+  .contato__grade { grid-template-columns: minmax(0, 1fr); }
   }
   @media (max-width: 480px) {
     .contato__canais div { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }

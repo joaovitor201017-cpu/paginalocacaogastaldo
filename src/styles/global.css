@@ -22,12 +22,14 @@ h1, h2, h3 { color: var(--marinho); line-height: 1.15; margin: 0 0 0.5em; font-w
 h1 { font-size: var(--fs-h1); letter-spacing: -0.035em; }
 h2 { font-size: var(--fs-h2); }
 h3 { font-size: var(--fs-h3); font-weight: 600; letter-spacing: -0.015em; }
-p { margin: 0 0 1em; text-wrap: pretty; }
+p { margin: 0 0 1em; }
 strong, b { font-weight: 600; }
 a { color: var(--azul-escuro); text-underline-offset: 3px; }
 ul { padding: 0; margin: 0; list-style: none; }
 
-:focus-visible { outline: 3px solid var(--azul-claro); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 3px solid var(--azul); outline-offset: 3px; border-radius: 4px; }
+/* Em fundos escuros o anel de foco fica claro */
+:is(.parceiras__painel, .cta__painel, .rodape) :focus-visible { outline-color: var(--azul-ceu); }
 
 .container { width: min(100% - 2.5rem, var(--largura)); margin-inline: auto; }
 .secao { padding-block: var(--respiro); }

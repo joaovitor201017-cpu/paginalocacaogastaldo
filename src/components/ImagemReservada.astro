@@ -58,5 +58,7 @@ const { descricao, proporcao, raio = 'm', src, alt = '', prioridade = false, siz
     border-radius: inherit;
   }
   .foto__reserva span { font-weight: 500; max-width: 24ch; }
-  .foto__reserva small { opacity: 0.75; }
+  /* reserva sobre fundo colorido: texto escuro para manter contraste */
+  .foto[style*="background"] .foto__reserva { color: var(--marinho-profundo); border-color: rgb(255 255 255 / 0.6); }
+  .foto__reserva small { font-size: 0.8rem; }
 </style>

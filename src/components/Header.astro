@@ -42,6 +42,9 @@ const links = [
       n.classList.toggle('aberto', abrir);
     });
     n.addEventListener('click', (e) => { if (e.target.closest('a')) fechar(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && n.classList.contains('aberto')) { fechar(); b.focus(); }
+    });
   })();
 </script>
 
@@ -50,8 +53,7 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgb(255 255 255 / 0.96);
-    backdrop-filter: saturate(1.4) blur(8px);
+    background: var(--branco);
     border-bottom: 1px solid var(--cinza-linha);
   }
   .topo__barra { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 72px; }
@@ -60,11 +62,16 @@ const links = [
   .topo__nav ul { display: flex; gap: 1.75rem; }
   .topo__nav ul a { color: var(--marinho); text-decoration: none; font-weight: 500; font-size: 0.975rem; }
   .topo__nav ul a:hover { color: var(--azul); }
-  .topo__menu { display: none; background: none; border: 0; padding: 0.4rem; color: var(--marinho); cursor: pointer; }
+  .topo__menu { display: none; background: none; border: 0; padding: 0.6rem; color: var(--marinho); cursor: pointer; }
 
   @media (max-width: 960px) {
-    .topo__menu { display: block; }
-    .topo__nav {
+    /* Sem JS a navegação fica visível abaixo do logo; com JS vira menu */
+    .topo__barra { flex-wrap: wrap; }
+    .topo__nav { flex-basis: 100%; flex-direction: column; align-items: stretch; padding-bottom: 1rem; }
+    .topo__nav ul { flex-direction: column; gap: 0; }
+    :global(.js) .topo__barra { flex-wrap: nowrap; }
+    :global(.js) .topo__menu { display: block; }
+    :global(.js) .topo__nav {
       display: none;
       position: absolute;
       top: 100%;
@@ -78,8 +85,7 @@ const links = [
       border-bottom: 1px solid var(--cinza-linha);
       box-shadow: var(--sombra);
     }
-    .topo__nav.aberto { display: flex; }
-    .topo__nav ul { flex-direction: column; gap: 0; }
+    :global(.js) .topo__nav.aberto { display: flex; }
     .topo__nav ul a { display: block; padding: 0.85rem 0; border-bottom: 1px solid var(--cinza-fundo); }
   }
 </style>
