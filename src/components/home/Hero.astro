@@ -3,6 +3,8 @@ import Botao from '../Botao.astro';
 import ImagemReservada from '../ImagemReservada.astro';
 import { site } from '../../data/site';
 import { linkWhatsApp } from '../../lib/whatsapp';
+import fotoPrincipal from '../../assets/fotos/hero-principal.jpg';
+import fotoChaves from '../../assets/fotos/hero-chaves.jpg';
 
 ---
 
@@ -20,8 +22,8 @@ import { linkWhatsApp } from '../../lib/whatsapp';
     </div>
 
     <div class="hero__fotos">
-      <ImagemReservada class="hero__foto1" descricao="Foto: pessoas felizes na mudança para o imóvel alugado" proporcao="4/5" raio="escudo" prioridade />
-      <ImagemReservada class="hero__foto2" descricao="Foto: chaves com chaveiro de casa" proporcao="1/1" raio="g" fundo="var(--azul-claro)" />
+      <ImagemReservada class="hero__foto1" descricao="Foto: pessoas felizes na mudança para o imóvel alugado" proporcao="4/5" raio="escudo" prioridade src={fotoPrincipal} alt="Casal sorrindo carregando caixas de mudança no apartamento alugado" sizes="(min-width: 900px) 370px, 78vw" />
+      <ImagemReservada class="hero__foto2" descricao="Foto: chaves com chaveiro de casa" proporcao="1/1" raio="g" fundo="var(--azul-claro)" src={fotoChaves} alt="Entrega das chaves do imóvel alugado" sizes="(min-width: 900px) 190px, 40vw" />
     </div>
   </div>
 </section>

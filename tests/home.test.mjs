@@ -192,3 +192,17 @@ test('sobre tem diferenciais na coluna do texto e carrossel de treinamentos', ()
   assert.ok(contar(s, /class="treino__slide/g) >= 3, 'ao menos 3 fotos de treinamento');
   assert.match(s, /aria-label="Fotos dos treinamentos[^"]*"/);
 });
+
+test('hero mostra as 2 fotos reais otimizadas, a principal com prioridade', () => {
+  const html = lerHome();
+  const hero = html.slice(html.indexOf('class="hero'), html.indexOf('id="solucoes"'));
+  assert.equal(contar(hero, /<picture/g), 2);
+  assert.match(hero, /<img[^>]*alt="Casal sorrindo carregando caixas de mudança no apartamento alugado"[^>]*fetchpriority="high"|fetchpriority="high"[^>]*alt="Casal sorrindo carregando caixas de mudança no apartamento alugado"/);
+  assert.match(hero, /alt="Entrega das chaves do imóvel alugado"/);
+  assert.match(hero, /type="image\/avif"/);
+});
+
+test('card de Título de Capitalização tem foto real', () => {
+  const html = lerHome();
+  assert.match(html, /alt="Mulher etiquetando caixas da mudança no apartamento novo"/);
+});

@@ -1,10 +1,14 @@
+import type { ImageMetadata } from 'astro';
+import fotoTitulo from '../assets/fotos/card-titulo-capitalizacao.jpg';
+
 // As 4 soluções da Home, com as URLs definidas no PDF
 export interface Solucao {
   titulo: string;
   texto: string;
   saibaMais: string;
   acao: { rotulo: 'Simular' | 'Cotar'; href: string };
-  foto: string; // descrição da foto que o João vai enviar
+  foto: string; // descrição da foto (usada na reserva enquanto não há imagem)
+  imagem?: { src: ImageMetadata; alt: string };
 }
 
 export const solucoes: Solucao[] = [
@@ -21,6 +25,7 @@ export const solucoes: Solucao[] = [
     saibaMais: '/titulo-de-capitalizacao',
     acao: { rotulo: 'Simular', href: '/simulador-titulo-de-capitalizacao-aluguel' },
     foto: 'Pessoa organizando caixas da mudança',
+    imagem: { src: fotoTitulo, alt: 'Mulher etiquetando caixas da mudança no apartamento novo' },
   },
   {
     titulo: 'Seguro Incêndio',
