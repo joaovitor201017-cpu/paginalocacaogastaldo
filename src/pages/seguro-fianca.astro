@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import TopoServico from '../components/servico/TopoServico.astro';
 import Passos from '../components/servico/Passos.astro';
 import LinkBlog from '../components/servico/LinkBlog.astro';
-import TabelaCoberturas from '../components/servico/TabelaCoberturas.astro';
+import Coberturas from '../components/servico/Coberturas.astro';
 import ListaDocumentos from '../components/servico/ListaDocumentos.astro';
 import Beneficios from '../components/home/Beneficios.astro';
 import Botao from '../components/Botao.astro';
@@ -38,9 +38,9 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
 
     <Passos id="como-funciona" titulo={s.comoFunciona.titulo} intro={s.comoFunciona.intro} passos={s.comoFunciona.passos} />
 
-    <TabelaCoberturas coberturas={s.coberturas} />
-
     <Beneficios id="vantagens" titulo={s.vantagens.titulo} intro={s.vantagens.intro} grupos={s.vantagens.grupos} rotuloAbas="Vantagens por público" />
+
+    <Coberturas coberturas={s.coberturas} />
 
     <section id="pagamento" class="secao pagamento" aria-labelledby="pagamento-titulo">
       <div class="container pagamento__grade">
@@ -55,7 +55,7 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
 
     <ListaDocumentos quemPode={s.quemPode} />
 
-    <OutrasGarantias outras={s.outras} />
+    <OutrasGarantias outras={s.outras} atual={caminho} />
 
     <Diferenciais porQue={s.porQue} />
 

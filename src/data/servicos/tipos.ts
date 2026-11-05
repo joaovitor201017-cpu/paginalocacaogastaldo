@@ -21,7 +21,7 @@ export interface Servico {
     titulo: string;
     intro: string;
     tabelaTitulo: string;
-    linhas: { cobertura: string; tipo: string; paga: string; limite: string }[];
+    linhas: { icone: Icone; cobertura: string; tipo: string; paga: string; limite: string }[];
     nota: string;
     assistencias: { titulo: string; texto: string };
     link: LinkBlog;
@@ -29,7 +29,7 @@ export interface Servico {
   vantagens: { titulo: string; intro: string; grupos: GrupoBeneficios[] };
   pagamento: { titulo: string; texto: string; botao: Acao; link: LinkBlog };
   quemPode: { titulo: string; texto: string; documentosTitulo: string; documentos: { rotulo: string; texto: string }[] };
-  outras: { titulo: string; intro: string; itens: { titulo: string; texto: string; href: string }[]; link: LinkBlog };
+  outras: { titulo: string; intro: string; link: LinkBlog }; // os cards vêm das soluções da Home
   porQue: {
     titulo: string;
     texto: string;

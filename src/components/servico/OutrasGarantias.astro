@@ -1,24 +1,13 @@
 ---
 import CardSolucao from '../CardSolucao.astro';
 import LinkBlog from './LinkBlog.astro';
-import { solucoes, type Solucao } from '../../data/solucoes';
+import { solucoes } from '../../data/solucoes';
 import type { Servico } from '../../data/servicos/tipos';
 
-// Outras garantias com o mesmo card da Home (foto, título, texto e "Saiba mais").
-// A foto vem do card da Home com o mesmo link; sem card na Home, fica o espaço reservado.
-interface Props { outras: Servico['outras'] }
-const { outras: o } = Astro.props;
-const cards: Solucao[] = o.itens.map((i) => {
-  const daHome = solucoes.find((s) => s.saibaMais === i.href);
-  return {
-    titulo: i.titulo,
-    texto: i.texto,
-    saibaMais: i.href,
-    acao: { rotulo: 'Simular', href: i.href },
-    foto: daHome?.foto ?? 'Empresa em imóvel comercial alugado',
-    imagem: daHome?.imagem,
-  };
-});
+// Outras garantias: os mesmos produtos e cards da Home, sem o serviço da página atual.
+interface Props { outras: Servico['outras']; atual: string }
+const { outras: o, atual } = Astro.props;
+const cards = solucoes.filter((s) => s.saibaMais !== atual);
 ---
 
 <section id="outras-garantias" class="secao outras" aria-labelledby="outras-titulo">

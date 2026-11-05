@@ -11,13 +11,12 @@ const todoTexto = textos(s).join(' | ');
 test('estrutura do texto do documento', () => {
   assert.equal(s.comoFunciona.passos.length, 5);
   assert.equal(s.coberturas.linhas.length, 6);
-  assert.deepEqual(s.coberturas.linhas[0], { cobertura: 'Aluguel e multa por atraso', tipo: 'Básica', paga: 'Aluguéis que o inquilino deixar de pagar', limite: 'até 30x o valor do aluguel' });
+  assert.deepEqual(s.coberturas.linhas[0], { icone: 'moeda', cobertura: 'Aluguel e multa por atraso', tipo: 'Básica', paga: 'Aluguéis que o inquilino deixar de pagar', limite: 'até 30x o valor do aluguel' });
   assert.equal(s.vantagens.grupos.length, 3);
   for (const g of s.vantagens.grupos) assert.equal(g.itens.length, 7, g.id);
   assert.equal(s.faq.itens.length, 9);
   assert.equal(s.porQue.diferenciais.length, 5);
   assert.equal(s.quemPode.documentos.length, 3);
-  assert.equal(s.outras.itens.length, 3);
 });
 
 test('selos, botões e SEO como combinado', () => {

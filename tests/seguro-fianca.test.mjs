@@ -49,16 +49,18 @@ test('schema com Service e BreadcrumbList', () => {
 });
 
 // --- Task 4: coberturas, vantagens, pagamento, documentos
-test('tabela de coberturas acessível e pronta para virar cards no celular', () => {
+test('coberturas em cards roláveis com setas, logo depois das vantagens', () => {
   const s = secao(html, 'coberturas');
   assert.match(s, /<h2[^>]*>Coberturas do seguro fiança<\/h2>/);
   assert.match(s, /<h3[^>]*>Cobertura básica e coberturas adicionais<\/h3>/);
-  const corpo = s.slice(s.indexOf('<tbody'), s.indexOf('</tbody>'));
-  assert.equal(contar(corpo, /<tr[\s>]/g), 6);
-  assert.equal(contar(s, /<th[^>]*scope="col"/g), 4);
-  assert.equal(contar(corpo, /<td[^>]*data-rotulo="/g), 18, 'as 3 colunas de dados de cada linha têm rótulo');
+  assert.ok(!s.includes('<table'), 'sem tabela');
+  assert.equal(contar(s, /class="cobertura"/g), 6);
+  assert.match(s, /aria-label="Coberturas anteriores"/);
+  assert.match(s, /aria-label="Próximas coberturas"/);
+  assert.ok(s.includes('até 30x o valor do aluguel'));
   assert.ok(s.includes('do seguro fiança da Porto Seguro'));
   assert.match(s, /<h3[^>]*>Assistências para o imóvel<\/h3>/);
+  assert.ok(html.indexOf('id="vantagens"') < html.indexOf('id="coberturas"'), 'vantagens antes das coberturas');
 });
 
 test('vantagens em 3 abas com 7 cards cada e ids próprios', () => {
@@ -79,13 +81,14 @@ test('formas de pagamento com Simular agora e documentos', () => {
 });
 
 // --- Task 5: outras garantias, por que a Gastaldo, cidades, FAQ, chamado final
-test('outras garantias com 3 links e fotos como os cards da Home', () => {
+test('outras garantias: os produtos da Home, menos o Seguro Fiança', () => {
   const s = secao(html, 'outras-garantias');
   assert.match(s, /<h2[^>]*>Outras garantias locatícias<\/h2>/);
-  for (const href of ['/titulo-de-capitalizacao', '/seguro-fianca-empresarial', '/seguro-incendio']) assert.ok(s.includes(`href="${href}"`), href);
-  assert.match(s, /alt="Mulher etiquetando caixas da mudança no apartamento novo"/);
-  assert.match(s, /alt="Cozinha de apartamento alugado à noite, com detector de fumaça no teto"/);
-  assert.equal(contar(s, /class="foto /g), 3, 'os 3 cards têm espaço de foto');
+  for (const t of ['Título de Capitalização', 'Seguro Incêndio', 'Seguro Residencial']) assert.match(s, new RegExp(`<h3[^>]*>${t}</h3>`), t);
+  for (const href of ['/titulo-de-capitalizacao', '/seguro-incendio', '/seguro-residencial']) assert.ok(s.includes(`href="${href}"`), href);
+  assert.ok(!s.includes('Empresarial') && !s.includes('href="/seguro-fianca"'));
+  assert.equal(contar(s, /<picture/g), 3, 'as 3 fotos da Home');
+  assert.ok(!s.includes('foto__reserva'));
 });
 
 test('por que a Gastaldo igual ao Sobre da Home: diferenciais e carrossel de treinamentos', () => {

@@ -48,14 +48,14 @@ export const seguroFianca: Servico = {
     intro: 'A cobertura básica garante o aluguel e a multa por atraso. As demais são adicionais: você escolhe quais incluir de acordo com o contrato.',
     tabelaTitulo: 'Cobertura básica e coberturas adicionais',
     linhas: [
-      { cobertura: 'Aluguel e multa por atraso', tipo: 'Básica', paga: 'Aluguéis que o inquilino deixar de pagar', limite: 'até 30x o valor do aluguel' },
-      { cobertura: 'Condomínio e IPTU', tipo: 'Adicional', paga: 'Encargos mensais em atraso', limite: 'até 30x o valor declarado, para cada item' },
-      { cobertura: 'Água, luz e gás canalizado', tipo: 'Adicional', paga: 'Contas de consumo em atraso', limite: 'até 6x o valor declarado, para cada item' },
-      { cobertura: 'Danos ao imóvel', tipo: 'Adicional', paga: 'Estragos causados pelo inquilino', limite: 'até 6x o valor do aluguel' },
-      { cobertura: 'Pintura interna e externa', tipo: 'Adicional', paga: 'Pintura para devolver o imóvel como foi entregue', limite: 'até 3x o valor do aluguel' },
-      { cobertura: 'Multa por rescisão contratual', tipo: 'Adicional', paga: 'Multa se o inquilino sair antes do prazo', limite: 'até 3x o valor do aluguel' },
+      { icone: 'moeda', cobertura: 'Aluguel e multa por atraso', tipo: 'Básica', paga: 'Aluguéis que o inquilino deixar de pagar', limite: 'até 30x o valor do aluguel' },
+      { icone: 'recibo', cobertura: 'Condomínio e IPTU', tipo: 'Adicional', paga: 'Encargos mensais em atraso', limite: 'até 30x o valor declarado, para cada item' },
+      { icone: 'documento', cobertura: 'Água, luz e gás canalizado', tipo: 'Adicional', paga: 'Contas de consumo em atraso', limite: 'até 6x o valor declarado, para cada item' },
+      { icone: 'ferramenta', cobertura: 'Danos ao imóvel', tipo: 'Adicional', paga: 'Estragos causados pelo inquilino', limite: 'até 6x o valor do aluguel' },
+      { icone: 'casa', cobertura: 'Pintura interna e externa', tipo: 'Adicional', paga: 'Pintura para devolver o imóvel como foi entregue', limite: 'até 3x o valor do aluguel' },
+      { icone: 'chave', cobertura: 'Multa por rescisão contratual', tipo: 'Adicional', paga: 'Multa se o inquilino sair antes do prazo', limite: 'até 3x o valor do aluguel' },
     ],
-    nota: 'Os limites mudam conforme a seguradora. Os valores da tabela são um exemplo, do seguro fiança da Porto Seguro. As regras completas estão nas Condições Gerais de cada seguradora.',
+    nota: 'Os limites mudam conforme a seguradora. Os limites acima são um exemplo, do seguro fiança da Porto Seguro. As regras completas estão nas Condições Gerais de cada seguradora.',
     assistencias: {
       titulo: 'Assistências para o imóvel',
       texto: 'Além das coberturas, o cliente pode contar com serviços de assistência residencial, como chaveiro, encanador e eletricista, pelo app da seguradora.',
@@ -136,11 +136,6 @@ export const seguroFianca: Servico = {
   outras: {
     titulo: 'Outras garantias locatícias',
     intro: 'Se o seguro fiança não for o melhor caminho para o seu contrato, temos outras garantias para você alugar sem fiador:',
-    itens: [
-      { titulo: 'Título de Capitalização', texto: 'Garantia sem análise de crédito, com o valor resgatado no fim do contrato.', href: '/titulo-de-capitalizacao' },
-      { titulo: 'Seguro Fiança Empresarial', texto: 'Para imóveis comerciais e empresas.', href: '/seguro-fianca-empresarial' },
-      { titulo: 'Seguro Incêndio para imóvel alugado', texto: 'Exigido na maioria dos contratos de aluguel.', href: '/seguro-incendio' },
-    ],
     link: { rotulo: 'Fiador, seguro fiança ou caução: qual escolher no ABC', href: null },
   },
 
