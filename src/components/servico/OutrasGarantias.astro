@@ -13,17 +13,18 @@ const cards = solucoes.filter((s) => s.saibaMais !== atual);
 <section id="outras-garantias" class="secao outras" aria-labelledby="outras-titulo">
   <div class="container">
     <h2 id="outras-titulo">{o.titulo}</h2>
-    <p class="intro">{o.intro}</p>
+    {o.intro && <p class="intro">{o.intro}</p>}
     <ul class="outras__lista">
       {cards.map((c) => <li><CardSolucao solucao={c} /></li>)}
     </ul>
-    <LinkBlog link={o.link} />
+    {o.link && <LinkBlog link={o.link} />}
   </div>
 </section>
 
 <style>
   .outras { background: var(--cinza-fundo); }
-  .outras .intro { max-width: 62ch; margin-bottom: 1.75rem; }
+  .outras h2 { margin-bottom: 1.5rem; }
+  .outras .intro { max-width: 62ch; margin: -0.75rem 0 1.75rem; }
   .outras__lista { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
   @media (max-width: 800px) {
     .outras__lista { grid-template-columns: minmax(0, 1fr); }

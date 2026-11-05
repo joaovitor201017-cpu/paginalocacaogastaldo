@@ -39,18 +39,20 @@ const { coberturas: c } = Astro.props;
             </div>
             <strong>{l.cobertura}</strong>
             <p>{l.paga}</p>
-            <p class="cobertura__limite"><span>Limite</span>{l.limite}</p>
+            {l.limite && <p class="cobertura__limite"><span>Limite</span>{l.limite}</p>}
           </li>
         ))}
       </ul>
     </div>
     <p class="coberturas__nota">{c.nota}</p>
 
-    <div class="coberturas__assist">
-      <h3>{c.assistencias.titulo}</h3>
-      <p>{c.assistencias.texto}</p>
-      <LinkBlog link={c.link} />
-    </div>
+    {c.assistencias && (
+      <div class="coberturas__assist">
+        <h3>{c.assistencias.titulo}</h3>
+        <p>{c.assistencias.texto}</p>
+      </div>
+    )}
+    <LinkBlog link={c.link} />
   </div>
 </section>
 

@@ -1,14 +1,18 @@
 ---
+import LinkBlog from './LinkBlog.astro';
+import type { LinkBlog as Link, Passo } from '../../data/servicos/tipos';
+
 // Passo a passo numerado (é uma sequência real: a numeração tem sentido)
-interface Props { id: string; titulo: string; intro: string; passos: { titulo: string; texto: string }[] }
-const { id, titulo, intro, passos } = Astro.props;
+// fundo branco quando vem logo depois de outra faixa cinza
+interface Props { id: string; titulo: string; intro?: string; passos: Passo[]; nota?: string; links?: Link[]; fundo?: 'cinza' | 'branco' }
+const { id, titulo, intro, passos, nota, links = [], fundo = 'cinza' } = Astro.props;
 ---
 
-<section id={id} class="secao passos" aria-labelledby={`${id}-titulo`}>
+<section id={id} class:list={['secao passos', { 'passos--branco': fundo === 'branco' }]} aria-labelledby={`${id}-titulo`}>
   <div class="container">
     <h2 id={`${id}-titulo`}>{titulo}</h2>
-    <p class="intro">{intro}</p>
-    <ol class="passos__lista">
+    {intro && <p class="intro">{intro}</p>}
+    <ol class="passos__lista" style={`--colunas: ${passos.length}`}>
       {passos.map((p, i) => (
         <li>
           <span class="passos__num" aria-hidden="true">{i + 1}</span>
@@ -17,13 +21,18 @@ const { id, titulo, intro, passos } = Astro.props;
         </li>
       ))}
     </ol>
+    {nota && <p class="passos__nota">{nota}</p>}
+    {links.map((l) => <LinkBlog link={l} />)}
   </div>
 </section>
 
 <style>
   .passos { background: var(--cinza-fundo); }
+  .passos--branco { background: var(--branco); }
+  .passos h2 { margin-bottom: 0.75rem; }
   .passos .intro { max-width: 62ch; margin-bottom: 2rem; }
-  .passos__lista { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; }
+  .passos h2 + .passos__lista { margin-top: 1.5rem; }
+  .passos__lista { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(var(--colunas, 5), minmax(0, 1fr)); gap: 1rem; }
   .passos__lista li { position: relative; padding: 1.25rem 1rem 1.1rem; background: var(--branco); border: 1.5px solid #bccbdd; border-radius: var(--raio-p); }
   .passos__num {
     display: grid; place-items: center; width: 36px; height: 36px; margin-bottom: 0.85rem;
@@ -32,6 +41,7 @@ const { id, titulo, intro, passos } = Astro.props;
   }
   .passos__lista strong { display: block; color: var(--marinho); font-size: 0.9375rem; margin-bottom: 0.35rem; }
   .passos__lista p { margin: 0; font-size: 0.875rem; line-height: 1.55; color: var(--texto-suave); }
+  .passos__nota { margin: 1.25rem 0 0; max-width: 70ch; color: var(--texto-suave); font-size: 0.9375rem; }
   @media (max-width: 1000px) {
     .passos__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }

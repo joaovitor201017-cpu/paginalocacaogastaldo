@@ -1,0 +1,37 @@
+---
+import Botao from '../Botao.astro';
+import LinkBlog from './LinkBlog.astro';
+import { icones } from '../../lib/icones';
+import type { Servico } from '../../data/servicos/tipos';
+
+// Formas de pagamento: faixa cinza com um cartão grande e suave atrás do texto
+interface Props { pagamento: NonNullable<Servico['pagamento']> }
+const { pagamento: p } = Astro.props;
+---
+
+<section id="pagamento" class="secao pagamento" aria-labelledby="pagamento-titulo">
+  <!-- Textura: cartão grande em tom pouco mais escuro que o fundo (decorativo) -->
+  <svg class="pagamento__marca" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d={icones.cartao}></path></svg>
+  <div class="container pagamento__grade">
+    <div>
+      <h2 id="pagamento-titulo">{p.titulo}</h2>
+      <p>{p.texto}</p>
+      <LinkBlog link={p.link} />
+    </div>
+    <Botao href={p.botao.href} tamanho="g">{p.botao.rotulo}</Botao>
+  </div>
+</section>
+
+<style>
+  .pagamento { background: var(--cinza-fundo); position: relative; overflow: hidden; }
+  .pagamento__grade { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem 4rem; align-items: center; }
+  .pagamento__marca {
+    position: absolute; left: clamp(6rem, 22vw, 24rem); top: 50%; width: clamp(320px, 38vw, 500px); height: auto;
+    color: #dbe4ef; opacity: 0.5; transform: translateY(-50%) rotate(-12deg); pointer-events: none;
+  }
+  .pagamento p { max-width: 64ch; margin: 0; }
+  @media (max-width: 760px) {
+    .pagamento__grade { grid-template-columns: minmax(0, 1fr); justify-items: start; }
+    .pagamento__marca { left: 15%; top: 32%; width: 340px; }
+  }
+</style>

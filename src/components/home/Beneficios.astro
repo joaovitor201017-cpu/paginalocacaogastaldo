@@ -23,7 +23,7 @@ const p = id === 'beneficios' ? '' : `${id}-`;
   <div class="container">
     <div class="beneficios__topo">
       <h2 id={`${id}-titulo`}>{titulo}</h2>
-      <p class="intro">{intro}</p>
+      {intro && <p class="intro">{intro}</p>}
     </div>
 
     <div class="abas__lista" role="tablist" aria-label={rotuloAbas}>

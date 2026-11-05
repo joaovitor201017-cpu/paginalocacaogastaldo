@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TopoServico from './TopoServico.astro';
+import Passos from './Passos.astro';
+import LinkBlog from './LinkBlog.astro';
+import Coberturas from './Coberturas.astro';
+import Assistencias from './Assistencias.astro';
+import Pagamento from './Pagamento.astro';
+import ListaDocumentos from './ListaDocumentos.astro';
+import OutrasGarantias from './OutrasGarantias.astro';
+import Diferenciais from './Diferenciais.astro';
+import Faq from './Faq.astro';
+import ChamadoFinal from './ChamadoFinal.astro';
+import Beneficios from '../home/Beneficios.astro';
+import Cidades from '../home/Cidades.astro';
+import { site } from '../../data/site';
+import { cidades } from '../../data/cidades';
+import { solucoes } from '../../data/solucoes';
+import { schemaServico } from '../../lib/schema';
+import type { Servico } from '../../data/servicos/tipos';
+
+// Monta uma página de serviço inteira a partir do arquivo de dados.
+// Ordem fixa (padrão aprovado no Seguro Fiança); seções opcionais só aparecem se existirem.
+// passos = 'antes' coloca o passo a passo logo depois do "O que é" (Seguro Fiança);
+// 'depois' coloca depois das coberturas/assistências (Seguro Residencial).
+interface Props { servico: Servico; passos?: 'antes' | 'depois'; idPassos?: string }
+const { servico: s, passos = 'antes', idPassos = 'como-funciona' } = Astro.props;
+
+const caminho = `/${s.slug}`;
+const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description, caminho, rotulo: s.rotuloTrilha }, s.faq.itens, cidades);
+// Foto do topo: a mesma do card deste serviço na Home
+const foto = solucoes.find((x) => x.saibaMais === caminho)?.imagem;
+const passoAPasso = s.comoFunciona;
+---
+
+<BaseLayout title={s.seo.title} description={s.seo.description} path={caminho} jsonLd={jsonLd} mensagemWhatsApp={s.mensagemWhatsApp}>
+  <main id="conteudo">
+    <TopoServico servico={s} foto={foto} />
+
+    <section id="o-que-e" class="secao texto-servico" aria-labelledby="o-que-e-titulo">
+      <div class="container">
+        <h2 id="o-que-e-titulo">{s.oQueE.titulo}</h2>
+        {s.oQueE.paragrafos.map((p) => <p>{p}</p>)}
+        <LinkBlog link={s.oQueE.link} />
+        {s.oQueE.extra && (
+          <div class="texto-servico__extra">
+            <h3>{s.oQueE.extra.titulo}</h3>
+            <p>{s.oQueE.extra.texto}</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    {passoAPasso && passos === 'antes' && <Passos id={idPassos} {...passoAPasso} />}
+
+    <Beneficios id="vantagens" titulo={s.vantagens.titulo} intro={s.vantagens.intro ?? ''} grupos={s.vantagens.grupos} rotuloAbas="Vantagens por público" />
+
+    <Coberturas coberturas={s.coberturas} />
+
+    {s.assistencias && <Assistencias assistencias={s.assistencias} />}
+
+    {passoAPasso && passos === 'depois' && <Passos id={idPassos} {...passoAPasso} fundo={s.assistencias ? 'branco' : 'cinza'} />}
+
+    {s.pagamento && <Pagamento pagamento={s.pagamento} />}
+
+    {s.quemPode && <ListaDocumentos quemPode={s.quemPode} />}
+
+    <OutrasGarantias outras={s.outras} atual={caminho} />
+
+    <Diferenciais porQue={s.porQue} />
+
+    <Cidades />
+
+    <Faq titulo={s.faq.titulo} itens={s.faq.itens} />
+
+    <ChamadoFinal titulo={s.final.titulo} texto={s.final.texto} principal={s.topo.botaoPrincipal} secundario={s.final.botaoSecundario} mensagemWhatsApp={s.mensagemWhatsApp} />
+  </main>
+</BaseLayout>
+
+<style>
+  .texto-servico p { max-width: 70ch; color: var(--texto); }
+  .texto-servico__extra { margin-top: 2rem; max-width: 70ch; padding: 1.25rem 1.4rem; background: var(--cinza-fundo); border-left: 4px solid var(--azul-escuro); border-radius: 0 var(--raio-p) var(--raio-p) 0; }
+  .texto-servico__extra h3 { font-size: 1.0625rem; margin-bottom: 0.5rem; }
+  .texto-servico__extra p { margin: 0; }
+</style>

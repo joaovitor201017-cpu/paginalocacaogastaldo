@@ -29,7 +29,6 @@ test('selos, botões e SEO como combinado', () => {
 
 test('regras herdadas da Home: sede em Santo André, sem Google, SUSEP ou avisos internos', () => {
   assert.ok(!todoTexto.includes('São Bernardo do Campo, onde fica'));
-  assert.ok(s.cidades.texto.includes('Santo André, onde fica a nossa sede'));
   for (const proibido of ['SUSEP', 'Google', '[', 'Cotar']) assert.ok(!todoTexto.includes(proibido), proibido);
 });
 
@@ -43,4 +42,21 @@ test('schemaServico: agência, serviço, FAQ e trilha', () => {
   assert.equal(servico.areaServed.length, 7);
   assert.equal(faq.mainEntity.length, 9);
   assert.deepEqual(trilha.itemListElement.map((i) => i.name), ['Início', 'Seguro Fiança']);
+});
+
+// --- Seguro Residencial
+import { seguroResidencial as r } from '../src/data/servicos/seguro-residencial.ts';
+
+test('Seguro Residencial: estrutura do documento e regras do site', () => {
+  assert.equal(r.coberturas.linhas.length, 13);
+  assert.equal(r.coberturas.linhas[0].tipo, 'Básica');
+  assert.equal(r.assistencias.grupos.length, 2);
+  assert.equal(r.comoFunciona.passos.length, 4);
+  for (const g of r.vantagens.grupos) assert.equal(g.itens.length, 5, g.id);
+  assert.equal(r.porQue.diferenciais.length, 4);
+  assert.equal(r.faq.itens.length, 8);
+  assert.equal(r.topo.selos.length, 5);
+  const t = textos(r).join(' | ');
+  for (const proibido of ['São Bernardo do Campo, onde fica', 'com sede em São Bernardo', 'SUSEP', 'Google', '[', 'Cotar', 'Porto']) assert.ok(!t.includes(proibido), proibido);
+  assert.ok(r.porQue.texto.includes('com sede em Santo André'));
 });

@@ -1,0 +1,54 @@
+---
+import { icones } from '../../lib/icones';
+import type { Servico } from '../../data/servicos/tipos';
+
+// Assistências 24 horas: dois grupos de serviços em cards, faixa cinza com
+// uma ferramenta grande e suave ao fundo (mesma textura da faixa de pagamento).
+interface Props { assistencias: NonNullable<Servico['assistencias']> }
+const { assistencias: a } = Astro.props;
+---
+
+<section id="assistencias" class="secao assist" aria-labelledby="assistencias-titulo">
+  <svg class="assist__marca" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d={icones.ferramenta}></path></svg>
+  <div class="container assist__conteudo">
+    <h2 id="assistencias-titulo">{a.titulo}</h2>
+    <p class="intro">{a.intro}</p>
+    <div class="assist__grupos">
+      {a.grupos.map((g) => (
+        <div class="assist__grupo">
+          <h3>{g.titulo}</h3>
+          <ul>
+            {g.itens.map((i) => (
+              <li>
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+                <span><strong>{i.rotulo}</strong>{i.texto && <>: {i.texto}</>}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="assist__nota">{a.nota}</p>
+  </div>
+</section>
+
+<style>
+  .assist { background: var(--cinza-fundo); position: relative; overflow: hidden; }
+  .assist__conteudo { position: relative; }
+  .assist__marca {
+    position: absolute; right: 6%; top: 1.5rem; width: clamp(220px, 24vw, 320px); height: auto;
+    color: #dbe4ef; opacity: 0.5; transform: rotate(12deg); pointer-events: none;
+  }
+  .assist .intro { max-width: 62ch; margin-bottom: 1.75rem; }
+  .assist__grupos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .assist__grupo { padding: 1.25rem 1.25rem 1.1rem; background: var(--branco); border: 1.5px solid #bccbdd; border-radius: var(--raio-p); }
+  .assist__grupo h3 { font-size: 1rem; margin-bottom: 0.9rem; }
+  .assist__grupo ul { display: grid; gap: 0.6rem; }
+  .assist__grupo li { display: flex; gap: 0.55rem; align-items: flex-start; font-size: 0.9375rem; color: var(--texto-suave); }
+  .assist__grupo li svg { flex: 0 0 auto; margin-top: 0.15rem; color: var(--azul-escuro); }
+  .assist__grupo strong { color: var(--marinho); }
+  .assist__nota { margin: 1rem 0 0; font-size: 0.8125rem; color: var(--texto-suave); }
+  @media (max-width: 760px) {
+    .assist__grupos { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

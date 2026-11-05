@@ -150,16 +150,6 @@ export const seguroFianca: Servico = {
       { icone: 'lupa', destaque: 'Mais de uma seguradora', texto: 'Comparamos as opções das seguradoras parceiras e indicamos a que encaixa melhor no seu contrato.' },
       { icone: 'capelo', destaque: 'Especialistas em garantias locatícias', texto: 'Além do seguro fiança, trabalhamos com título de capitalização, fiança empresarial e seguro incêndio.' },
     ],
-    imobiliarias: {
-      titulo: 'Seguro fiança para imobiliárias do ABC',
-      texto: 'Trabalhamos lado a lado com imobiliárias. Além do seguro fiança para os seus inquilinos, oferecemos suporte ativo e próximo e treinamento presencial para o seu time de corretores vender garantias locatícias com segurança.',
-      botao: 'Quero ser imobiliária parceira',
-    },
-  },
-
-  cidades: {
-    titulo: 'Seguro fiança no ABC Paulista: cidades atendidas',
-    texto: 'Atendemos inquilinos, proprietários e imobiliárias em todas as cidades do ABC Paulista: Santo André, onde fica a nossa sede, São Bernardo do Campo, São Caetano do Sul, Diadema, Mauá, Ribeirão Pires e Rio Grande da Serra. A simulação e a contratação são online.',
   },
 
   faq: {
