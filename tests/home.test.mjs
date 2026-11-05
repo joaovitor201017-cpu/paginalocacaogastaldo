@@ -229,3 +229,9 @@ test('card de Seguro Residencial tem foto real e nenhum card fica com reserva', 
   assert.match(s, /alt="Casal tomando café e conversando no sofá de casa"/);
   assert.ok(!s.includes('foto__reserva'), 'sem espaços reservados nos cards');
 });
+
+test('sobre sem a reserva de logos das seguradoras e sem o link do blog', () => {
+  const s = secao(html, 'sobre');
+  assert.ok(!s.includes('logos das seguradoras parceiras'));
+  assert.ok(!s.includes('gastaldo-seguros-corretora-especializada'));
+});

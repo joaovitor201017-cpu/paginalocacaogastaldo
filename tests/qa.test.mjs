@@ -29,3 +29,7 @@ test('página marca .js no <html> antes do conteúdo (menu mobile visível sem J
 test('Esc fecha o menu mobile', () => {
   assert.match(html, /key === 'Escape'/);
 });
+
+test('carrossel do topo tem espaçamento maior entre as logos', async () => {
+  assert.match(lerCssGerado(), /\.faixa__marquee[^{]*\{[^}]*--espaco:clamp\(2\.5rem, ?5vw, ?4\.5rem\)/);
+});

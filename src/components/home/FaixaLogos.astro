@@ -22,7 +22,7 @@ import { alturaLogo } from '../../lib/logos';
   .faixa { border-block: 1px solid var(--cinza-linha); background: var(--branco); }
   .faixa__interna { display: flex; align-items: center; gap: 2rem; padding-block: 0.8rem; }
   .faixa__frase { flex: 0 0 auto; margin: 0; max-width: 22ch; font-size: 0.8125rem; font-weight: 500; color: var(--texto-suave); line-height: 1.35; }
-  .faixa :global(.faixa__marquee) { flex: 1; min-width: 0; }
+  .faixa :global(.faixa__marquee) { flex: 1; min-width: 0; --espaco: clamp(2.5rem, 5vw, 4.5rem); }
   .faixa :global(.faixa__item) { flex: 0 0 auto; color: var(--texto-suave); font-weight: 600; font-size: 0.9375rem; letter-spacing: -0.01em; white-space: nowrap; }
   .faixa :global(.faixa__item img) { display: block; width: auto; }
   @media (max-width: 700px) {

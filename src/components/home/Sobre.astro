@@ -1,5 +1,4 @@
 ---
-import Pendente from '../Pendente.astro';
 import ImagemReservada from '../ImagemReservada.astro';
 import { treinamentos } from '../../data/treinamentos';
 
@@ -31,11 +30,6 @@ const diferenciais = [
           </li>
         ))}
       </ul>
-      <p class="sobre__seguradoras"><Pendente rotulo="logos das seguradoras parceiras" /></p>
-
-      <p class="sobre__link">
-        <a href="/blog/gastaldo-seguros-corretora-especializada">Gastaldo Seguros: corretora especializada em seguros e garantias para o aluguel</a>
-      </p>
     </div>
 
     <div class="sobre__treinamentos">
@@ -100,8 +94,6 @@ const diferenciais = [
     color: var(--marinho); background: var(--azul-ceu);
     border-radius: 8px 8px 8px 14px; /* eco do escudo do logo */
   }
-  .sobre__seguradoras { margin: 0.9rem 0 0; }
-  .sobre__link { font-weight: 600; margin-top: 1.25rem; font-size: 0.9375rem; }
 
   /* Carrossel de fotos dos treinamentos */
   .sobre__treinamentos { position: relative; min-width: 0; }
