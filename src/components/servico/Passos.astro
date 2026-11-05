@@ -3,12 +3,11 @@ import LinkBlog from './LinkBlog.astro';
 import type { LinkBlog as Link, Passo } from '../../data/servicos/tipos';
 
 // Passo a passo numerado (é uma sequência real: a numeração tem sentido)
-// fundo branco quando vem logo depois de outra faixa cinza
-interface Props { id: string; titulo: string; intro?: string; passos: Passo[]; nota?: string; links?: Link[]; fundo?: 'cinza' | 'branco' }
-const { id, titulo, intro, passos, nota, links = [], fundo = 'cinza' } = Astro.props;
+interface Props { id: string; titulo: string; intro?: string; passos: Passo[]; nota?: string; links?: Link[] }
+const { id, titulo, intro, passos, nota, links = [] } = Astro.props;
 ---
 
-<section id={id} class:list={['secao passos', { 'passos--branco': fundo === 'branco' }]} aria-labelledby={`${id}-titulo`}>
+<section id={id} class="secao passos" aria-labelledby={`${id}-titulo`}>
   <div class="container">
     <h2 id={`${id}-titulo`}>{titulo}</h2>
     {intro && <p class="intro">{intro}</p>}
@@ -28,7 +27,6 @@ const { id, titulo, intro, passos, nota, links = [], fundo = 'cinza' } = Astro.p
 
 <style>
   .passos { background: var(--cinza-fundo); }
-  .passos--branco { background: var(--branco); }
   .passos h2 { margin-bottom: 0.75rem; }
   .passos .intro { max-width: 62ch; margin-bottom: 2rem; }
   .passos h2 + .passos__lista { margin-top: 1.5rem; }

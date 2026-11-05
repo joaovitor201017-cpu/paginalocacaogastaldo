@@ -55,7 +55,7 @@ const { coberturas: c, botao } = Astro.props;
       </div>
     )}
     <LinkBlog link={c.link} />
-    {botao && <div class="coberturas__acao"><Botao href={botao.href} tamanho="g">{botao.rotulo}</Botao></div>}
+    {botao && <div class="coberturas__acao"><Botao href={botao.href}>{botao.rotulo}</Botao></div>}
   </div>
 </section>
 

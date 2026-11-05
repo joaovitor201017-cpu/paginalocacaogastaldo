@@ -30,7 +30,7 @@ const { assistencias: a, botao } = Astro.props;
       ))}
     </div>
     <p class="assist__nota">{a.nota}</p>
-    <div class="assist__acao"><Botao href={botao.href} tamanho="g">{botao.rotulo}</Botao></div>
+    <div class="assist__acao"><Botao href={botao.href}>{botao.rotulo}</Botao></div>
   </div>
 </section>
 

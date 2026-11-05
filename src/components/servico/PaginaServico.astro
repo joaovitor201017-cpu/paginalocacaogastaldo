@@ -22,14 +22,14 @@ import type { Servico } from '../../data/servicos/tipos';
 import type { ImageMetadata } from 'astro';
 
 // Monta uma página de serviço inteira a partir do arquivo de dados.
-// Ordem fixa (padrão aprovado no Seguro Fiança); seções opcionais só aparecem se existirem.
-// passos = 'antes' coloca o passo a passo logo depois do "O que é" (Seguro Fiança);
-// 'depois' coloca depois das coberturas/assistências (Seguro Residencial).
+// Ordem fixa, igual em todas as páginas de serviço: topo, o que é, passo a passo, vantagens,
+// coberturas, [assistências], [pagamento], [quem pode], outras garantias, por que, cidades, FAQ, final.
+// Seções entre colchetes só aparecem se o serviço tiver esse conteúdo.
 // fotoTopo troca a foto do topo (padrão: a do card do serviço na Home);
 // fotosOQueE coloca imagens ao lado do texto do "O que é" (sem src fica o espaço reservado).
 type Foto = { src?: ImageMetadata; alt: string; descricao: string };
-interface Props { servico: Servico; passos?: 'antes' | 'depois'; idPassos?: string; fotoTopo?: { src: ImageMetadata; alt: string }; fotosOQueE?: Foto[] }
-const { servico: s, passos = 'antes', idPassos = 'como-funciona', fotoTopo, fotosOQueE = [] } = Astro.props;
+interface Props { servico: Servico; idPassos?: string; fotoTopo?: { src: ImageMetadata; alt: string }; fotosOQueE?: Foto[] }
+const { servico: s, idPassos = 'como-funciona', fotoTopo, fotosOQueE = [] } = Astro.props;
 
 const caminho = `/${s.slug}`;
 const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description, caminho, rotulo: s.rotuloTrilha }, s.faq.itens, cidades);
@@ -37,6 +37,8 @@ const jsonLd = schemaServico(site, { nome: s.nome, descricao: s.seo.description,
 const foto = fotoTopo ?? solucoes.find((x) => x.saibaMais === caminho)?.imagem;
 const passoAPasso = s.comoFunciona;
 // Padrão: a seção de informações (assistências ou, sem elas, coberturas) termina com a simulação
+// "Outras garantias" é cinza, a menos que a seção anterior também seja (evita duas faixas cinza seguidas)
+const antesDasOutrasCinza = !s.quemPode && Boolean(s.pagamento || s.assistencias);
 const simulacao = { rotulo: 'Fazer simulação', href: s.topo.botaoPrincipal.href };
 ---
 
@@ -67,7 +69,7 @@ const simulacao = { rotulo: 'Fazer simulação', href: s.topo.botaoPrincipal.hre
       </div>
     </section>
 
-    {passoAPasso && passos === 'antes' && <Passos id={idPassos} {...passoAPasso} />}
+    {passoAPasso && <Passos id={idPassos} {...passoAPasso} />}
 
     <Beneficios id="vantagens" titulo={s.vantagens.titulo} intro={s.vantagens.intro ?? ''} grupos={s.vantagens.grupos} rotuloAbas="Vantagens por público" />
 
@@ -75,13 +77,11 @@ const simulacao = { rotulo: 'Fazer simulação', href: s.topo.botaoPrincipal.hre
 
     {s.assistencias && <Assistencias assistencias={s.assistencias} botao={simulacao} />}
 
-    {passoAPasso && passos === 'depois' && <Passos id={idPassos} {...passoAPasso} fundo={s.assistencias ? 'branco' : 'cinza'} />}
-
     {s.pagamento && <Pagamento pagamento={s.pagamento} />}
 
     {s.quemPode && <ListaDocumentos quemPode={s.quemPode} />}
 
-    <OutrasGarantias outras={s.outras} atual={caminho} />
+    <OutrasGarantias outras={s.outras} atual={caminho} fundo={antesDasOutrasCinza ? 'branco' : 'cinza'} />
 
     <Diferenciais porQue={s.porQue} />
 

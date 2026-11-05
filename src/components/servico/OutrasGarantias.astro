@@ -5,12 +5,12 @@ import { solucoes } from '../../data/solucoes';
 import type { Servico } from '../../data/servicos/tipos';
 
 // Outras garantias: os mesmos produtos e cards da Home, sem o serviço da página atual.
-interface Props { outras: Servico['outras']; atual: string }
-const { outras: o, atual } = Astro.props;
+interface Props { outras: Servico['outras']; atual: string; fundo?: 'cinza' | 'branco' }
+const { outras: o, atual, fundo = 'cinza' } = Astro.props;
 const cards = solucoes.filter((s) => s.saibaMais !== atual);
 ---
 
-<section id="outras-garantias" class="secao outras" aria-labelledby="outras-titulo">
+<section id="outras-garantias" class:list={['secao outras', { 'outras--branco': fundo === 'branco' }]} aria-labelledby="outras-titulo">
   <div class="container">
     <h2 id="outras-titulo">{o.titulo}</h2>
     {o.intro && <p class="intro">{o.intro}</p>}
@@ -23,6 +23,7 @@ const cards = solucoes.filter((s) => s.saibaMais !== atual);
 
 <style>
   .outras { background: var(--cinza-fundo); }
+  .outras--branco { background: var(--branco); }
   .outras h2 { margin-bottom: 1.5rem; }
   .outras .intro { max-width: 62ch; margin: -0.75rem 0 1.75rem; }
   .outras__lista { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }

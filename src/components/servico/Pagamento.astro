@@ -18,7 +18,7 @@ const { pagamento: p } = Astro.props;
       <p>{p.texto}</p>
       <LinkBlog link={p.link} />
     </div>
-    <Botao href={p.botao.href} tamanho="g">{p.botao.rotulo}</Botao>
+    <Botao href={p.botao.href}>{p.botao.rotulo}</Botao>
   </div>
 </section>
 

@@ -21,7 +21,7 @@ test('topo com 5 selos, botão de simulação e uma foto (a do card Residencial)
 });
 
 test('ordem das seções no padrão do Seguro Fiança', () => {
-  const ordem = ['o-que-e', 'vantagens', 'coberturas', 'assistencias', 'como-contratar', 'outras-garantias', 'por-que', 'cidades', 'faq', 'chamado-final'].map((id) => html.indexOf(`id="${id}"`));
+  const ordem = ['o-que-e', 'como-contratar', 'vantagens', 'coberturas', 'assistencias', 'outras-garantias', 'por-que', 'cidades', 'faq', 'chamado-final'].map((id) => html.indexOf(`id="${id}"`));
   for (const i of ordem) assert.ok(i > 0);
   assert.deepEqual([...ordem].sort((a, b) => a - b), ordem);
 });
@@ -78,9 +78,9 @@ test('schema e JS dentro do orçamento', () => {
   assert.ok(!html.includes('href="null"'));
 });
 
-test('vantagens sem o texto da Home e passo a passo em fundo branco depois das assistências', async () => {
+test('vantagens sem o texto da Home e outras garantias em fundo branco depois das assistências', async () => {
   assert.ok(!secao(html, 'vantagens').includes('Nossas soluções para alugar foram pensadas'));
-  assert.match(html, /id="como-contratar" class="[^"]*passos--branco/);
+  assert.match(html, /id="outras-garantias" class="[^"]*outras--branco/);
 });
 
 test('casa e apartamento com duas imagens ao lado do texto', () => {
