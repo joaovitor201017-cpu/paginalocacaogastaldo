@@ -33,3 +33,12 @@ test('Esc fecha o menu mobile', () => {
 test('carrossel do topo tem espaçamento maior entre as logos', async () => {
   assert.match(lerCssGerado(), /\.faixa__marquee[^{]*\{[^}]*--espaco:clamp\(2\.5rem, ?5vw, ?4\.5rem\)/);
 });
+
+test('textos do hero um pouco maiores', () => {
+  const css = lerCssGerado();
+  assert.match(css, /\.hero[^{]*h1[^{]*\{[^}]*font-size:clamp\(2\.25rem, ?1\.7rem \+ 2\.4vw, ?3\.5rem\)/);
+  assert.match(css, /\.hero__sub[^{]*\{[^}]*font-size:clamp\(1\.0625rem, ?1rem \+ \.3vw, ?1\.25rem\)/);
+  const html = lerHome();
+  const hero = html.slice(html.indexOf('class="hero'), html.indexOf('class="hero__fotos'));
+  assert.equal((hero.match(/botao--g/g) || []).length, 2);
+});
