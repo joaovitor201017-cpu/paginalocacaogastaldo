@@ -3,23 +3,19 @@ import Pendente from '../Pendente.astro';
 
 const diferenciais = [
   {
-    destaque: 'Especialização em seguros locatícios.',
-    texto: 'Conhecemos a Lei do Inquilinato e as exigências das imobiliárias.',
+    destaque: 'Especialização em seguros locatícios',
     icone: 'M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Zm-3.5 9 2.5 2.5 4.5-4.5',
   },
   {
-    destaque: 'Suporte ativo e próximo.',
-    texto: 'Você fala com uma pessoa da equipe, não com uma central.',
+    destaque: 'Suporte ativo e próximo',
     icone: 'M20 15.5a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9.5ZM8.5 9.5h7M8.5 13h4',
   },
   {
-    destaque: 'Treinamento presencial para imobiliárias.',
-    texto: 'Capacitamos o time de corretores de imóveis.',
+    destaque: 'Treinamento presencial para imobiliárias',
     icone: 'M3 9.5 12 5l9 4.5-9 4.5-9-4.5Zm4 2v4.5c1.5 1.3 3.2 2 5 2s3.5-.7 5-2v-4.5M21 9.5v5',
   },
   {
-    destaque: 'Várias seguradoras parceiras.',
-    texto: 'Comparamos as opções para indicar a melhor para cada contrato.',
+    destaque: 'Várias seguradoras parceiras',
     icone: 'M4 7h16M4 12h16M4 17h10M17 15l2 2 3-3.5',
   },
 ];
@@ -46,7 +42,7 @@ const diferenciais = [
             <span class="sobre__icone" aria-hidden="true">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={d.icone}></path></svg>
             </span>
-            <p><strong>{d.destaque}</strong> {d.texto}</p>
+            <strong>{d.destaque}</strong>
           </li>
         ))}
       </ul>
@@ -62,12 +58,11 @@ const diferenciais = [
   .sobre__link { font-weight: 600; margin-top: 1.5rem; }
   .sobre__diferenciais h3 { margin-bottom: 1.5rem; }
   .sobre__diferenciais ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-  /* fundo cinza bem leve para destacar ícone, título e texto */
-  .sobre__diferenciais li { padding: 1.25rem; background: var(--cinza-fundo); border-radius: var(--raio-m); }
-  .sobre__diferenciais li p { margin: 0; font-size: var(--fs-pequeno); color: var(--texto-suave); }
-  .sobre__diferenciais li strong { display: block; color: var(--marinho); font-size: 1rem; margin-bottom: 0.2rem; }
+  /* fundo cinza bem leve para destacar ícone e título */
+  .sobre__diferenciais li { display: flex; align-items: center; gap: 0.9rem; padding: 1rem 1.1rem; background: var(--cinza-fundo); border-radius: var(--raio-m); }
+  .sobre__diferenciais li strong { color: var(--marinho); font-size: 0.975rem; line-height: 1.35; }
   .sobre__icone {
-    display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 0.9rem;
+    flex: 0 0 auto; display: grid; place-items: center; width: 46px; height: 46px;
     color: var(--marinho); background: var(--azul-ceu);
     border-radius: 10px 10px 10px 22px; /* eco do escudo do logo */
   }

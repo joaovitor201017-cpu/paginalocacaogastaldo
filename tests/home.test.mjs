@@ -114,7 +114,7 @@ test('seção #sobre com H2, texto e 4 diferenciais', () => {
   assert.ok(s.includes('Desde 2015'), 'texto sobre nós do cliente');
   assert.ok(!s.includes('história real'), 'sem pendência de história');
   assert.match(s, /<h3[^>]*>Nossos diferenciais<\/h3>/);
-  for (const d of ['Especialização em seguros locatícios.', 'Suporte ativo e próximo.', 'Treinamento presencial para imobiliárias.', 'Várias seguradoras parceiras.']) assert.ok(s.includes(d), d);
+  for (const d of ['Especialização em seguros locatícios', 'Suporte ativo e próximo', 'Treinamento presencial para imobiliárias', 'Várias seguradoras parceiras']) assert.ok(s.includes(d), d);
 });
 
 test('seção #cidades com H2 e as 7 cidades, sede marcada', () => {
