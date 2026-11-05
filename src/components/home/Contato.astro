@@ -4,14 +4,15 @@ import MapaFachada from '../MapaFachada.astro';
 import { site } from '../../data/site';
 import { linkWhatsApp, numeroWhatsApp } from '../../lib/whatsapp';
 import { enderecoCompleto } from '../../lib/endereco';
+import { icones } from '../../lib/icones';
 
 const endereco = site.endereco ? enderecoCompleto(site.endereco) : null;
 const canais = [
-  { rotulo: 'WhatsApp', valor: site.whatsapp, href: site.whatsapp ? linkWhatsApp(site.mensagemWhatsApp, site.whatsapp) : null, pendente: 'número' },
-  { rotulo: 'Telefone', valor: site.telefone, href: site.telefone ? `tel:+${numeroWhatsApp(site.telefone)}` : null, pendente: 'número' },
-  { rotulo: 'E-mail', valor: site.email, href: site.email ? `mailto:${site.email}` : null, pendente: 'e-mail' },
-  { rotulo: 'Endereço', valor: endereco, href: null, pendente: 'endereço completo, igual ao Google Meu Negócio' },
-  { rotulo: 'Horário', valor: site.horario, href: null, pendente: 'dias e horários' },
+  { rotulo: 'WhatsApp', icone: icones.mensagem, valor: site.whatsapp, href: site.whatsapp ? linkWhatsApp(site.mensagemWhatsApp, site.whatsapp) : null, pendente: 'número' },
+  { rotulo: 'Telefone', icone: icones.telefone, valor: site.telefone, href: site.telefone ? `tel:+${numeroWhatsApp(site.telefone)}` : null, pendente: 'número' },
+  { rotulo: 'E-mail', icone: icones.email, valor: site.email, href: site.email ? `mailto:${site.email}` : null, pendente: 'e-mail' },
+  { rotulo: 'Endereço', icone: icones.pin, valor: endereco, href: null, pendente: 'endereço completo, igual ao Google Meu Negócio' },
+  { rotulo: 'Horário', icone: icones.relogio, valor: site.horario, href: null, pendente: 'dias e horários' },
 ];
 // Sem JS o formulário envia para o WhatsApp com a mensagem padrão no campo oculto "text"
 const acaoPadrao = `https://wa.me/${numeroWhatsApp(site.whatsapp)}`;
@@ -24,7 +25,12 @@ const acaoPadrao = `https://wa.me/${numeroWhatsApp(site.whatsapp)}`;
       <dl class="contato__canais">
         {canais.map((c) => (
           <div>
-            <dt>{c.rotulo}</dt>
+            <dt>
+              <span class="contato__icone" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={c.icone}></path></svg>
+              </span>
+              {c.rotulo}
+            </dt>
             <dd>{c.valor ? (c.href ? <a href={c.href}>{c.valor}</a> : c.valor) : <Pendente rotulo={c.pendente} />}</dd>
           </div>
         ))}
@@ -80,8 +86,13 @@ const acaoPadrao = `https://wa.me/${numeroWhatsApp(site.whatsapp)}`;
 <style>
   .contato__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
   .contato__canais { display: grid; gap: 0.9rem; margin: 1.5rem 0 2rem; }
-  .contato__canais div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--cinza-linha); }
-  .contato__canais dt { font-weight: 600; color: var(--marinho); }
+  .contato__canais div { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1rem; align-items: center; padding-bottom: 0.9rem; border-bottom: 1px solid var(--cinza-linha); }
+  .contato__canais dt { display: flex; align-items: center; gap: 0.7rem; font-weight: 600; color: var(--marinho); }
+  .contato__icone {
+    flex: 0 0 auto; display: grid; place-items: center; width: 38px; height: 38px;
+    color: var(--marinho); background: var(--azul-ceu);
+    border-radius: 9px 9px 9px 16px; /* eco do escudo do logo */
+  }
   .contato__canais dd { margin: 0; }
 
   .contato__form { display: grid; gap: 1.1rem; padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); background: var(--cinza-fundo); border-radius: var(--raio-g); }
@@ -103,7 +114,8 @@ const acaoPadrao = `https://wa.me/${numeroWhatsApp(site.whatsapp)}`;
     .contato__grade { grid-template-columns: minmax(0, 1fr); }
   }
   @media (max-width: 480px) {
-    .contato__canais div { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
+    .contato__canais div { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
+    .contato__canais dd { padding-left: calc(38px + 0.7rem); }
     .contato__form button { justify-self: stretch; }
   }
 </style>

@@ -29,10 +29,13 @@ const diferenciais = [
   <div class="container sobre__grade">
     <div class="sobre__texto">
       <h2 id="sobre-titulo">Sobre a Gastaldo Seguros</h2>
+      <p class="sobre__abertura">Mais que uma corretora: parceiros na construção de um futuro seguro para você e sua família.</p>
       <p>
-        A Gastaldo Seguros é uma corretora de Santo André especializada em seguros e garantias para o aluguel. Em vez de vender de tudo, escolhemos ser especialistas no que o mercado de locação precisa e trabalhar lado a lado com as imobiliárias do ABC.
+        Desde 2015, a Gastaldo Seguros oferece proteção personalizada em cada etapa, com atendimento próximo e soluções pensadas para a necessidade de cada cliente. Daqui de Santo André, cuidamos da sua casa, do seu carro, da sua empresa e da sua vida com responsabilidade e experiência.
       </p>
-      <p><Pendente rotulo="história real: ano de fundação, quem fundou, número SUSEP" /></p>
+      <p>
+        No aluguel, somos especialistas: trabalhamos lado a lado com as imobiliárias do ABC para que inquilinos e proprietários fechem contratos com segurança, sem fiador e sem caução.
+      </p>
       <p class="sobre__link">
         <a href="/blog/gastaldo-seguros-corretora-especializada">Gastaldo Seguros: corretora especializada em seguros e garantias para o aluguel</a>
       </p>
@@ -58,9 +61,12 @@ const diferenciais = [
 <style>
   .sobre__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
   .sobre__texto p { max-width: 58ch; }
+  .sobre__abertura { font-size: 1.125rem; font-weight: 500; color: var(--marinho); line-height: 1.45; }
   .sobre__link { font-weight: 600; margin-top: 1.5rem; }
   .sobre__diferenciais h3 { margin-bottom: 1.5rem; }
-  .sobre__diferenciais ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 2rem; }
+  .sobre__diferenciais ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  /* fundo cinza bem leve para destacar ícone, título e texto */
+  .sobre__diferenciais li { padding: 1.25rem; background: var(--cinza-fundo); border-radius: var(--raio-m); }
   .sobre__diferenciais li p { margin: 0; font-size: var(--fs-pequeno); color: var(--texto-suave); }
   .sobre__diferenciais li strong { display: block; color: var(--marinho); font-size: 1rem; margin-bottom: 0.2rem; }
   .sobre__icone {

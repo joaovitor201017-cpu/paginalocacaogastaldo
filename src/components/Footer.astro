@@ -33,7 +33,7 @@ const institucional = [
   </div>
   <div class="container rodape__dados">
     <p>
-      {site.nome} · CNPJ {site.cnpj ?? <Pendente rotulo="número" />} · SUSEP {site.susep ?? <Pendente rotulo="número" />} ·{' '}
+      {site.nome} · CNPJ {site.cnpj ?? <Pendente rotulo="número" />} ·{' '}
       {site.endereco ? enderecoCompleto(site.endereco) : <Pendente rotulo="endereço" />} · {site.telefone ?? <Pendente rotulo="telefone" />}
     </p>
   </div>

@@ -14,11 +14,9 @@ test('botão secundário desce para #solucoes', () => {
   assert.match(html, /href="#solucoes"[^>]*>\s*Conhecer as soluções/);
 });
 
-test('hero mostra só a avaliação do Google, sem selos de números', () => {
+test('hero sem selos de números e sem avaliação do Google', () => {
   const hero = html.slice(html.indexOf('class="hero'), html.indexOf('</section>', html.indexOf('class="hero')));
-  assert.ok(hero.includes('4,5'), 'nota');
-  assert.ok(hero.includes('27 avaliações no Google'), 'avaliações');
-  for (const r of ['imobiliárias parceiras no ABC', 'contratos de aluguel garantidos', 'anos de mercado']) assert.ok(!hero.includes(r), r);
+  for (const r of ['avaliações no Google', 'imobiliárias parceiras no ABC', 'contratos de aluguel garantidos', 'anos de mercado']) assert.ok(!hero.includes(r), r);
 });
 
 test('faixa de logos com a frase e as 8 imobiliárias', () => {
@@ -113,7 +111,8 @@ test('logos em carrossel infinito no topo e na seção de parceiras', () => {
 test('seção #sobre com H2, texto e 4 diferenciais', () => {
   const s = secao(html, 'sobre');
   assert.match(s, /<h2[^>]*>Sobre a Gastaldo Seguros<\/h2>/);
-  assert.ok(s.includes('corretora de Santo André especializada em seguros e garantias para o aluguel'));
+  assert.ok(s.includes('Desde 2015'), 'texto sobre nós do cliente');
+  assert.ok(!s.includes('história real'), 'sem pendência de história');
   assert.match(s, /<h3[^>]*>Nossos diferenciais<\/h3>/);
   for (const d of ['Especialização em seguros locatícios.', 'Suporte ativo e próximo.', 'Treinamento presencial para imobiliárias.', 'Várias seguradoras parceiras.']) assert.ok(s.includes(d), d);
 });
@@ -167,4 +166,19 @@ test('todos os links de WhatsApp apontam para 5511993226252', () => {
   const links = [...html.matchAll(/href="(https:\/\/wa\.me\/[^"?]*)/g)].map((m) => m[1]);
   assert.ok(links.length > 0);
   for (const l of links) assert.equal(l, 'https://wa.me/5511993226252');
+});
+
+// --- Ajustes de contato, benefícios e SUSEP
+test('cada canal de contato tem ícone ao lado', () => {
+  assert.equal(contar(secao(html, 'contato'), /class="contato__icone/g), 5);
+});
+
+test('botões dos três públicos de benefícios têm o mesmo estilo', () => {
+  const s = secao(html, 'beneficios');
+  assert.equal(contar(s, /class="botao botao--primario/g), 3);
+  assert.doesNotMatch(s, /botao--whatsapp/);
+});
+
+test('SUSEP não aparece no site', () => {
+  assert.doesNotMatch(html, /SUSEP/);
 });

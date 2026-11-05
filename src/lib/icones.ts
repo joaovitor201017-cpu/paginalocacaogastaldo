@@ -16,7 +16,10 @@ export const icones = {
   grafico: 'M4 20h16M7 16V10m5 6V6m5 10v-4',
   telefone: 'M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1Z',
   capelo: 'M3 9.5 12 5l9 4.5-9 4.5-9-4.5Zm4 2v4.5c1.5 1.3 3.2 2 5 2s3.5-.7 5-2v-4.5M21 9.5v5',
-  documento: 'M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm7 0v4h4M9 13h6M9 17h4',
+  mensagem: 'M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.2A8 8 0 1 1 20 11.5Z',
+  email: 'M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm-1 1 9 6 9-6',
+  pin: 'M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21Zm0-9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
+  documento:'M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm7 0v4h4M9 13h6M9 17h4',
 } as const;
 
 export type Icone = keyof typeof icones;

@@ -18,10 +18,7 @@ export const site = {
   horario: 'Segunda a sexta, das 9h às 18h' as string | null,
   horarioSchema: 'Mo-Fr 09:00-18:00' as string | null, // formato schema.org (sábado e domingo fechado)
   cnpj: null as string | null,
-  susep: null as string | null,
   cidadeSede: 'Santo André',
-  // Avaliação real do perfil no Google (atualizar quando mudar)
-  google: { nota: '4,5', avaliacoes: 27 },
   mensagemWhatsApp: 'Olá! Quero saber sobre as soluções para alugar.',
 };
 

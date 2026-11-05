@@ -4,9 +4,6 @@ import ImagemReservada from '../ImagemReservada.astro';
 import { site } from '../../data/site';
 import { linkWhatsApp } from '../../lib/whatsapp';
 
-// Estrelas da nota do Google (ex.: 4,5 → 4 cheias + meia)
-const nota = Number(site.google.nota.replace(',', '.'));
-const estrelas = [1, 2, 3, 4, 5].map((n) => (nota >= n ? 'cheia' : nota >= n - 0.5 ? 'meia' : 'vazia'));
 ---
 
 <section class="hero" aria-labelledby="hero-titulo">
@@ -20,18 +17,6 @@ const estrelas = [1, 2, 3, 4, 5].map((n) => (nota >= n ? 'cheia' : nota >= n - 0
         <Botao href={linkWhatsApp(site.mensagemWhatsApp, site.whatsapp)} variante="primario">Falar com um consultor</Botao>
         <Botao href="#solucoes" variante="secundario">Conhecer as soluções</Botao>
       </div>
-      <p class="hero__google">
-        <strong>{site.google.nota}</strong>
-        <svg width="0" height="0" class="hero__defs" aria-hidden="true"><defs><linearGradient id="estrela-meia"><stop offset="50%" stop-color="#FBBC04"></stop><stop offset="50%" stop-color="#d7dde5"></stop></linearGradient></defs></svg>
-        <span class="hero__estrelas" aria-label={`Nota ${site.google.nota} de 5`} role="img">
-          {estrelas.map((e) => (
-            <svg width="16" height="16" viewBox="0 0 24 24" class={`estrela estrela--${e}`}>
-              <path d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9L12 2.8Z"></path>
-            </svg>
-          ))}
-        </span>
-        <span>{site.google.avaliacoes} avaliações no Google</span>
-      </p>
     </div>
 
     <div class="hero__fotos">
@@ -46,15 +31,8 @@ const estrelas = [1, 2, 3, 4, 5].map((n) => (nota >= n ? 'cheia' : nota >= n - 0
   .hero__grade { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 4rem); align-items: center; }
   .hero h1 { max-width: 13ch; margin-bottom: 1rem; }
   .hero__sub { font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem); color: var(--texto-suave); max-width: 46ch; margin-bottom: 1.75rem; }
-  .hero__acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.75rem; }
+  .hero__acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
-  .hero__google { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin: 0; font-size: 0.9375rem; color: var(--texto-suave); }
-  .hero__google strong { color: var(--marinho); font-size: 1rem; }
-  .hero__estrelas { display: inline-flex; gap: 1px; }
-  .estrela--cheia { fill: #fbbc04; }
-  .estrela--meia { fill: url(#estrela-meia); }
-  .hero__defs { position: absolute; }
-  .estrela--vazia { fill: #d7dde5; }
 
   /* Colagem: foto principal com moldura em escudo + quadro das chaves sobreposto */
   .hero__fotos { position: relative; padding: 0 0 10% 0; max-width: 470px; width: 100%; justify-self: end; }
