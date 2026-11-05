@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Botao from '../Botao.astro';
 import Marquee from '../Marquee.astro';
 import { imobiliarias } from '../../data/imobiliarias';
+import { alturaLogo } from '../../lib/logos';
 import { site } from '../../data/site';
 import { linkWhatsApp } from '../../lib/whatsapp';
 ---
@@ -21,7 +22,7 @@ import { linkWhatsApp } from '../../lib/whatsapp';
       <Marquee class="parceiras__marquee" rotulo="Imobiliárias parceiras da Gastaldo" duracao={40}>
         {imobiliarias.map((i) => (
           <li class="parceira-card" title={i.cidade ?? undefined}>
-            {i.logo ? <Image src={i.logo} alt={i.nome} height={48} loading="lazy" /> : <span>{i.nome}</span>}
+            {i.logo ? <Image src={i.logo} alt={i.nome} height={alturaLogo(i.logo.width, i.logo.height, { area: 6000, max: 60 })} densities={[1, 2]} loading="lazy" /> : <span>{i.nome}</span>}
           </li>
         ))}
       </Marquee>
@@ -50,7 +51,7 @@ import { linkWhatsApp } from '../../lib/whatsapp';
     display: grid;
     place-items: center;
     min-width: 170px;
-    min-height: 76px;
+    min-height: 84px;
     padding: 0.75rem 1.25rem;
     background: var(--branco);
     border-radius: var(--raio-p);
@@ -59,7 +60,7 @@ import { linkWhatsApp } from '../../lib/whatsapp';
     font-size: 0.9375rem;
     white-space: nowrap;
   }
-  .parceiras :global(.parceira-card img) { max-height: 48px; width: auto; }
+  .parceiras :global(.parceira-card img) { display: block; width: auto; }
 
   @media (max-width: 560px) {
     .parceiras__painel { padding: 2rem 1.25rem; }

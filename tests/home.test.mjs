@@ -212,3 +212,14 @@ test('cards de Seguro Fiança e Seguro Incêndio têm foto real', () => {
   assert.match(html, /alt="Família recebendo as chaves do apartamento alugado com o corretor"/);
   assert.match(html, /alt="Sala de apartamento alugado iluminada, com sofá e cozinha integrada"/);
 });
+
+test('logos reais: cinza no carrossel do topo e coloridas nos cards das parceiras', () => {
+  const nomes = ['GRAE Imóveis', 'Tectus', 'Rosch', 'Casari Imóveis', 'BJ Flores Imóveis', 'F&amp;G Imóveis', 'Otacília Imóveis', 'Patrão Imóveis'];
+  const faixa = html.slice(html.indexOf('class="faixa'), html.indexOf('id="solucoes"'));
+  const parceiras = secao(html, 'imobiliarias');
+  for (const n of nomes) {
+    assert.match(faixa, new RegExp(`<img[^>]*alt="${n}"[^>]*src="[^"]*-cinza[^"]*"|<img[^>]*src="[^"]*-cinza[^"]*"[^>]*alt="${n}"`), `faixa: ${n}`);
+    assert.match(parceiras, new RegExp(`<img[^>]*alt="${n}"`), `parceiras: ${n}`);
+  }
+  assert.ok(!/-cinza/.test(parceiras), 'parceiras usam as logos coloridas');
+});
