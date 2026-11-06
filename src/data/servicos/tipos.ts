@@ -8,7 +8,7 @@ import type { GrupoBeneficios } from '../beneficios';
 // Link para um post do blog: fica oculto enquanto o post não existir (href null)
 export interface LinkBlog { rotulo: string; href: string | null }
 export interface Acao { rotulo: string; href: string }
-export interface Passo { titulo: string; texto: string }
+export interface Passo { titulo: string; texto?: string }
 
 export interface Servico {
   slug: string;

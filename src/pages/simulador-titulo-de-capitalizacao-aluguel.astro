@@ -1,0 +1,47 @@
+---
+import PaginaSimulador from '../components/simulador/PaginaSimulador.astro';
+import Passos from '../components/servico/Passos.astro';
+import SimuladorTitulo from '../components/simulador/SimuladorTitulo.astro';
+import { simuladorTitulo as s } from '../data/simuladores/titulo-de-capitalizacao';
+
+// Simulador de título de capitalização para aluguel: calculadora no topo e o texto de SEO abaixo dela
+---
+
+<PaginaSimulador
+  slug={s.slug}
+  nomeApp="Simulador de Título de Capitalização para Aluguel"
+  seo={s.seo}
+  mensagemWhatsApp={s.mensagemWhatsApp}
+  h1={s.h1}
+  subtitulo={s.subtitulo}
+  selos={s.selos}
+  servico={{ rotulo: 'Título de Capitalização', href: '/titulo-de-capitalizacao' }}
+  abc={s.abc}
+  faq={s.faq}
+  final={s.final}
+>
+  <SimuladorTitulo slot="calculadora" />
+
+  <Passos id="como-funciona" titulo={s.comoFunciona.titulo} intro={s.comoFunciona.intro} passos={s.comoFunciona.passos} />
+
+  <section class="secao sim-textos" aria-label="Antes de contratar">
+    <div class="container sim-textos__grade">
+      {s.textos.map((t) => (
+        <div id={t.id}>
+          <h2>{t.titulo}</h2>
+          <p>{t.texto}</p>
+          <p class="sim-textos__link"><a href={t.link.href}>{t.link.rotulo}</a></p>
+        </div>
+      ))}
+    </div>
+  </section>
+</PaginaSimulador>
+
+<style>
+  .sim-textos__grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 5vw, 4.5rem); }
+  .sim-textos p { margin: 0; max-width: 60ch; }
+  .sim-textos__link { margin-top: 0.75rem !important; font-weight: 600; }
+  @media (max-width: 760px) {
+    .sim-textos__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

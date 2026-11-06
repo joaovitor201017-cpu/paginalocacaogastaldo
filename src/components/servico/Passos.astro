@@ -18,7 +18,7 @@ const colunas = passos.length > 5 ? 3 : passos.length;
         <li>
           <span class="passos__num" aria-hidden="true">{i + 1}</span>
           <strong>{p.titulo}</strong>
-          <p>{p.texto}</p>
+          {p.texto && <p>{p.texto}</p>}
         </li>
       ))}
     </ol>
