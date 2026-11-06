@@ -64,3 +64,21 @@ test('Seguro Residencial: estrutura do documento e regras do site', () => {
 test('subtítulo do Seguro Residencial', () => {
   assert.equal(r.topo.subtitulo, 'Proteja seu imóvel contra incêndio, roubo e danos elétricos, com assistência 24 horas. Faça a cotação grátis, compare as seguradoras no WhatsApp e contrate o seguro do seu jeito.');
 });
+
+// --- Seguro Incêndio
+import { seguroIncendio as inc } from '../src/data/servicos/seguro-incendio.ts';
+
+test('Seguro Incêndio: estrutura do documento e regras do site', () => {
+  assert.equal(inc.topo.h1, 'Seguro Incêndio para Locação');
+  assert.equal(inc.topo.selos.length, 5);
+  assert.equal(inc.oQueE.extras.length, 3);
+  assert.equal(inc.oQueE.extras[1].lista.length, 4);
+  assert.equal(inc.coberturas.linhas.length, 6);
+  assert.equal(inc.assistencias.grupos[0].itens.length, 4);
+  assert.deepEqual(inc.vantagens.grupos.map((g) => g.itens.length), [5, 4, 5]);
+  assert.equal(inc.comoFunciona.passos.length, 4);
+  assert.equal(inc.porQue.diferenciais.length, 4);
+  assert.equal(inc.faq.itens.length, 6, 'sem a pergunta do prazo da apólice, que ainda não tem resposta real');
+  const t = textos(inc).join(' | ');
+  for (const proibido of ['São Bernardo do Campo, onde fica', 'com sede em São Bernardo', 'SUSEP', 'Google', '[', 'Cotar', 'Porto']) assert.ok(!t.includes(proibido), proibido);
+});

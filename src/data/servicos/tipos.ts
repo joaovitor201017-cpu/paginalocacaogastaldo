@@ -17,7 +17,8 @@ export interface Servico {
   seo: { title: string; description: string };
   mensagemWhatsApp: string;
   topo: { h1: string; subtitulo: string; botaoPrincipal: Acao; botaoSecundario: string; selos: string[] };
-  oQueE: { titulo: string; paragrafos: string[]; link: LinkBlog; extra?: { titulo: string; texto: string } };
+  // extras: quadros com H3 abaixo do texto (podem ter uma lista numerada)
+  oQueE: { titulo: string; paragrafos: string[]; link: LinkBlog; extras?: { titulo: string; texto?: string; lista?: string[]; link?: LinkBlog }[] };
   // Passo a passo (Seguro Fiança: "Como funciona"; Residencial: "Como contratar")
   comoFunciona?: { titulo: string; intro?: string; passos: Passo[]; nota?: string; links?: LinkBlog[] };
   coberturas: {
@@ -30,7 +31,9 @@ export interface Servico {
     link: LinkBlog;
   };
   // Seção própria de assistências 24h (Residencial)
-  assistencias?: { titulo: string; intro: string; grupos: { titulo: string; itens: { rotulo: string; texto?: string }[] }[]; nota: string };
+  assistencias?: { titulo: string; intro: string; grupos: { titulo?: string; itens: { rotulo: string; texto?: string }[] }[]; nota: string };
+  // Faixa de destaque com texto e botão de WhatsApp (ex.: imóvel comercial no Seguro Incêndio)
+  destaque?: { id: string; titulo: string; texto: string; botao: string; mensagemWhatsApp: string; icone: Icone };
   vantagens: { titulo: string; intro?: string; grupos: GrupoBeneficios[] };
   pagamento?: { titulo: string; texto: string; botao: Acao; link: LinkBlog };
   quemPode?: { titulo: string; texto: string; documentosTitulo: string; documentos: { rotulo: string; texto: string }[] };

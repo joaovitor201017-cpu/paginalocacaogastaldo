@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { lerPagina } from './helpers.mjs';
 
-const paginas = ['/seguro-fianca', '/seguro-residencial'];
+const paginas = ['/seguro-fianca', '/seguro-residencial', '/seguro-incendio'];
 
 // Seções do <main> na ordem em que aparecem, com as classes de cada uma
 function secoes(html) {
@@ -12,7 +12,7 @@ function secoes(html) {
 }
 
 // Faixas com fundo cinza (as demais são brancas)
-const cinza = (c) => /\b(passos|pagamento|outras|cidades|assist)\b/.test(c) && !/--branco\b/.test(c);
+const cinza = (c) => /\b(passos|pagamento|outras|cidades|assist|destaque)\b/.test(c) && !/--branco\b/.test(c);
 
 for (const rota of paginas) {
   const html = lerPagina(rota);

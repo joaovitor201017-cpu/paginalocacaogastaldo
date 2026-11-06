@@ -1,0 +1,14 @@
+---
+import PaginaServico from '../components/servico/PaginaServico.astro';
+import { seguroIncendio } from '../data/servicos/seguro-incendio';
+---
+
+<PaginaServico
+  servico={seguroIncendio}
+  idPassos="como-contratar"
+  fotosOQueE={[
+    // Fotos a gerar: salve em src/assets/fotos/ e preencha o src (import)
+    { alt: 'Inquilino entregando a apólice do seguro incêndio na imobiliária', descricao: 'Foto: apólice entregue na imobiliária' },
+    { alt: 'Sala de apartamento alugado com detector de fumaça no teto', descricao: 'Foto: detector de fumaça no imóvel' },
+  ]}
+/>

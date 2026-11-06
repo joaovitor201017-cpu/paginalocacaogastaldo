@@ -14,10 +14,10 @@ const { assistencias: a, botao } = Astro.props;
   <div class="container assist__conteudo">
     <h2 id="assistencias-titulo">{a.titulo}</h2>
     <p class="intro">{a.intro}</p>
-    <div class="assist__grupos">
+    <div class:list={['assist__grupos', { 'assist__grupos--um': a.grupos.length === 1 }]}>
       {a.grupos.map((g) => (
         <div class="assist__grupo">
-          <h3>{g.titulo}</h3>
+          {g.titulo && <h3>{g.titulo}</h3>}
           <ul>
             {g.itens.map((i) => (
               <li>
@@ -51,7 +51,11 @@ const { assistencias: a, botao } = Astro.props;
   .assist__grupo strong { color: var(--marinho); }
   .assist__nota { margin: 1rem 0 0; font-size: 0.8125rem; color: var(--texto-suave); }
   .assist__acao { margin-top: 1.5rem; }
+  /* Um grupo só: card na largura toda, com a lista em duas colunas */
+  .assist__grupos--um { grid-template-columns: minmax(0, 1fr); }
+  .assist__grupos--um ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem 2rem; }
   @media (max-width: 760px) {
     .assist__grupos { grid-template-columns: minmax(0, 1fr); }
+    .assist__grupos--um ul { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

@@ -28,10 +28,10 @@ export const seguroResidencial: Servico = {
       'Você escolhe as coberturas e monta o seguro de acordo com o seu imóvel e o seu bolso.',
     ],
     link: { rotulo: 'O que é seguro residencial e o que ele cobre', href: null },
-    extra: {
+    extras: [{
       titulo: 'Seguro residencial para apartamento',
       texto: 'O seguro do condomínio protege as áreas comuns e a estrutura do prédio, mas não cobre o que está dentro do seu apartamento. O seguro residencial cobre os seus bens, os danos elétricos, o roubo e os vazamentos que atingem o vizinho de baixo, por exemplo.',
-    },
+    }],
   },
 
   coberturas: {
