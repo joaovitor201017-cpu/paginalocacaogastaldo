@@ -54,3 +54,14 @@ test('títulos com mais espaço entre linhas e cabeçalho das abas mais largo', 
   assert.match(css, /h2[^{]*\{[^}]*line-height:1\.22/);
   assert.match(css, /\.beneficios__topo[^{]*\{[^}]*max-width:78ch/);
 });
+
+test('fotos do carrossel de treinamentos não repetem a legenda no texto alternativo', () => {
+  const html = lerHome();
+  const slides = [...html.matchAll(/<li class="treino__slide[\s\S]*?<\/li>/g)].map((m) => m[0]);
+  assert.ok(slides.length > 0);
+  for (const s of slides) {
+    const alt = (s.match(/<img[^>]*alt="([^"]*)"/) || [])[1];
+    const legenda = (s.match(/class="treino__legenda"[^>]*>([^<]*)</) || [])[1];
+    assert.notEqual(alt, legenda, 'alt igual à legenda');
+  }
+});

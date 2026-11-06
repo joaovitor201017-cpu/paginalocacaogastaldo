@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "src/components/simulador/SimuladorFianca.astro"
+        ],
+        "createdAt": "2026-11-06T00:55:07.852Z",
+        "reason": "Claude: L224 é o círculo do número da etapa (border-radius 50%, sem borda); a borda de 3px fica no li pai, sem raio"
+      }
+    ]
+  }
+}
