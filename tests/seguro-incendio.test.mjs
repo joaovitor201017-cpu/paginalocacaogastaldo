@@ -55,6 +55,13 @@ test('schema, JS e links', () => {
 
 test('foto do vistoriador no o que é, enquadrada nas pessoas', () => {
   const s = secao(html, 'o-que-e');
-  assert.match(s, /alt="Vistoriador da seguradora conversando com a moradora na cozinha"[^>]*style="object-position: 25%/);
+  assert.match(s, /alt="Vistoriador da seguradora conversando com a moradora na cozinha"[^>]*style="object-position: 52%/);
   assert.ok(!html.includes('Cozinha de apartamento alugado à noite'), 'foto antiga fora do site');
+});
+
+test('as duas fotos do o que é são reais', () => {
+  const s = secao(html, 'o-que-e');
+  assert.equal(contar(s, /<picture/g), 2);
+  assert.ok(!s.includes('foto__reserva'));
+  assert.match(s, /alt="Morador testando o detector de fumaça na sala do apartamento alugado"/);
 });
