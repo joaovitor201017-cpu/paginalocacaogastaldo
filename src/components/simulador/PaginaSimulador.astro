@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Trilha from '../servico/Trilha.astro';
+import Faq from '../servico/Faq.astro';
+import ChamadoFinal from '../servico/ChamadoFinal.astro';
+import { site } from '../../data/site';
+import { cidades } from '../../data/cidades';
+import { schemaSimulador } from '../../lib/schema';
+
+// Molde das páginas de simulador: topo (trilha, H1, subtítulo, selos e a calculadora ao lado),
+// seções de SEO da página (slot padrão), ABC Paulista, FAQ e chamado final só com WhatsApp.
+// A calculadora entra no slot "calculadora".
+interface Props {
+  slug: string;
+  nomeApp: string; // nome da aplicação no schema WebApplication
+  seo: { title: string; description: string };
+  mensagemWhatsApp: string;
+  h1: string;
+  subtitulo: string;
+  selos: string[];
+  servico: { rotulo: string; href: string }; // nível do meio na trilha (página de serviço)
+  abc: { titulo: string; texto: string; link?: { rotulo: string; href: string } };
+  faq: { titulo: string; itens: { pergunta: string; resposta: string }[] };
+  final: { titulo: string; texto: string; botao: string };
+}
+const p = Astro.props;
+const caminho = `/${p.slug}`;
+const jsonLd = schemaSimulador(site, { nome: p.nomeApp, descricao: p.seo.description, caminho }, p.faq.itens, cidades, [
+  { nome: 'Início', caminho: '/' },
+  { nome: p.servico.rotulo, caminho: p.servico.href },
+  { nome: 'Simulador', caminho },
+]);
+---
+
+<BaseLayout title={p.seo.title} description={p.seo.description} path={caminho} jsonLd={jsonLd} mensagemWhatsApp={p.mensagemWhatsApp}>
+  <main id="conteudo">
+    <section class="sim-topo" aria-labelledby="hero-titulo">
+      <div class="container sim-topo__grade">
+        <div class="sim-topo__texto">
+          <Trilha atual="Simulador" meio={[p.servico]} />
+          <h1 id="hero-titulo">{p.h1}</h1>
+          <p class="sim-topo__sub">{p.subtitulo}</p>
+          <ul class="selos">
+            {p.selos.map((selo) => (
+              <li>
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+                {selo}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <slot name="calculadora" />
+      </div>
+    </section>
+
+    <slot />
+
+    <section id="abc" class="secao sim-abc" aria-labelledby="abc-titulo">
+      <div class="container">
+        <h2 id="abc-titulo">{p.abc.titulo}</h2>
+        <p>{p.abc.texto}</p>
+        {p.abc.link && <p class="sim-abc__link"><a href={p.abc.link.href}>{p.abc.link.rotulo}</a></p>}
+      </div>
+    </section>
+
+    <Faq titulo={p.faq.titulo} itens={p.faq.itens} />
+
+    <ChamadoFinal titulo={p.final.titulo} texto={p.final.texto} secundario={p.final.botao} mensagemWhatsApp={p.mensagemWhatsApp} />
+  </main>
+</BaseLayout>
+
+<style>
+  .sim-topo { padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(2.5rem, 2rem + 2vw, 4rem); }
+  .sim-topo__grade { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(2rem, 4vw, 3.5rem); align-items: start; }
+  .sim-topo h1 { font-size: clamp(2rem, 1.5rem + 2vw, 2.875rem); max-width: 16ch; margin-bottom: 1rem; }
+  .sim-topo__sub { font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem); color: var(--texto-suave); max-width: 46ch; }
+  .selos { display: grid; gap: 0.6rem; margin-top: 1.5rem; font-size: 0.9375rem; font-weight: 500; color: var(--marinho); }
+  .selos li { display: flex; align-items: center; gap: 0.5rem; }
+  .selos svg { color: var(--azul-escuro); flex: 0 0 auto; }
+  .sim-abc { background: var(--cinza-fundo); }
+  .sim-abc p { max-width: 70ch; }
+  .sim-abc__link { font-weight: 600; margin-top: 1rem; }
+  @media (max-width: 960px) {
+    .sim-topo__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

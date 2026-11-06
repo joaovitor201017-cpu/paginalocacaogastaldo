@@ -38,3 +38,33 @@ test('mensagem do lead com todos os dados', () => {
   const m = mensagemLead({ nome: 'Ana', perfil: 'Inquilino', aluguel: 2000, condominio: 500, iptu: null, tipo: 'Residencial', cidade: 'Santo André', whatsapp: '(11) 91234-5678', plano: 'Completo' });
   assert.equal(m, 'Olá! Fiz a simulação no site e quero a cotação do seguro fiança, plano Completo, aluguel de R$ 2.000. Novo lead do simulador: Ana · Inquilino · Aluguel R$ 2.000 · Condomínio R$ 500 · IPTU — · Residencial · Santo André · WhatsApp (11) 91234-5678');
 });
+
+// --- Título de capitalização
+import { calcularTitulo, formatarReaisCentavos, mensagemLeadTitulo } from '../src/lib/simulador.ts';
+
+test('título: exemplo do documento (aluguel 2.000 + encargos 500, 6x)', () => {
+  const t = calcularTitulo({ aluguel: 2000, condominio: 300, iptu: 200, vezes: 6 });
+  assert.equal(t.mensal, 2500);
+  assert.equal(t.titulo, 15000);
+  assert.equal(Math.round(t.parcela * 100) / 100, 833.33);
+});
+
+test('título: sem encargos e com 12x', () => {
+  const t = calcularTitulo({ aluguel: 1500, condominio: null, iptu: null, vezes: 12 });
+  assert.equal(t.mensal, 1500);
+  assert.equal(t.titulo, 18000);
+  assert.equal(t.parcela, 1000);
+});
+
+test('formatarReaisCentavos com centavos', () => {
+  assert.equal(formatarReaisCentavos(833.333).replace(/\s/g, ' '), 'R$ 833,33');
+});
+
+test('mensagem do lead do título (com e sem o número de aluguéis definido)', () => {
+  const base = { nome: 'Ana', perfil: 'Inquilino', aluguel: 2000, encargos: 500, tipo: 'Residencial', cidade: 'Santo André', whatsapp: '(11) 91234-5678' };
+  assert.equal(
+    mensagemLeadTitulo({ ...base, vezes: [6], titulos: [15000] }),
+    'Olá! Simulei no site um título de capitalização de R$ 15.000 para o meu aluguel e quero a cotação. Novo lead título de capitalização: Ana · Inquilino · Aluguel R$ 2.000 · Encargos R$ 500 · 6x · Título R$ 15.000 · Residencial · Santo André · WhatsApp (11) 91234-5678',
+  );
+  assert.match(mensagemLeadTitulo({ ...base, vezes: [6, 12], titulos: [15000, 30000] }), /título de capitalização de R\$ 15\.000 a R\$ 30\.000 .* · 6x a 12x · Título R\$ 15\.000 a R\$ 30\.000 ·/);
+});

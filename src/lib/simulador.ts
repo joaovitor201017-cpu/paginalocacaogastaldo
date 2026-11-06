@@ -57,3 +57,41 @@ export function mensagemLead(l: Lead): string {
     `Novo lead do simulador: ${l.nome} · ${l.perfil} · Aluguel ${r(l.aluguel)} · Condomínio ${r(l.condominio)} · IPTU ${r(l.iptu)} · ${l.tipo} · ${l.cidade} · WhatsApp ${l.whatsapp}`
   );
 }
+
+// --- Título de capitalização para aluguel (fórmulas do documento do João)
+// valor mensal = aluguel + condomínio + IPTU; título = valor mensal × número de aluguéis; parcela de exemplo = título ÷ 18
+export interface ValoresTitulo { aluguel: number; condominio: number | null; iptu: number | null; vezes: number }
+export function calcularTitulo({ aluguel, condominio, iptu, vezes }: ValoresTitulo) {
+  const mensal = aluguel + (condominio ?? 0) + (iptu ?? 0);
+  const titulo = mensal * vezes;
+  return { mensal, titulo, parcela: titulo / 18 };
+}
+
+const reaisCentavos = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+export function formatarReaisCentavos(valor: number): string {
+  return reaisCentavos.format(valor);
+}
+
+export interface LeadTitulo {
+  nome: string;
+  perfil: string;
+  aluguel: number;
+  encargos: number;
+  vezes: number[]; // [6] ou, quando a pessoa ainda não sabe, [6, 12]
+  titulos: number[];
+  tipo: string;
+  cidade: string;
+  whatsapp: string;
+}
+
+// Mensagem que o cliente envia no WhatsApp (já com os dados do lead para a equipe)
+export function mensagemLeadTitulo(l: LeadTitulo): string {
+  const r = (v: number) => formatarReais(v).replace(/\s/g, ' ');
+  const faixa = (vs: number[], f: (v: number) => string) => vs.map(f).join(' a ');
+  const valor = faixa(l.titulos, r);
+  return (
+    `Olá! Simulei no site um título de capitalização de ${valor} para o meu aluguel e quero a cotação. ` +
+    `Novo lead título de capitalização: ${l.nome} · ${l.perfil} · Aluguel ${r(l.aluguel)} · Encargos ${l.encargos ? r(l.encargos) : '—'} · ` +
+    `${faixa(l.vezes, (v) => `${v}x`)} · Título ${valor} · ${l.tipo} · ${l.cidade} · WhatsApp ${l.whatsapp}`
+  );
+}
