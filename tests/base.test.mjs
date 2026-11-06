@@ -31,3 +31,8 @@ test('CSS respeita prefers-reduced-motion', () => {
 test('sem domínio final o site pede para não indexar', () => {
   assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
 });
+
+test('páginas geradas como arquivo .html (a Cloudflare serve /rota sem redirecionar para /rota/)', async () => {
+  const { existsSync } = await import('node:fs');
+  for (const r of ['seguro-fianca', 'simulador-seguro-fianca', 'politica-de-privacidade']) assert.ok(existsSync(`dist/${r}.html`), r);
+});

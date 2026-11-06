@@ -25,8 +25,10 @@ export function secao(html, id) {
 }
 
 // Lê o HTML gerado de qualquer rota (ex.: '/seguro-fianca')
+// (build.format = 'file': a página fica em dist/rota.html)
 export function lerPagina(rota) {
-  return readFileSync(join('dist', rota, 'index.html'), 'utf8');
+  const arquivo = join('dist', `${rota.replace(/^\/|\/$/g, '')}.html`);
+  return readFileSync(existsSync(arquivo) ? arquivo : join('dist', rota, 'index.html'), 'utf8');
 }
 
 // JS que uma página realmente envia ao navegador: scripts dentro do HTML (fora o JSON-LD)
