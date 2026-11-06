@@ -19,16 +19,18 @@ interface Props {
   subtitulo: string;
   selos: string[];
   servico: { rotulo: string; href: string }; // nível do meio na trilha (página de serviço)
+  rotuloAtual?: string; // último nível da trilha (padrão: "Simulador")
   abc: { titulo: string; texto: string; link?: { rotulo: string; href: string } };
   faq: { titulo: string; itens: { pergunta: string; resposta: string }[] };
   final: { titulo: string; texto: string; botao: string };
 }
 const p = Astro.props;
+const atual = p.rotuloAtual ?? 'Simulador';
 const caminho = `/${p.slug}`;
 const jsonLd = schemaSimulador(site, { nome: p.nomeApp, descricao: p.seo.description, caminho }, p.faq.itens, cidades, [
   { nome: 'Início', caminho: '/' },
   { nome: p.servico.rotulo, caminho: p.servico.href },
-  { nome: 'Simulador', caminho },
+  { nome: atual, caminho },
 ]);
 ---
 
@@ -37,7 +39,7 @@ const jsonLd = schemaSimulador(site, { nome: p.nomeApp, descricao: p.seo.descrip
     <section class="sim-topo" aria-labelledby="hero-titulo">
       <div class="container sim-topo__grade">
         <div class="sim-topo__texto">
-          <Trilha atual="Simulador" meio={[p.servico]} />
+          <Trilha atual={atual} meio={[p.servico]} />
           <h1 id="hero-titulo">{p.h1}</h1>
           <p class="sim-topo__sub">{p.subtitulo}</p>
           <ul class="selos">

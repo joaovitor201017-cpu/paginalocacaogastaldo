@@ -1,0 +1,58 @@
+---
+import PaginaSimulador from '../components/simulador/PaginaSimulador.astro';
+import Passos from '../components/servico/Passos.astro';
+import CotacaoResidencial from '../components/simulador/CotacaoResidencial.astro';
+import { cotacaoResidencial as s } from '../data/simuladores/seguro-residencial';
+
+// Cotação de seguro residencial: formulário no topo e o texto de SEO abaixo dele
+---
+
+<PaginaSimulador
+  slug={s.slug}
+  nomeApp="Cotação de Seguro Residencial"
+  seo={s.seo}
+  mensagemWhatsApp={s.mensagemWhatsApp}
+  h1={s.h1}
+  subtitulo={s.subtitulo}
+  selos={s.selos}
+  servico={{ rotulo: 'Seguro Residencial', href: '/seguro-residencial' }}
+  rotuloAtual="Cotação"
+  abc={s.abc}
+  faq={s.faq}
+  final={s.final}
+>
+  <CotacaoResidencial slot="calculadora" />
+
+  <Passos id="como-funciona" titulo={s.comoFunciona.titulo} passos={s.comoFunciona.passos} />
+
+  <section class="secao cot-textos" aria-label="Preço e corretora">
+    <div class="container cot-textos__grade">
+      <div id="preco">
+        <h2>{s.preco.titulo}</h2>
+        <p>{s.preco.texto}</p>
+      </div>
+      <div id="corretora">
+        <h2>{s.corretora.titulo}</h2>
+        <ul class="cot-lista">
+          {s.corretora.itens.map((i) => (
+            <li>
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+              {i}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+</PaginaSimulador>
+
+<style>
+  .cot-textos__grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 5vw, 4.5rem); }
+  .cot-textos p { margin: 0; max-width: 60ch; }
+  .cot-lista { display: grid; gap: 0.6rem; }
+  .cot-lista li { display: flex; gap: 0.55rem; align-items: flex-start; }
+  .cot-lista svg { flex: 0 0 auto; margin-top: 0.2rem; color: var(--azul-escuro); }
+  @media (max-width: 760px) {
+    .cot-textos__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

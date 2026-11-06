@@ -1,0 +1,209 @@
+---
+import { site } from '../../data/site';
+import { cotacaoResidencial as s } from '../../data/simuladores/seguro-residencial';
+import { numeroWhatsApp } from '../../lib/whatsapp';
+import '../../styles/simulador.css';
+
+// Formulário de cotação do seguro residencial em 3 passos (Imóvel → Proteção → Seus dados)
+// e o plano sugerido no fim (regra em src/lib/simulador.ts → sugerirPlano).
+const numero = numeroWhatsApp(site.whatsapp);
+const etapas = ['Imóvel', 'Proteção', 'Seus dados'];
+const grupos = [
+  { nome: 'tipo', legenda: 'Tipo de imóvel', opcoes: ['Apartamento', 'Casa', 'Casa em condomínio'], obrigatorio: true },
+  { nome: 'condicao', legenda: 'O imóvel é', opcoes: ['Próprio', 'Alugado'], obrigatorio: true },
+  { nome: 'uso', legenda: 'Uso', opcoes: ['Moradia', 'Veraneio', 'Alugo para terceiros'], obrigatorio: true },
+  { nome: 'negocio', legenda: 'Tem escritório ou negócio em casa?', opcoes: ['Sim', 'Não'], obrigatorio: false },
+];
+---
+
+<form class="sim" action={`https://wa.me/${numero}`} method="get" target="_blank" novalidate data-cotacao-residencial data-whatsapp={numero} data-planilha={site.planilhaLeads ?? undefined}>
+  <input type="hidden" name="text" value={s.mensagemWhatsApp} />
+
+  <ol class="sim__progresso" aria-label="Etapas da cotação">
+    {etapas.map((e, i) => <li data-etapa={i + 1} aria-current={i === 0 ? 'step' : undefined}><span>{i + 1}</span>{e}</li>)}
+  </ol>
+
+  <!-- Passo 1 -->
+  <fieldset class="sim__passo" data-passo="1">
+    <legend>Seu imóvel</legend>
+    <label class="sim__campo">
+      CEP do imóvel
+      <input name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="09751-000" maxlength="9" required />
+      <span class="sim__erro" data-erro="cep" aria-live="polite"></span>
+    </label>
+    {grupos.map((g) => (
+      <>
+        <fieldset class="sim__opcoes">
+          <legend>{g.legenda}{!g.obrigatorio && <span class="sim__opcional"> (opcional)</span>}</legend>
+          {g.opcoes.map((o) => <label><input type="radio" name={g.nome} value={o} required={g.obrigatorio} /> {o}</label>)}
+        </fieldset>
+        {g.obrigatorio && <span class="sim__erro" data-erro={g.nome} aria-live="polite"></span>}
+      </>
+    ))}
+    <button type="button" class="sim__botao" data-avancar="2">Continuar</button>
+  </fieldset>
+
+  <!-- Passo 2 -->
+  <fieldset class="sim__passo" data-passo="2">
+    <legend>O que você quer proteger</legend>
+    <p class="sim__dica">Marque o que é importante para você. A cobertura de incêndio já vem incluída.</p>
+    <div class="checks">
+      {s.protecoes.map((p) => (
+        <label class="check">
+          <input type="checkbox" name="protecao" value={p.valor} checked={p.marcada} />
+          <span><strong>{p.rotulo}</strong>{p.ajuda && <small>{p.ajuda}</small>}</span>
+        </label>
+      ))}
+    </div>
+    <label class="sim__campo">
+      <span>Valor aproximado dos seus bens <span class="sim__opcional">(opcional)</span></span>
+      <select name="bens">
+        <option value="">Selecione</option>
+        {s.faixasBens.map((f) => <option>{f}</option>)}
+      </select>
+    </label>
+    <div class="sim__acoes">
+      <button type="button" class="sim__botao" data-avancar="3">Continuar</button>
+      <button type="button" class="sim__voltar" data-voltar="1">Voltar</button>
+    </div>
+  </fieldset>
+
+  <!-- Passo 3 -->
+  <fieldset class="sim__passo" data-passo="3">
+    <legend>Seus dados</legend>
+    <label class="sim__campo">
+      Nome
+      <input name="nome" autocomplete="name" required />
+      <span class="sim__erro" data-erro="nome" aria-live="polite"></span>
+    </label>
+    <label class="sim__campo">
+      WhatsApp
+      <input name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 91234-5678" required />
+      <span class="sim__erro" data-erro="whatsapp" aria-live="polite"></span>
+    </label>
+    <label class="sim__campo">
+      <span>E-mail <span class="sim__opcional">(opcional)</span></span>
+      <input name="email" type="email" autocomplete="email" />
+    </label>
+    <label class="sim__consentimento">
+      <input type="checkbox" name="consentimento" required />
+      <span>Aceito receber o contato da Gastaldo Seguros pelo WhatsApp sobre esta cotação, conforme a <a href="/politica-de-privacidade">Política de Privacidade</a>.</span>
+    </label>
+    <span class="sim__erro" data-erro="consentimento" aria-live="polite"></span>
+    <div class="sim__acoes">
+      <button type="submit" class="sim__botao">Receber minhas propostas</button>
+      <button type="button" class="sim__voltar" data-voltar="2">Voltar</button>
+    </div>
+    <p class="sim__seguro">Seus dados estão seguros e não são compartilhados. A cotação não pede o seu CPF.</p>
+  </fieldset>
+
+  <!-- Resultado: um dos 3 planos -->
+  <div class="sim__passo sim__resultado" data-passo="4" hidden tabindex="-1">
+    <h2 class="sim__titulo"><span data-nome>Você</span>, este é o plano que combina com o seu imóvel</h2>
+    {s.planos.map((p) => (
+      <article class="plano-sugerido" data-plano-card={p.nome} hidden>
+        <p class="plano-sugerido__rotulo">Plano sugerido</p>
+        <h3>{p.nome}</h3>
+        <ul>
+          {p.coberturas.map((c) => (
+            <li>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+              {c}
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))}
+    <p>{s.textoResultado}</p>
+    <a class="sim__botao sim__botao--wpp" href={`https://wa.me/${numero}`} target="_blank" rel="noopener" data-falar>Falar agora no WhatsApp</a>
+    <button type="button" class="sim__voltar" data-voltar="1">Voltar e alterar as respostas</button>
+  </div>
+</form>
+
+<script>
+  import { cepValido, sugerirPlano, mensagemLeadResidencial } from '../../lib/simulador';
+
+  const form = document.querySelector<HTMLFormElement>('[data-cotacao-residencial]');
+  if (form) {
+    const $ = <T extends Element>(sel: string) => form.querySelector<T>(sel)!;
+    const $$ = (sel: string) => [...form.querySelectorAll<HTMLElement>(sel)];
+    const valor = (n: string) => String(new FormData(form).get(n) ?? '').trim();
+    const campo = (n: string) => form.elements.namedItem(n) as HTMLInputElement | null;
+
+    const ir = (n: number) => {
+      $$('[data-passo]').forEach((p) => (p.hidden = p.dataset.passo !== String(n)));
+      $$('[data-etapa]').forEach((e) => (Number(e.dataset.etapa) === Math.min(n, 3) ? e.setAttribute('aria-current', 'step') : e.removeAttribute('aria-current')));
+      const alvo = $<HTMLElement>(`[data-passo="${n}"]`);
+      (n > 3 ? alvo : alvo.querySelector<HTMLElement>('input,select'))?.focus({ preventScroll: n === 1 });
+      if (n > 1) form.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    };
+    const erro = (n: string, msg = '') => {
+      $(`[data-erro="${n}"]`).textContent = msg;
+      const c = campo(n);
+      if (c && 'setAttribute' in c) c.setAttribute('aria-invalid', String(Boolean(msg)));
+      return !msg;
+    };
+    const primeiroErro = () => form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+
+    form.classList.add('sim--js');
+    ir(1);
+
+    $$('[data-voltar]').forEach((b) => b.addEventListener('click', () => ir(Number(b.dataset.voltar))));
+    $('[data-avancar="2"]').addEventListener('click', () => {
+      const ok = [
+        erro('cep', cepValido(valor('cep')) ? '' : 'Informe o CEP com 8 números, por exemplo 09751-000.'),
+        erro('tipo', valor('tipo') ? '' : 'Escolha o tipo de imóvel.'),
+        erro('condicao', valor('condicao') ? '' : 'Diga se o imóvel é próprio ou alugado.'),
+        erro('uso', valor('uso') ? '' : 'Escolha o uso do imóvel.'),
+      ].every(Boolean);
+      if (ok) ir(2);
+      else primeiroErro();
+    });
+    $('[data-avancar="3"]').addEventListener('click', () => ir(3));
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const digitos = valor('whatsapp').replace(/\D/g, '');
+      const ok = [
+        erro('nome', valor('nome') ? '' : 'Informe seu nome.'),
+        erro('whatsapp', digitos.length >= 10 && digitos.length <= 11 ? '' : 'Confira o número com DDD, por exemplo (11) 91234-5678.'),
+        erro('consentimento', campo('consentimento')?.checked ? '' : 'Marque a caixa para receber sua cotação.'),
+      ].every(Boolean);
+      if (!ok) return primeiroErro();
+
+      const opcoes = new FormData(form).getAll('protecao').map(String);
+      const plano = sugerirPlano({ tipo: valor('tipo'), condicao: valor('condicao'), marcadas: opcoes.filter((o) => o !== 'Assistência 24h').length });
+      $$('[data-nome]').forEach((n) => (n.textContent = valor('nome').split(' ')[0]));
+      $$('[data-plano-card]').forEach((c) => (c.hidden = c.dataset.planoCard !== plano));
+
+      const lead = { nome: valor('nome'), cep: valor('cep'), tipo: valor('tipo'), condicao: valor('condicao'), uso: valor('uso'), opcoes, bens: valor('bens'), plano, whatsapp: valor('whatsapp') };
+      $<HTMLAnchorElement>('[data-falar]').href = `https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(mensagemLeadResidencial(lead))}`;
+      ir(4);
+
+      // Planilha de leads (quando configurada)
+      if (form.dataset.planilha) fetch(form.dataset.planilha, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ produto: 'Seguro residencial', ...lead, opcoes: opcoes.join(', '), negocio: valor('negocio'), email: valor('email') }) }).catch(() => {});
+    });
+  }
+</script>
+
+<style>
+  .sim__dica { margin: -0.25rem 0 0; font-size: 0.9rem; color: var(--texto-suave); }
+  .checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+  .check { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.7rem 0.8rem; border: 1.5px solid #bccbdd; border-radius: var(--raio-p); cursor: pointer; }
+  .check:has(input:checked) { border-color: var(--azul-escuro); background: var(--cinza-fundo); }
+  .check input { margin-top: 0.15rem; width: 18px; height: 18px; flex: 0 0 auto; accent-color: var(--azul-escuro); }
+  .check strong { display: block; color: var(--marinho); font-size: 0.875rem; font-weight: 600; line-height: 1.35; }
+  .check small { display: block; color: var(--texto-suave); font-size: 0.78rem; margin-top: 0.1rem; }
+
+  .plano-sugerido { padding: 1.1rem 1.2rem; border: 1.5px solid var(--azul-escuro); border-radius: var(--raio-p); box-shadow: 0 0 0 1px var(--azul-escuro); }
+  .plano-sugerido[hidden] { display: none; }
+  .plano-sugerido__rotulo { display: inline-block; margin: 0 0 0.35rem !important; padding: 0.15rem 0.6rem; border-radius: 999px; background: var(--amarelo); color: var(--marinho-profundo); font-size: 0.75rem; font-weight: 700; }
+  .plano-sugerido h3 { margin: 0 0 0.6rem; font-size: 1.25rem; }
+  .plano-sugerido ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem 1rem; }
+  .plano-sugerido li { display: flex; gap: 0.45rem; align-items: flex-start; font-size: 0.9rem; color: var(--texto); }
+  .plano-sugerido li svg { flex: 0 0 auto; margin-top: 0.2rem; color: var(--azul-escuro); }
+
+  @media (max-width: 560px) {
+    .checks, .plano-sugerido ul { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

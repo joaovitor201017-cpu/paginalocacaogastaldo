@@ -68,3 +68,32 @@ test('mensagem do lead do título (com e sem o número de aluguéis definido)', 
   );
   assert.match(mensagemLeadTitulo({ ...base, vezes: [6, 12], titulos: [15000, 30000] }), /título de capitalização de R\$ 15\.000 a R\$ 30\.000 .* · 6x a 12x · Título R\$ 15\.000 a R\$ 30\.000 ·/);
 });
+
+// --- Cotação de seguro residencial: plano sugerido
+import { sugerirPlano, cepValido, mensagemLeadResidencial } from '../src/lib/simulador.ts';
+
+test('plano sugerido conforme as respostas', () => {
+  // Total: casa (qualquer quantidade) ou 5+ opções
+  assert.equal(sugerirPlano({ tipo: 'Casa', condicao: 'Alugado', marcadas: 0 }), 'Total');
+  assert.equal(sugerirPlano({ tipo: 'Casa em condomínio', condicao: 'Próprio', marcadas: 1 }), 'Total');
+  assert.equal(sugerirPlano({ tipo: 'Apartamento', condicao: 'Alugado', marcadas: 5 }), 'Total');
+  // Completo: apartamento próprio ou 3 a 4 opções
+  assert.equal(sugerirPlano({ tipo: 'Apartamento', condicao: 'Próprio', marcadas: 0 }), 'Completo');
+  assert.equal(sugerirPlano({ tipo: 'Apartamento', condicao: 'Alugado', marcadas: 3 }), 'Completo');
+  assert.equal(sugerirPlano({ tipo: 'Apartamento', condicao: 'Alugado', marcadas: 4 }), 'Completo');
+  // Essencial: apartamento alugado e até 2 opções
+  assert.equal(sugerirPlano({ tipo: 'Apartamento', condicao: 'Alugado', marcadas: 2 }), 'Essencial');
+  assert.equal(sugerirPlano({ tipo: 'Apartamento', condicao: 'Alugado', marcadas: 0 }), 'Essencial');
+});
+
+test('CEP com 8 números', () => {
+  assert.equal(cepValido('09751-000'), true);
+  assert.equal(cepValido('09751000'), true);
+  assert.equal(cepValido('0975'), false);
+  assert.equal(cepValido(''), false);
+});
+
+test('mensagem do lead residencial no formato do documento', () => {
+  const m = mensagemLeadResidencial({ nome: 'Ana', cep: '09751-000', tipo: 'Apartamento', condicao: 'Alugado', uso: 'Moradia', opcoes: ['Danos elétricos', 'Assistência 24h'], bens: 'até R$ 20 mil', plano: 'Essencial', whatsapp: '(11) 91234-5678' });
+  assert.equal(m, 'Olá! Fiz a cotação de seguro residencial no site e quero receber as propostas. Novo lead seguro residencial: Ana · CEP 09751-000 · Apartamento · Alugado · Moradia · Quer proteger: Danos elétricos, Assistência 24h · Bens: até R$ 20 mil · Plano sugerido: Essencial · WhatsApp (11) 91234-5678');
+});

@@ -12,7 +12,7 @@ test('JS total enviado ao cliente ≤ 5 KB', () => {
 });
 
 test('JS dos simuladores ≤ 8 KB (calculadora inclusa)', () => {
-  for (const rota of ['/simulador-seguro-fianca', '/simulador-titulo-de-capitalizacao-aluguel']) {
+  for (const rota of ['/simulador-seguro-fianca', '/simulador-titulo-de-capitalizacao-aluguel', '/cotacao-seguro-residencial']) {
     const total = jsDaPagina(lerPagina(rota));
     assert.ok(total <= 8 * 1024, `${rota}: JS = ${total} bytes`);
   }

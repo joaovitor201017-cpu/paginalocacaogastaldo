@@ -95,3 +95,38 @@ export function mensagemLeadTitulo(l: LeadTitulo): string {
     `${faixa(l.vezes, (v) => `${v}x`)} · Título ${valor} · ${l.tipo} · ${l.cidade} · WhatsApp ${l.whatsapp}`
   );
 }
+
+// --- Cotação de seguro residencial (aba 02 do documento do João)
+// "marcadas" conta as opções de proteção marcadas, sem a Assistência 24h (que já vem marcada).
+// Ordem: Total (casa, ou 5+ opções) → Completo (apartamento próprio, ou 3 a 4 opções) → Essencial (o resto:
+// apartamento alugado com até 2 opções).
+export type PlanoResidencial = 'Essencial' | 'Completo' | 'Total';
+export function sugerirPlano({ tipo, condicao, marcadas }: { tipo: string; condicao: string; marcadas: number }): PlanoResidencial {
+  if (tipo !== 'Apartamento' || marcadas >= 5) return 'Total';
+  if (condicao === 'Próprio' || marcadas >= 3) return 'Completo';
+  return 'Essencial';
+}
+
+export function cepValido(cep: string): boolean {
+  return /^\d{8}$/.test(cep.replace(/\D/g, '')) && cep.replace(/\D/g, '').length === cep.replace(/[\s.-]/g, '').length;
+}
+
+export interface LeadResidencial {
+  nome: string;
+  cep: string;
+  tipo: string;
+  condicao: string;
+  uso: string;
+  opcoes: string[];
+  bens: string;
+  plano: string;
+  whatsapp: string;
+}
+
+export function mensagemLeadResidencial(l: LeadResidencial): string {
+  return (
+    'Olá! Fiz a cotação de seguro residencial no site e quero receber as propostas. ' +
+    `Novo lead seguro residencial: ${l.nome} · CEP ${l.cep} · ${l.tipo} · ${l.condicao} · ${l.uso} · Quer proteger: ${l.opcoes.join(', ') || '—'} · ` +
+    `Bens: ${l.bens || '—'} · Plano sugerido: ${l.plano} · WhatsApp ${l.whatsapp}`
+  );
+}
