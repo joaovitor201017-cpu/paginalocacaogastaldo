@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { lerPagina } from './helpers.mjs';
 
-const paginas = ['/seguro-fianca', '/seguro-residencial', '/seguro-incendio'];
+const paginas = ['/seguro-fianca', '/seguro-residencial', '/seguro-incendio', '/titulo-de-capitalizacao'];
 
 // Seções do <main> na ordem em que aparecem, com as classes de cada uma
 function secoes(html) {

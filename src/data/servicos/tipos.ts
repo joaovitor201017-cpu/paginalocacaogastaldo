@@ -25,7 +25,9 @@ export interface Servico {
     titulo: string;
     intro: string;
     tabelaTitulo: string;
-    linhas: { icone: Icone; cobertura: string; tipo: string; paga: string; limite?: string }[];
+    // tipo (Básica/Adicional) é opcional; rotuloLimite troca o rótulo do valor de baixo (padrão: "Limite")
+    linhas: { icone: Icone; cobertura: string; tipo?: string; paga: string; limite?: string }[];
+    rotuloLimite?: string;
     nota: string;
     assistencias?: { titulo: string; texto: string };
     link: LinkBlog;

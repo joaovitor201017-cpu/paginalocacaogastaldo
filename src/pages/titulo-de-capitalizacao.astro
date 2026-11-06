@@ -1,0 +1,14 @@
+---
+import PaginaServico from '../components/servico/PaginaServico.astro';
+import { tituloDeCapitalizacao } from '../data/servicos/titulo-de-capitalizacao';
+---
+
+<PaginaServico
+  servico={tituloDeCapitalizacao}
+  idPassos="como-funciona"
+  fotosOQueE={[
+    // Fotos a gerar: salve em src/assets/fotos/ e preencha o src (import)
+    { alt: 'Inquilino recebendo o valor do título de capitalização de volta no fim do contrato', descricao: 'Foto: dinheiro de volta no fim do contrato' },
+    { alt: 'Inquilina pagando o título de capitalização pelo celular, sem análise de crédito', descricao: 'Foto: pagamento pelo celular' },
+  ]}
+/>

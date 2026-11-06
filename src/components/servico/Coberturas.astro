@@ -37,11 +37,11 @@ const { coberturas: c, botao } = Astro.props;
               <span class="cobertura__icone" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icones[l.icone]}></path></svg>
               </span>
-              <span class:list={['cobertura__tipo', { 'cobertura__tipo--basica': l.tipo === 'Básica' }]}>{l.tipo}</span>
+              {l.tipo && <span class:list={['cobertura__tipo', { 'cobertura__tipo--basica': l.tipo === 'Básica' }]}>{l.tipo}</span>}
             </div>
             <strong>{l.cobertura}</strong>
             <p>{l.paga}</p>
-            {l.limite && <p class="cobertura__limite"><span>Limite</span>{l.limite}</p>}
+            {l.limite && <p class="cobertura__limite"><span>{c.rotuloLimite ?? 'Limite'}</span>{l.limite}</p>}
           </li>
         ))}
       </ul>

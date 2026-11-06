@@ -5,13 +5,15 @@ import type { LinkBlog as Link, Passo } from '../../data/servicos/tipos';
 // Passo a passo numerado (é uma sequência real: a numeração tem sentido)
 interface Props { id: string; titulo: string; intro?: string; passos: Passo[]; nota?: string; links?: Link[] }
 const { id, titulo, intro, passos, nota, links = [] } = Astro.props;
+// Até 5 passos numa linha; 6 ou mais quebram em linhas de 3
+const colunas = passos.length > 5 ? 3 : passos.length;
 ---
 
 <section id={id} class="secao passos" aria-labelledby={`${id}-titulo`}>
   <div class="container">
     <h2 id={`${id}-titulo`}>{titulo}</h2>
     {intro && <p class="intro">{intro}</p>}
-    <ol class="passos__lista" style={`--colunas: ${passos.length}`}>
+    <ol class="passos__lista" style={`--colunas: ${colunas}`}>
       {passos.map((p, i) => (
         <li>
           <span class="passos__num" aria-hidden="true">{i + 1}</span>

@@ -83,3 +83,21 @@ test('Seguro Incêndio: estrutura do documento e regras do site', () => {
   const t = textos(inc).join(' | ');
   for (const proibido of ['São Bernardo do Campo, onde fica', 'com sede em São Bernardo', 'SUSEP', 'Google', '[', 'Cotar', 'Porto']) assert.ok(!t.includes(proibido), proibido);
 });
+
+// --- Título de Capitalização
+import { tituloDeCapitalizacao as tc } from '../src/data/servicos/titulo-de-capitalizacao.ts';
+
+test('Título de Capitalização: estrutura do documento e regras do site', () => {
+  assert.equal(tc.topo.selos.length, 5);
+  assert.equal(tc.oQueE.paragrafos.length, 3);
+  assert.equal(tc.comoFunciona.passos.length, 6);
+  assert.equal(tc.coberturas.linhas.length, 7);
+  assert.equal(tc.coberturas.rotuloLimite, 'Exemplo: Porto');
+  assert.deepEqual(tc.vantagens.grupos.map((g) => g.itens.length), [6, 7, 6]);
+  assert.equal(tc.quemPode.documentos.length, 3);
+  assert.equal(tc.porQue.diferenciais.length, 4);
+  assert.equal(tc.faq.itens.length, 11);
+  const t = textos(tc).join(' | ');
+  for (const proibido of ['São Bernardo do Campo, onde fica', 'com sede em São Bernardo', 'SUSEP', 'Google', '[', 'Cotar', '4332-4950']) assert.ok(!t.includes(proibido), proibido);
+  assert.ok(tc.porQue.texto.includes('com sede em Santo André'));
+});
