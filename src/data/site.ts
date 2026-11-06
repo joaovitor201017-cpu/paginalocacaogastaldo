@@ -20,6 +20,8 @@ export const site = {
   cnpj: null as string | null,
   cidadeSede: 'Santo André',
   mensagemWhatsApp: 'Olá! Quero saber sobre as soluções para alugar.',
+  // Endereço (Google Apps Script) que grava os leads do simulador numa planilha. Pendente: null = só WhatsApp.
+  planilhaLeads: null as string | null,
 };
 
 export type Site = typeof site;

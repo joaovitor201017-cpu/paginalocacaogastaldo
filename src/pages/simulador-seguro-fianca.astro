@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Trilha from '../components/servico/Trilha.astro';
+import Passos from '../components/servico/Passos.astro';
+import Faq from '../components/servico/Faq.astro';
+import ChamadoFinal from '../components/servico/ChamadoFinal.astro';
+import SimuladorFianca from '../components/simulador/SimuladorFianca.astro';
+import { simuladorFianca as s } from '../data/simuladores/seguro-fianca';
+import { site } from '../data/site';
+import { cidades } from '../data/cidades';
+import { icones } from '../lib/icones';
+import { schemaSimulador } from '../lib/schema';
+
+// Simulador de seguro fiança: calculadora no topo e o texto de SEO abaixo dela
+const caminho = `/${s.slug}`;
+const jsonLd = schemaSimulador(site, { nome: 'Simulador de Seguro Fiança', descricao: s.seo.description, caminho }, s.faq.itens, cidades, [
+  { nome: 'Início', caminho: '/' },
+  { nome: 'Seguro Fiança', caminho: '/seguro-fianca' },
+  { nome: 'Simulador', caminho },
+]);
+---
+
+<BaseLayout title={s.seo.title} description={s.seo.description} path={caminho} jsonLd={jsonLd} mensagemWhatsApp={s.mensagemWhatsApp}>
+  <main id="conteudo">
+    <section class="sim-topo" aria-labelledby="hero-titulo">
+      <div class="container sim-topo__grade">
+        <div class="sim-topo__texto">
+          <Trilha atual="Simulador" meio={[{ rotulo: 'Seguro Fiança', href: '/seguro-fianca' }]} />
+          <h1 id="hero-titulo">{s.h1}</h1>
+          <p class="sim-topo__sub">{s.subtitulo}</p>
+          <ul class="selos">
+            {s.selos.map((selo) => (
+              <li>
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+                {selo}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <SimuladorFianca />
+      </div>
+    </section>
+
+    <Passos id="como-funciona" titulo={s.comoFunciona.titulo} intro={s.comoFunciona.intro} passos={s.comoFunciona.passos} />
+
+    <section class="secao sim-textos" aria-label="Antes de simular">
+      <div class="container sim-textos__grade">
+        {s.textos.map((t) => (
+          <div id={t.id}>
+            <h2>{t.titulo}</h2>
+            <p>{t.texto}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="qual-plano" class="secao sim-planos" aria-labelledby="qual-plano-titulo">
+      <div class="container">
+        <h2 id="qual-plano-titulo">{s.qualPlano.titulo}</h2>
+        <ul class="sim-planos__lista">
+          {s.qualPlano.itens.map((p) => <li><strong>{p.rotulo}</strong><p>{p.texto}</p></li>)}
+        </ul>
+        <p class="sim-planos__nota">{s.qualPlano.nota} <a href="/seguro-fianca#coberturas">Veja o que o seguro fiança cobre</a>.</p>
+      </div>
+    </section>
+
+    <section id="perfis" class="secao sim-perfis" aria-labelledby="perfis-titulo">
+      <div class="container">
+        <h2 id="perfis-titulo">{s.perfis.titulo}</h2>
+        <ul class="sim-perfis__lista">
+          {s.perfis.itens.map((p) => (
+            <li>
+              <span class="sim-perfis__icone" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icones[p.icone]}></path></svg>
+              </span>
+              <strong>{p.rotulo}</strong>
+              <p>{p.texto}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section id="abc" class="secao sim-abc" aria-labelledby="abc-titulo">
+      <div class="container">
+        <h2 id="abc-titulo">{s.abc.titulo}</h2>
+        <p>{s.abc.texto}</p>
+        <p class="sim-abc__link"><a href={s.abc.link.href}>{s.abc.link.rotulo}</a></p>
+      </div>
+    </section>
+
+    <Faq titulo={s.faq.titulo} itens={s.faq.itens} />
+
+    <ChamadoFinal titulo={s.final.titulo} texto={s.final.texto} secundario={s.final.botao} mensagemWhatsApp={s.mensagemWhatsApp} />
+  </main>
+</BaseLayout>
+
+<style>
+  .sim-topo { padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(2.5rem, 2rem + 2vw, 4rem); }
+  .sim-topo__grade { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(2rem, 4vw, 3.5rem); align-items: start; }
+  .sim-topo h1 { font-size: clamp(2rem, 1.5rem + 2vw, 2.875rem); max-width: 16ch; margin-bottom: 1rem; }
+  .sim-topo__sub { font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem); color: var(--texto-suave); max-width: 46ch; }
+  .selos { display: grid; gap: 0.6rem; margin-top: 1.5rem; font-size: 0.9375rem; font-weight: 500; color: var(--marinho); }
+  .selos li { display: flex; align-items: center; gap: 0.5rem; }
+  .selos svg { color: var(--azul-escuro); flex: 0 0 auto; }
+
+  .sim-textos__grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 5vw, 4.5rem); }
+  .sim-textos p { margin: 0; max-width: 60ch; }
+
+  .sim-planos { background: var(--cinza-fundo); }
+  .sim-planos__lista { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .sim-planos__lista li { padding: 1.25rem; background: var(--branco); border: 1.5px solid #bccbdd; border-radius: var(--raio-p); }
+  .sim-planos__lista strong { display: block; color: var(--marinho); font-size: 1.0625rem; margin-bottom: 0.35rem; }
+  .sim-planos__lista p { margin: 0; color: var(--texto-suave); font-size: 0.9375rem; }
+  .sim-planos__nota { margin: 1.25rem 0 0; max-width: 70ch; }
+
+  .sim-perfis__lista { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .sim-perfis__lista li { display: grid; gap: 0.5rem; align-content: start; }
+  .sim-perfis__icone { display: grid; place-items: center; width: 44px; height: 44px; color: var(--marinho); background: var(--azul-ceu); border-radius: 10px 10px 10px 20px; }
+  .sim-perfis__lista strong { color: var(--marinho); }
+  .sim-perfis__lista p { margin: 0; color: var(--texto-suave); font-size: 0.9375rem; }
+
+  .sim-abc { background: var(--cinza-fundo); }
+  .sim-abc p { max-width: 70ch; }
+  .sim-abc__link { font-weight: 600; margin-top: 1rem; }
+
+  @media (max-width: 960px) {
+    .sim-topo__grade { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .sim-textos__grade, .sim-planos__lista, .sim-perfis__lista { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

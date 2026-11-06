@@ -5,7 +5,8 @@ import { linkWhatsApp } from '../../lib/whatsapp';
 import type { Acao } from '../../data/servicos/tipos';
 
 // Chamado final da página de serviço: painel marinho com simulação e WhatsApp
-interface Props { titulo: string; texto: string; principal: Acao; secundario: string; mensagemWhatsApp: string }
+// principal é opcional: sem ele, fica só o botão do WhatsApp
+interface Props { titulo: string; texto: string; principal?: Acao; secundario: string; mensagemWhatsApp: string }
 const { titulo, texto, principal, secundario, mensagemWhatsApp } = Astro.props;
 ---
 
@@ -15,7 +16,7 @@ const { titulo, texto, principal, secundario, mensagemWhatsApp } = Astro.props;
       <h2 id="chamado-titulo">{titulo}</h2>
       <p>{texto}</p>
       <div class="chamado__acoes">
-        <Botao href={principal.href} variante="claro" tamanho="g">{principal.rotulo}</Botao>
+        {principal && <Botao href={principal.href} variante="claro" tamanho="g">{principal.rotulo}</Botao>}
         <Botao href={linkWhatsApp(mensagemWhatsApp, site.whatsapp)} variante="whatsapp" tamanho="g">{secundario}</Botao>
       </div>
     </div>

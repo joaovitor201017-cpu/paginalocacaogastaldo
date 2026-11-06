@@ -1,12 +1,13 @@
 ---
-// Trilha de navegação (Início › página atual). Igual ao BreadcrumbList do schema.
-interface Props { atual: string }
-const { atual } = Astro.props;
+// Trilha de navegação (Início › [níveis intermediários] › página atual). Igual ao BreadcrumbList do schema.
+interface Props { atual: string; meio?: { rotulo: string; href: string }[] }
+const { atual, meio = [] } = Astro.props;
 ---
 
 <nav class="trilha" aria-label="Trilha">
   <ol>
     <li><a href="/">Início</a></li>
+    {meio.map((m) => <li><a href={m.href}>{m.rotulo}</a></li>)}
     <li><span aria-current="page">{atual}</span></li>
   </ol>
 </nav>

@@ -1,0 +1,292 @@
+---
+import { site } from '../../data/site';
+import { cidades } from '../../data/cidades';
+import { simuladorFianca as s } from '../../data/simuladores/seguro-fianca';
+import { numeroWhatsApp } from '../../lib/whatsapp';
+
+// Calculadora do seguro fiança em 3 passos (Imóvel → Seus dados → Resultado).
+// Sem JS: os passos 1 e 2 aparecem juntos e o envio abre o WhatsApp com a mensagem padrão.
+// Com JS: um passo por vez, validação com as mensagens do documento e resultado calculado na tela.
+const numero = numeroWhatsApp(site.whatsapp);
+const etapas = ['Imóvel', 'Seus dados', 'Resultado'];
+---
+
+<form class="sim" action={`https://wa.me/${numero}`} method="get" target="_blank" novalidate data-simulador data-whatsapp={numero} data-planilha={site.planilhaLeads ?? undefined}>
+  <input type="hidden" name="text" value={s.mensagemWhatsApp} />
+
+  <ol class="sim__progresso" aria-label="Etapas da simulação">
+    {etapas.map((e, i) => <li data-etapa={i + 1} aria-current={i === 0 ? 'step' : undefined}><span>{i + 1}</span>{e}</li>)}
+  </ol>
+
+  <!-- Passo 1 -->
+  <fieldset class="sim__passo" data-passo="1">
+    <legend>Conte sobre o imóvel</legend>
+    <label class="sim__campo">
+      Valor do aluguel (R$)
+      <input name="aluguel" inputmode="decimal" autocomplete="off" placeholder="2.000" required aria-describedby="ajuda-aluguel erro-aluguel" />
+      <small id="ajuda-aluguel">O valor mensal do aluguel, sem condomínio</small>
+      <span class="sim__erro" id="erro-aluguel" data-erro="aluguel" aria-live="polite"></span>
+    </label>
+    <div class="sim__duplo">
+      <label class="sim__campo">
+        Valor do condomínio (R$)
+        <input name="condominio" inputmode="decimal" autocomplete="off" placeholder="Opcional" aria-describedby="ajuda-condominio erro-condominio" />
+        <small id="ajuda-condominio">Deixe em branco se não tiver</small>
+        <span class="sim__erro" id="erro-condominio" data-erro="condominio" aria-live="polite"></span>
+      </label>
+      <label class="sim__campo">
+        Valor do IPTU por mês (R$)
+        <input name="iptu" inputmode="decimal" autocomplete="off" placeholder="Opcional" aria-describedby="ajuda-iptu erro-iptu" />
+        <small id="ajuda-iptu">Se pagar por ano, divida por 12</small>
+        <span class="sim__erro" id="erro-iptu" data-erro="iptu" aria-live="polite"></span>
+      </label>
+    </div>
+    <fieldset class="sim__opcoes">
+      <legend>Tipo de imóvel</legend>
+      <label><input type="radio" name="tipo" value="Residencial" required checked /> Residencial</label>
+      <label><input type="radio" name="tipo" value="Comercial" /> Comercial</label>
+    </fieldset>
+    <label class="sim__campo">
+      Cidade do imóvel
+      <select name="cidade" required>
+        <option value="">Selecione</option>
+        {cidades.map((c) => <option>{c.nome}</option>)}
+        <option>Outra cidade</option>
+      </select>
+      <span class="sim__erro" data-erro="cidade" aria-live="polite"></span>
+    </label>
+    <button type="button" class="sim__botao" data-avancar>Continuar</button>
+  </fieldset>
+
+  <!-- Passo 2 -->
+  <fieldset class="sim__passo" data-passo="2">
+    <legend>Para onde enviamos sua cotação?</legend>
+    <label class="sim__campo">
+      Nome
+      <input name="nome" autocomplete="name" required />
+      <span class="sim__erro" data-erro="nome" aria-live="polite"></span>
+    </label>
+    <label class="sim__campo">
+      WhatsApp
+      <input name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 91234-5678" required />
+      <span class="sim__erro" data-erro="whatsapp" aria-live="polite"></span>
+    </label>
+    <fieldset class="sim__opcoes">
+      <legend>Você é</legend>
+      <label><input type="radio" name="perfil" value="Inquilino" required checked /> Inquilino</label>
+      <label><input type="radio" name="perfil" value="Proprietário" /> Proprietário</label>
+      <label><input type="radio" name="perfil" value="Imobiliária" /> Imobiliária</label>
+    </fieldset>
+    <label class="sim__campo">
+      E-mail <span class="sim__opcional">(opcional)</span>
+      <input name="email" type="email" autocomplete="email" />
+    </label>
+    <label class="sim__consentimento">
+      <input type="checkbox" name="consentimento" required />
+      <span>Aceito receber o contato da Gastaldo Seguros pelo WhatsApp sobre esta cotação, conforme a <a href="/politica-de-privacidade">Política de Privacidade</a>.</span>
+    </label>
+    <span class="sim__erro" data-erro="consentimento" aria-live="polite"></span>
+    <div class="sim__acoes">
+      <button type="submit" class="sim__botao">Ver meu resultado</button>
+      <button type="button" class="sim__voltar" data-voltar>Voltar</button>
+    </div>
+    <p class="sim__seguro">Seus dados estão seguros e não são compartilhados. A simulação não consulta seu CPF.</p>
+  </fieldset>
+
+  <!-- Passo 3: resultado (preenchido pelo script) -->
+  <div class="sim__passo sim__resultado" data-passo="3" hidden tabindex="-1">
+    <h2 class="sim__titulo"><span data-nome>Você</span>, veja quanto o seu aluguel fica protegido</h2>
+    <p>Calculamos a proteção de cada plano com base no aluguel de <strong data-aluguel>R$ —</strong>. O valor do seguro sai depois da análise de crédito, e enviamos a cotação oficial no seu WhatsApp.</p>
+    <div class="sim__planos">
+      {s.planos.map((p) => (
+        <article class:list={['plano', { 'plano--destaque': p.destaque }]}>
+          {p.destaque && <span class="plano__selo">Mais escolhido</span>}
+          <h3>{p.nome}</h3>
+          <p class="plano__para">{p.paraQuem}</p>
+          <ul>
+            {s.coberturas.map((c) => (
+              <li class:list={{ 'plano__nao': !p.inclui.includes(c.chave) }} data-linha={c.chave}>
+                <span>{c.rotulo}</span>
+                <strong data-valor={p.inclui.includes(c.chave) ? c.chave : undefined}>{p.inclui.includes(c.chave) ? c.referencia : '—'}</strong>
+              </li>
+            ))}
+          </ul>
+          <button type="button" class="sim__botao" data-plano={p.nome}>Quero este plano</button>
+        </article>
+      ))}
+    </div>
+    <p class="sim__aviso">{s.aviso}</p>
+    <button type="button" class="sim__voltar" data-voltar>Voltar e alterar os valores</button>
+  </div>
+
+  <!-- Depois de escolher o plano -->
+  <div class="sim__passo sim__pronto" data-passo="4" hidden tabindex="-1">
+    <h2 class="sim__titulo">Pronto, <span data-nome>você</span>!</h2>
+    <p>Recebemos sua simulação. Um especialista vai chamar você no WhatsApp para enviar a cotação oficial.</p>
+    <a class="sim__botao sim__botao--wpp" href={`https://wa.me/${numero}`} target="_blank" rel="noopener" data-falar>Falar agora no WhatsApp</a>
+  </div>
+</form>
+
+<script>
+  import { calcularProtecao, lerValor, formatarReais, mensagemLead } from '../../lib/simulador';
+
+  const form = document.querySelector<HTMLFormElement>('[data-simulador]');
+  if (form) {
+    const $ = <T extends Element>(sel: string) => form.querySelector<T>(sel)!;
+    const $$ = (sel: string) => [...form.querySelectorAll<HTMLElement>(sel)];
+    const campo = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+    const valor = (n: string) => String(new FormData(form).get(n) ?? '').trim();
+    let dados: ReturnType<typeof ler> | null = null;
+
+    const ir = (n: number) => {
+      $$('[data-passo]').forEach((p) => (p.hidden = p.dataset.passo !== String(n)));
+      $$('[data-etapa]').forEach((e) => (Number(e.dataset.etapa) === Math.min(n, 3) ? e.setAttribute('aria-current', 'step') : e.removeAttribute('aria-current')));
+      const alvo = $<HTMLElement>(`[data-passo="${n}"]`);
+      (n > 2 ? alvo : alvo.querySelector<HTMLElement>('input,select'))?.focus({ preventScroll: n === 1 });
+      if (n > 1) form.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    };
+    const erro = (n: string, msg = '') => {
+      $(`[data-erro="${n}"]`).textContent = msg;
+      campo(n)?.setAttribute?.('aria-invalid', String(Boolean(msg)));
+      return !msg;
+    };
+    const numeroValido = (n: string, obrigatorio: boolean) => {
+      const v = lerValor(valor(n));
+      if (v === null) return erro(n, obrigatorio ? 'Informe o valor do aluguel para continuar.' : '');
+      return erro(n, Number.isNaN(v) ? 'Digite apenas números, por exemplo 2000.' : '');
+    };
+    const ler = () => ({
+      aluguel: lerValor(valor('aluguel')) as number,
+      condominio: lerValor(valor('condominio')),
+      iptu: lerValor(valor('iptu')),
+      tipo: valor('tipo'),
+      cidade: valor('cidade'),
+      nome: valor('nome'),
+      whatsapp: valor('whatsapp'),
+      perfil: valor('perfil'),
+    });
+
+    // Com JS, um passo por vez
+    form.classList.add('sim--js');
+    ir(1);
+
+    $('[data-avancar]').addEventListener('click', () => {
+      const ok = [numeroValido('aluguel', true), numeroValido('condominio', false), numeroValido('iptu', false), erro('cidade', valor('cidade') ? '' : 'Escolha a cidade do imóvel.')].every(Boolean);
+      if (ok) ir(2);
+      else form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+    });
+    $$('[data-voltar]').forEach((b) => b.addEventListener('click', () => ir(1)));
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const digitos = valor('whatsapp').replace(/\D/g, '');
+      const ok = [
+        erro('nome', valor('nome') ? '' : 'Informe seu nome.'),
+        erro('whatsapp', digitos.length >= 10 && digitos.length <= 11 ? '' : 'Confira o número com DDD, por exemplo (11) 91234-5678.'),
+        erro('consentimento', campo('consentimento').checked ? '' : 'Marque a caixa para receber sua cotação.'),
+      ].every(Boolean);
+      if (!ok) return form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+
+      dados = ler();
+      const p = calcularProtecao(dados);
+      const primeiroNome = dados.nome.split(' ')[0];
+      $$('[data-nome]').forEach((n) => (n.textContent = primeiroNome));
+      $('[data-aluguel]').textContent = formatarReais(dados.aluguel);
+      $$('[data-valor]').forEach((v) => {
+        const chave = v.dataset.valor as keyof typeof p | 'consumo';
+        if (chave !== 'consumo') v.textContent = `até ${formatarReais(p[chave] as number)}`;
+      });
+      // Condomínio e IPTU só aparecem se foram informados
+      $$('[data-linha="condominio"]').forEach((l) => (l.hidden = !dados!.condominio));
+      $$('[data-linha="iptu"]').forEach((l) => (l.hidden = !dados!.iptu));
+      ir(3);
+
+      // Planilha de leads (quando configurada)
+      if (form.dataset.planilha) fetch(form.dataset.planilha, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ ...dados, email: valor('email') } as unknown as Record<string, string>) }).catch(() => {});
+    });
+
+    $$('[data-plano]').forEach((b) =>
+      b.addEventListener('click', () => {
+        if (!dados) return;
+        const texto = mensagemLead({ ...dados, plano: b.dataset.plano! });
+        $<HTMLAnchorElement>('[data-falar]').href = `https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(texto)}`;
+        ir(4);
+      }),
+    );
+  }
+</script>
+
+<style>
+  .sim { background: var(--branco); border: 1.5px solid #bccbdd; border-radius: var(--raio-g); padding: clamp(1.25rem, 1rem + 1.5vw, 2rem); box-shadow: 0 18px 40px -24px rgb(4 57 103 / 0.35); }
+  .sim__progresso { display: none; list-style: none; margin: 0 0 1.5rem; padding: 0; gap: 0.5rem; }
+  .sim--js .sim__progresso { display: flex; }
+  .sim__progresso li { flex: 1; display: flex; align-items: center; gap: 0.45rem; padding-top: 0.6rem; border-top: 3px solid var(--cinza-linha); font-size: 0.8125rem; font-weight: 600; color: var(--texto-suave); }
+  .sim__progresso li span { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--cinza-fundo); font-size: 0.75rem; }
+  .sim__progresso li[aria-current] { border-color: var(--azul-escuro); color: var(--marinho); }
+  .sim__progresso li[aria-current] span { background: var(--marinho); color: var(--branco); }
+
+  .sim__passo { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; gap: 1rem; }
+  .sim__passo[hidden] { display: none; }
+  .sim:not(.sim--js) .sim__passo + .sim__passo { margin-top: 1.5rem; }
+  .sim__passo > legend, .sim__titulo { font-size: 1.125rem; font-weight: 700; color: var(--marinho); margin-bottom: 0.25rem; padding: 0; line-height: 1.3; }
+  .sim__campo { display: grid; gap: 0.35rem; font-weight: 500; font-size: 0.9rem; color: var(--marinho); }
+  .sim__campo small { font-weight: 400; color: var(--texto-suave); font-size: 0.8rem; }
+  .sim__opcional { font-weight: 400; color: var(--texto-suave); }
+  .sim :is(input:not([type='radio']):not([type='checkbox']), select) {
+    font: inherit; font-weight: 400; color: var(--texto); width: 100%;
+    padding: 0.75rem 0.9rem; border: 1.5px solid #7a8a9e; border-radius: var(--raio-p); background: var(--branco);
+  }
+  .sim :is(input, select):focus-visible { border-color: var(--azul); outline: 2px solid var(--azul); outline-offset: 1px; }
+  .sim [aria-invalid='true'] { border-color: #c0392b !important; }
+  .sim__erro { color: #b42318; font-size: 0.8125rem; font-weight: 500; }
+  .sim__erro:empty { display: none; }
+  .sim__duplo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+
+  .sim__opcoes { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .sim__opcoes legend { font-weight: 500; font-size: 0.9rem; color: var(--marinho); margin-bottom: 0.4rem; padding: 0; }
+  .sim__opcoes label { position: relative; }
+  .sim__opcoes input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .sim__opcoes label { display: inline-flex; align-items: center; padding: 0.55rem 1rem; border: 1.5px solid #bccbdd; border-radius: 999px; font-size: 0.9rem; font-weight: 500; color: var(--marinho); cursor: pointer; }
+  .sim__opcoes label:has(input:checked) { background: var(--marinho); border-color: var(--marinho); color: var(--branco); }
+  .sim__opcoes label:has(input:focus-visible) { outline: 3px solid var(--azul); outline-offset: 2px; }
+
+  .sim__consentimento { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.85rem; color: var(--texto-suave); }
+  .sim__consentimento input { margin-top: 0.2rem; width: 18px; height: 18px; flex: 0 0 auto; accent-color: var(--azul-escuro); }
+  .sim__seguro { margin: 0; font-size: 0.8rem; color: var(--texto-suave); }
+  .sim__acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+
+  .sim__botao {
+    font: inherit; font-weight: 600; font-size: 1rem; color: var(--branco); background: var(--azul-escuro);
+    border: 0; border-radius: 999px; padding: 0.85rem 1.5rem; cursor: pointer; text-align: center; text-decoration: none; justify-self: start;
+  }
+  .sim__botao:hover { background: var(--marinho); }
+  .sim__botao--wpp { background: #13863f; }
+  .sim__botao--wpp:hover { background: #0f6f33; }
+  .sim__voltar { font: inherit; font-weight: 600; color: var(--azul-escuro); background: none; border: 0; padding: 0.5rem 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; justify-self: start; }
+  .sim:not(.sim--js) :is([data-avancar], [data-voltar]) { display: none; }
+
+  /* Resultado */
+  .sim__resultado p { margin: 0; }
+  .sim__planos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+  .plano { position: relative; display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem 0.9rem; border: 1.5px solid #bccbdd; border-radius: var(--raio-p); }
+  .plano--destaque { border-color: var(--azul-escuro); box-shadow: 0 0 0 1px var(--azul-escuro); }
+  .plano__selo { position: absolute; top: -0.7rem; left: 0.9rem; padding: 0.15rem 0.6rem; border-radius: 999px; background: var(--amarelo); color: var(--marinho-profundo); font-size: 0.75rem; font-weight: 700; }
+  .plano h3 { margin: 0; font-size: 1.0625rem; }
+  .plano__para { font-size: 0.8125rem; color: var(--texto-suave); min-height: 2.6em; }
+  .plano ul { display: grid; gap: 0.45rem; margin: 0.25rem 0 0.75rem; flex: 1; }
+  .plano li { display: grid; gap: 0.05rem; font-size: 0.8rem; color: var(--texto-suave); padding-top: 0.45rem; border-top: 1px solid var(--cinza-linha); }
+  .plano li[hidden] { display: none; }
+  .plano li strong { color: var(--marinho); font-size: 0.875rem; }
+  .plano__nao strong { color: #9aa6b4; font-weight: 500; }
+  .plano .sim__botao { width: 100%; padding: 0.65rem 0.5rem; font-size: 0.875rem; white-space: nowrap; }
+  .sim__aviso { font-size: 0.8rem; color: var(--texto-suave); }
+
+  @media (max-width: 1100px) {
+    .sim__planos { grid-template-columns: minmax(0, 1fr); }
+    .plano__para { min-height: 0; }
+  }
+  @media (max-width: 480px) {
+    .sim__duplo { grid-template-columns: minmax(0, 1fr); }
+    .sim__acoes .sim__botao, .sim__pronto .sim__botao { width: 100%; }
+  }
+</style>

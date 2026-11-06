@@ -101,3 +101,13 @@ test('Título de Capitalização: estrutura do documento e regras do site', () =
   for (const proibido of ['São Bernardo do Campo, onde fica', 'com sede em São Bernardo', 'SUSEP', 'Google', '[', 'Cotar', '4332-4950']) assert.ok(!t.includes(proibido), proibido);
   assert.ok(tc.porQue.texto.includes('com sede em Santo André'));
 });
+
+test('schemaSimulador: WebApplication grátis e trilha de 3 níveis', async () => {
+  const { schemaSimulador } = await import('../src/lib/schema.ts');
+  const site = { nome: 'Gastaldo Seguros', dominio: null, telefone: null, email: null, endereco: null, cidadeSede: 'Santo André' };
+  const out = schemaSimulador(site, { nome: 'Simulador de Seguro Fiança', descricao: 'x', caminho: '/simulador-seguro-fianca' }, [{ pergunta: 'P?', resposta: 'R.' }], [{ nome: 'Santo André' }],
+    [{ nome: 'Início', caminho: '/' }, { nome: 'Seguro Fiança', caminho: '/seguro-fianca' }, { nome: 'Simulador', caminho: '/simulador-seguro-fianca' }]);
+  assert.deepEqual(out.map((x) => x['@type']), ['InsuranceAgency', 'WebApplication', 'FAQPage', 'BreadcrumbList']);
+  assert.equal(out[1].offers.price, '0');
+  assert.deepEqual(out[3].itemListElement.map((i) => i.name), ['Início', 'Seguro Fiança', 'Simulador']);
+});

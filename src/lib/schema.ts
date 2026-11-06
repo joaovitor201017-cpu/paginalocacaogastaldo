@@ -57,6 +57,40 @@ export function schemaHome(site: SiteSchema, faq: Faq, cidades: { nome: string }
   return faq.length === 0 ? [corretora, website] : [corretora, website, faqPage(faq)];
 }
 
+// Trilha (BreadcrumbList) a partir de uma lista de níveis { nome, caminho }
+function trilhaSchema(site: SiteSchema, niveis: { nome: string; caminho: string }[]): Obj {
+  const abs = (caminho: string) => (site.dominio ? new URL(caminho, site.dominio).href : undefined);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: niveis.map((n, i) => limpar({ '@type': 'ListItem', position: i + 1, name: n.nome, item: abs(n.caminho) })),
+  };
+}
+
+// Página de simulador: corretora + aplicação web gratuita + FAQ + trilha
+export function schemaSimulador(
+  site: SiteSchema,
+  app: { nome: string; descricao: string; caminho: string },
+  faq: Faq,
+  cidades: { nome: string }[],
+  trilha: { nome: string; caminho: string }[],
+): Obj[] {
+  const url = site.dominio ? new URL(app.caminho, site.dominio).href : undefined;
+  const webApp = limpar({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: app.nome,
+    description: app.descricao,
+    url,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    inLanguage: 'pt-BR',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
+    provider: limpar({ '@type': 'InsuranceAgency', name: site.nome, telephone: site.telefone }),
+  });
+  return [agencia(site, cidades), webApp, faqPage(faq), trilhaSchema(site, trilha)];
+}
+
 // Página de serviço: corretora + serviço + FAQ + trilha (Início > serviço)
 export function schemaServico(
   site: SiteSchema,
