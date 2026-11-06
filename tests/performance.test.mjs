@@ -32,3 +32,14 @@ test('HTML da Home ≤ 80 KB', () => {
 test('nenhuma fonte externa no CSS', () => {
   assert.doesNotMatch(lerCssGerado(), /@import\s+url\(["']?https?:|fonts\.googleapis/);
 });
+
+test('simuladores têm a seção Sobre da Home logo antes do FAQ', () => {
+  for (const rota of ['/simulador-seguro-fianca', '/simulador-titulo-de-capitalizacao-aluguel', '/cotacao-seguro-residencial', '/cotacao-seguro-incendio']) {
+    const h = lerPagina(rota);
+    const sobre = h.indexOf('id="sobre"');
+    assert.ok(sobre > 0, `${rota}: sem Sobre`);
+    assert.ok(h.includes('>Sobre a Gastaldo Seguros</h2>'), rota);
+    assert.ok(sobre < h.indexOf('id="faq"') && sobre > h.indexOf('id="abc"'), `${rota}: fora de ordem`);
+    assert.ok(h.includes('class="treino__slide'), `${rota}: sem carrossel`);
+  }
+});

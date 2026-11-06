@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Trilha from '../servico/Trilha.astro';
 import Faq from '../servico/Faq.astro';
 import ChamadoFinal from '../servico/ChamadoFinal.astro';
+import Sobre from '../home/Sobre.astro';
 import { site } from '../../data/site';
 import { cidades } from '../../data/cidades';
 import { schemaSimulador } from '../../lib/schema';
@@ -64,6 +65,9 @@ const jsonLd = schemaSimulador(site, { nome: p.nomeApp, descricao: p.seo.descrip
         {p.abc.link && <p class="sim-abc__link"><a href={p.abc.link.href}>{p.abc.link.rotulo}</a></p>}
       </div>
     </section>
+
+    <!-- Mesma seção "Sobre a Gastaldo Seguros" da Home -->
+    <Sobre />
 
     <Faq titulo={p.faq.titulo} itens={p.faq.itens} />
 
