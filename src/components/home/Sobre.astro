@@ -1,5 +1,6 @@
 ---
 import CarrosselTreinamentos from '../CarrosselTreinamentos.astro';
+import RedesSociais from '../RedesSociais.astro';
 
 const diferenciais = [
   { destaque: 'Especialização em seguros locatícios', icone: 'M12 3 4 6v6c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V6l-8-3Zm-3.5 9 2.5 2.5 4.5-4.5' },
@@ -29,6 +30,11 @@ const diferenciais = [
           </li>
         ))}
       </ul>
+
+      <div class="sobre__redes">
+        <p>Acompanhe a Gastaldo nas redes</p>
+        <RedesSociais />
+      </div>
     </div>
 
     <CarrosselTreinamentos />
@@ -40,6 +46,8 @@ const diferenciais = [
   .sobre__texto p { max-width: 54ch; }
   .sobre__abertura { font-size: 1.125rem; font-weight: 500; color: var(--marinho); line-height: 1.45; }
   .sobre__texto h3 { font-size: 0.975rem; margin: 1.75rem 0 0.75rem; }
+  .sobre__redes { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 1.5rem; }
+  .sobre__redes p { margin: 0; font-size: 0.9375rem; font-weight: 600; color: var(--marinho); }
 
   /* Diferenciais em formato compacto */
   .sobre__diferenciais { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }

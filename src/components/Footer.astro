@@ -1,105 +1,125 @@
 ---
 import Pendente from './Pendente.astro';
-import MapaFachada from './MapaFachada.astro';
+import RedesSociais from './RedesSociais.astro';
 import { site } from '../data/site';
 import { solucoes } from '../data/solucoes';
+import { cidades } from '../data/cidades';
 import { enderecoCompleto } from '../lib/endereco';
 import { icones } from '../lib/icones';
 import { linkWhatsApp, numeroWhatsApp } from '../lib/whatsapp';
 
+// Rodapé: topo (logo, frase e dados da corretora), 4 colunas e faixa de baixo com as redes sociais.
+// Cidades sem link até existirem as páginas de cidade.
 const institucional = [
-  { href: '/#sobre', rotulo: 'Sobre nós' },
-  { href: '/#imobiliarias', rotulo: 'Para Imobiliárias' },
+  { href: '/#contato', rotulo: 'Página de contato' },
+  { href: '/#sobre', rotulo: 'Sobre a corretora' },
+  { href: '/#imobiliarias', rotulo: 'Para imobiliárias' },
   { href: '/blog', rotulo: 'Blog' },
-  { href: '/politica-de-privacidade', rotulo: 'Política de Privacidade' },
+  { href: '/politica-de-privacidade', rotulo: 'Política de privacidade' },
 ];
-
-// Canais de contato (os mesmos do "Fale com a gente"); só os que têm dado aparecem
-const endereco = site.endereco ? enderecoCompleto(site.endereco) : null;
-const canais = [
-  { rotulo: 'WhatsApp', icone: icones.mensagem, valor: site.whatsapp, href: site.whatsapp ? linkWhatsApp(site.mensagemWhatsApp, site.whatsapp) : null },
-  { rotulo: 'Telefone', icone: icones.telefone, valor: site.telefone, href: site.telefone ? `tel:+${numeroWhatsApp(site.telefone)}` : null },
-  { rotulo: 'E-mail', icone: icones.email, valor: site.email, href: site.email ? `mailto:${site.email}` : null },
-  { rotulo: 'Endereço', icone: icones.pin, valor: endereco, href: null },
-  { rotulo: 'Horário', icone: icones.relogio, valor: site.horario, href: null },
-].filter((c) => c.valor);
+const simuladores = [
+  { href: '/simulador-seguro-fianca', rotulo: 'Simulador de Seguro Fiança' },
+  { href: '/simulador-titulo-de-capitalizacao-aluguel', rotulo: 'Simulador de Título de Capitalização' },
+  { href: '/cotacao-seguro-incendio', rotulo: 'Cotação de Seguro Incêndio' },
+  { href: '/cotacao-seguro-residencial', rotulo: 'Cotação de Seguro Residencial' },
+];
+const ano = new Date().getFullYear();
 ---
 
 <footer class="rodape">
-  <div class="container rodape__grade">
-    <div class="rodape__marca">
-      <img src="/brand/logo-gastaldo-branco.png" alt="Gastaldo Seguros" width="170" height="54" loading="lazy" />
-      <p>Seguros e garantias para alugar no ABC Paulista.</p>
+  <div class="container rodape__topo">
+    <img class="rodape__logo" src="/brand/logo-gastaldo-branco.png" alt="Gastaldo Seguros" width="170" height="54" loading="lazy" />
+    <p class="rodape__descricao">{site.descricao}</p>
+    <div class="rodape__dados">
+      <strong>{site.nome}</strong>
+      {site.endereco && <span>{enderecoCompleto(site.endereco)}</span>}
+      {site.telefone && <a href={`tel:+${numeroWhatsApp(site.telefone)}`}>{site.telefone}</a>}
+    </div>
+  </div>
+
+  <div class="container rodape__colunas">
+    <div>
+      <p class="rodape__titulo">Atendimento</p>
+      <ul class="rodape__atendimento">
+        {site.horario && (
+          <li>
+            <svg class="rodape__icone" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icones.relogio}></path></svg>
+            <span>{site.horario}{site.horarioFimDeSemana && <><br />{site.horarioFimDeSemana}</>}</span>
+          </li>
+        )}
+        {site.whatsapp && (
+          <li>
+            <svg class="rodape__icone" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icones.mensagem}></path></svg>
+            <a href={linkWhatsApp(site.mensagemWhatsApp, site.whatsapp)}>WhatsApp {site.whatsapp}</a>
+          </li>
+        )}
+        {site.email && (
+          <li>
+            <svg class="rodape__icone" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icones.email}></path></svg>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </li>
+        )}
+      </ul>
+      <ul class="rodape__links">{institucional.map((l) => <li><a href={l.href}>{l.rotulo}</a></li>)}</ul>
     </div>
     <div>
-      <p class="rodape__titulo">Seguros</p>
-      <ul>{solucoes.map((s) => <li><a href={s.saibaMais}>{s.titulo}</a></li>)}</ul>
+      <p class="rodape__titulo">Seguros e garantias</p>
+      <ul class="rodape__links">{solucoes.map((s) => <li><a href={s.saibaMais}>{s.titulo}</a></li>)}</ul>
     </div>
     <div>
       <p class="rodape__titulo">Simuladores</p>
-      <ul>{solucoes.map((s) => <li><a href={s.acao.href}>{s.titulo}</a></li>)}</ul>
+      <ul class="rodape__links">{simuladores.map((s) => <li><a href={s.href}>{s.rotulo}</a></li>)}</ul>
     </div>
     <div>
-      <p class="rodape__titulo">Institucional</p>
-      <ul>{institucional.map((l) => <li><a href={l.href}>{l.rotulo}</a></li>)}</ul>
+      <p class="rodape__titulo">Cidades atendidas</p>
+      <ul class="rodape__links rodape__cidades">
+        {cidades.map((c) => <li>{c.href ? <a href={c.href}>{c.nome}</a> : c.nome}{c.sede && <span class="rodape__sede">sede</span>}</li>)}
+      </ul>
     </div>
   </div>
 
-  <div class="container rodape__contato">
-    <div>
-      <p class="rodape__titulo">Fale com a gente</p>
-      <dl class="rodape__canais">
-        {canais.map((c) => (
-          <div>
-            <dt>
-              <svg class="rodape__contato-icone" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={c.icone}></path></svg>
-              {c.rotulo}
-            </dt>
-            <dd>{c.href ? <a href={c.href}>{c.valor}</a> : c.valor}</dd>
-          </div>
-        ))}
-      </dl>
+  <div class="rodape__base">
+    <div class="container rodape__base-grade">
+      <RedesSociais tema="escuro" />
+      <p>© {ano} {site.nome} · CNPJ {site.cnpj ?? <Pendente rotulo="número" />}</p>
     </div>
-    <MapaFachada consulta={endereco ?? `${site.nome}, ${site.cidadeSede} - SP`} rotulo={`${site.nome} · ${site.endereco ? `${site.endereco.bairro}, ${site.endereco.cidade}` : site.cidadeSede}`} />
-  </div>
-
-  <div class="container rodape__dados">
-    <p>
-      {site.nome} · CNPJ {site.cnpj ?? <Pendente rotulo="número" />} ·{' '}
-      {site.endereco ? enderecoCompleto(site.endereco) : <Pendente rotulo="endereço" />} · {site.telefone ?? <Pendente rotulo="telefone" />}
-    </p>
   </div>
 </footer>
 
 <style>
-  .rodape { background: var(--marinho-profundo); color: rgb(255 255 255 / 0.8); padding: 4rem 0 2rem; font-size: var(--fs-pequeno); }
-  .rodape__grade { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 2.5rem; }
-  .rodape__marca img { width: 170px; height: auto; margin-bottom: 1rem; }
-  .rodape__marca p { max-width: 28ch; }
-  .rodape__titulo { color: var(--branco); font-weight: 600; margin-bottom: 0.9rem; }
-  .rodape li + li { margin-top: 0.5rem; }
+  .rodape { background: var(--marinho-profundo); color: rgb(255 255 255 / 0.82); font-size: var(--fs-pequeno); }
   .rodape a { color: inherit; text-decoration: none; }
   .rodape a:hover { color: var(--azul-ceu); text-decoration: underline; }
 
-  /* Contatos e mapa */
-  .rodape__contato { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid rgb(255 255 255 / 0.14); }
-  .rodape__canais { display: grid; gap: 0.7rem; margin: 0; }
-  .rodape__canais div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; align-items: start; }
-  .rodape__canais dt { display: flex; align-items: center; gap: 0.55rem; color: var(--branco); font-weight: 600; }
-  .rodape__canais dd { margin: 0; }
-  .rodape__contato-icone { flex: 0 0 auto; color: var(--azul-ceu); }
-  .rodape__contato :global(.mapa) { aspect-ratio: 16 / 8; border-color: rgb(255 255 255 / 0.14); }
+  /* Topo: logo | frase | dados */
+  .rodape__topo { display: grid; grid-template-columns: auto minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 2rem 3rem; align-items: start; padding-block: 3.5rem 2.25rem; border-bottom: 1px solid rgb(255 255 255 / 0.14); }
+  .rodape__logo { width: 170px; height: auto; }
+  .rodape__descricao { margin: 0; max-width: 30ch; }
+  .rodape__dados { display: grid; gap: 0.35rem; justify-self: end; text-align: right; }
+  .rodape__dados strong { color: var(--branco); }
+  .rodape__dados a { color: var(--branco); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
-  .rodape__dados { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgb(255 255 255 / 0.14); font-size: 0.85rem; }
-  .rodape__dados p { margin: 0; }
-  @media (max-width: 860px) {
-    .rodape__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1.25rem; }
-    .rodape__marca { grid-column: 1 / -1; }
-    .rodape__contato { grid-template-columns: minmax(0, 1fr); }
+  /* Colunas */
+  .rodape__colunas { display: grid; grid-template-columns: 1.15fr 1fr 1.1fr 1fr; gap: 2.5rem; padding-block: 2.5rem 3rem; }
+  .rodape__titulo { color: var(--branco); font-weight: 700; font-size: 1rem; margin-bottom: 1rem; }
+  .rodape__atendimento { display: grid; gap: 0.75rem; margin-bottom: 1.25rem; }
+  .rodape__atendimento li { display: flex; gap: 0.55rem; align-items: flex-start; }
+  .rodape__icone { flex: 0 0 auto; margin-top: 0.15rem; color: var(--azul-ceu); }
+  .rodape__links { display: grid; gap: 0.7rem; }
+  .rodape__cidades li { display: flex; align-items: center; gap: 0.45rem; }
+  .rodape__sede { font-size: 0.7rem; font-weight: 700; padding: 0.05rem 0.45rem; border-radius: 999px; background: var(--amarelo); color: var(--marinho-profundo); }
+
+  /* Faixa de baixo */
+  .rodape__base { background: rgb(0 0 0 / 0.22); }
+  .rodape__base-grade { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.1rem; }
+  .rodape__base p { margin: 0; font-size: 0.85rem; }
+
+  @media (max-width: 960px) {
+    .rodape__topo { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+    .rodape__dados { justify-self: start; text-align: left; }
+    .rodape__colunas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1.5rem; }
   }
-  @media (max-width: 480px) {
-    .rodape__canais div { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
-    .rodape__canais dd { padding-left: calc(18px + 0.55rem); }
-    .rodape__contato :global(.mapa) { aspect-ratio: 4 / 3; }
+  @media (max-width: 520px) {
+    .rodape__colunas { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

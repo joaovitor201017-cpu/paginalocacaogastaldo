@@ -7,6 +7,7 @@ interface SiteSchema {
   endereco: { logradouro: string; bairro: string; cidade: string; uf: string; cep: string } | null;
   horarioSchema?: string | null;
   cidadeSede: string;
+  redes?: { url: string }[]; // perfis oficiais (sameAs)
 }
 
 type Obj = Record<string, unknown>;
@@ -38,6 +39,7 @@ function agencia(site: SiteSchema, cidades: { nome: string }[]): Obj {
         }
       : null,
     areaServed: cidades.map((c) => ({ '@type': 'City', name: c.nome })),
+    sameAs: site.redes?.length ? site.redes.map((r) => r.url) : null,
   });
 }
 

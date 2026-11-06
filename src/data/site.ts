@@ -16,7 +16,15 @@ export const site = {
     cep: '09751-000',
   } as Endereco | null,
   horario: 'Segunda a sexta, das 9h às 18h' as string | null,
+  horarioFimDeSemana: 'Sábado e domingo: fechado' as string | null,
   horarioSchema: 'Mo-Fr 09:00-18:00' as string | null, // formato schema.org (sábado e domingo fechado)
+  // Frase curta sobre a corretora (rodapé)
+  descricao: 'Corretora de seguros e garantias para o aluguel no ABC Paulista, desde 2015.',
+  // Redes sociais (rodapé, Sobre da Home e "sameAs" no schema)
+  redes: [
+    { nome: 'Instagram', url: 'https://www.instagram.com/gastaldoseguros/' },
+    { nome: 'Facebook', url: 'https://www.facebook.com/gastaldoseguros' },
+  ] as { nome: 'Instagram' | 'Facebook'; url: string }[],
   cnpj: null as string | null,
   cidadeSede: 'Santo André',
   mensagemWhatsApp: 'Olá! Quero saber sobre as soluções para alugar.',

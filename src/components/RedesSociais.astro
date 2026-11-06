@@ -1,0 +1,32 @@
+---
+import { site } from '../data/site';
+import { icones } from '../lib/icones';
+
+// Ícones das redes sociais da Gastaldo (rodapé e Sobre da Home).
+// tema "escuro": para fundo marinho (rodapé); "claro": para fundo branco.
+interface Props { tema?: 'escuro' | 'claro'; class?: string }
+const { tema = 'claro', class: classe } = Astro.props;
+const icone = { Instagram: icones.instagram, Facebook: icones.facebook };
+---
+
+<ul class:list={['redes', `redes--${tema}`, classe]}>
+  {site.redes.map((r) => (
+    <li>
+      <a href={r.url} target="_blank" rel="noopener noreferrer" aria-label={`${site.nome} no ${r.nome}`}>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={icone[r.nome]}></path></svg>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .redes { display: flex; gap: 0.6rem; }
+  .redes a { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; transition: background-color 0.18s ease, color 0.18s ease; }
+  .redes--escuro a { color: var(--branco); border: 1.5px solid rgb(255 255 255 / 0.35); }
+  .redes--escuro a:hover { background: var(--branco); color: var(--marinho-profundo); }
+  .redes--claro a { color: var(--marinho); border: 1.5px solid #bccbdd; }
+  .redes--claro a:hover { background: var(--marinho); border-color: var(--marinho); color: var(--branco); }
+  @media (prefers-reduced-motion: reduce) {
+    .redes a { transition: none; }
+  }
+</style>
