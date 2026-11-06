@@ -27,28 +27,10 @@ export const seguroIncendio: Servico = {
     paragrafos: [
       'O seguro incêndio protege o imóvel contra incêndio, raio e explosão. Na locação, ele garante que, se algo acontecer, o proprietário tenha como reconstruir o imóvel, e o inquilino não fique com essa conta.',
       'Por isso, quase todo contrato de aluguel exige o seguro incêndio. A imobiliária costuma informar o valor mínimo de cobertura e, muitas vezes, pede que o proprietário apareça na apólice como beneficiário.',
+      // Resumo dos antigos quadros (quem paga, como funciona no contrato); os detalhes estão no FAQ
+      'Na maioria dos contratos, quem paga é o inquilino. A apólice é feita para o endereço do imóvel, entregue à imobiliária na entrada e renovada a cada 12 meses.',
     ],
     link: { rotulo: 'Quem paga o seguro incêndio, inquilino ou proprietário', href: null },
-    extras: [
-      {
-        titulo: 'Quem paga o seguro incêndio no aluguel',
-        texto: 'A Lei do Inquilinato coloca o seguro contra incêndio como obrigação do proprietário, mas permite que o contrato diga o contrário. Na prática, a maioria dos contratos passa esse custo para o inquilino. Confira o que diz o seu contrato.',
-      },
-      {
-        titulo: 'Como funciona no contrato de aluguel',
-        lista: [
-          'A imobiliária informa o valor de cobertura exigido no contrato.',
-          'O seguro é contratado para o endereço do imóvel alugado.',
-          'A apólice é enviada à imobiliária antes ou logo depois da entrega das chaves.',
-          'O seguro vale por 12 meses e deve ser renovado enquanto o contrato durar.',
-        ],
-      },
-      {
-        titulo: 'Seguro incêndio ou seguro residencial?',
-        texto: 'O seguro incêndio é o mais simples e o mais barato, feito para atender a exigência do contrato. O seguro residencial inclui o incêndio e acrescenta coberturas como roubo, danos elétricos e danos a vizinhos. Se você quer proteger também os seus bens, o residencial pode valer mais a pena.',
-        link: { rotulo: 'Conheça o Seguro Residencial', href: '/seguro-residencial' },
-      },
-    ],
   },
 
   comoFunciona: {
@@ -166,7 +148,9 @@ export const seguroIncendio: Servico = {
     titulo: 'Perguntas frequentes sobre seguro incêndio',
     itens: [
       { pergunta: 'O seguro incêndio é obrigatório no aluguel?', resposta: 'A Lei do Inquilinato coloca o seguro contra incêndio como obrigação do proprietário, e quase todo contrato exige esse seguro. O contrato pode passar o custo para o inquilino.' },
-      { pergunta: 'Quem paga o seguro incêndio?', resposta: 'Depende do contrato. Na maioria dos casos, é o inquilino.' },
+      { pergunta: 'Quem paga o seguro incêndio?', resposta: 'Depende do contrato. A Lei do Inquilinato coloca o seguro contra incêndio como obrigação do proprietário, mas permite que o contrato diga o contrário. Na prática, a maioria dos contratos passa esse custo para o inquilino. Confira o que diz o seu contrato.' },
+      { pergunta: 'Como funciona o seguro incêndio no contrato de aluguel?', resposta: 'A imobiliária informa o valor de cobertura exigido no contrato. O seguro é contratado para o endereço do imóvel alugado, e a apólice é enviada à imobiliária antes ou logo depois da entrega das chaves. Ele vale por 12 meses e deve ser renovado enquanto o contrato durar.' },
+      { pergunta: 'Qual a diferença entre seguro incêndio e seguro residencial?', resposta: 'O seguro incêndio é o mais simples e o mais barato, feito para atender a exigência do contrato. O seguro residencial inclui o incêndio e acrescenta coberturas como roubo, danos elétricos e danos a vizinhos. Se você quer proteger também os seus bens, o residencial pode valer mais a pena.' },
       { pergunta: 'Qual valor de cobertura devo contratar?', resposta: 'O valor que o contrato ou a imobiliária pedir. Se não houver valor definido, o ideal é uma cobertura próxima ao custo de reconstrução do imóvel.' },
       { pergunta: 'Quanto tempo dura o seguro incêndio?', resposta: 'Em geral, 12 meses. Ele deve ser renovado enquanto o contrato de aluguel estiver valendo.' },
       { pergunta: 'O seguro incêndio cobre os meus móveis?', resposta: 'O foco do seguro incêndio no aluguel é o imóvel. Para proteger os seus bens, o indicado é o seguro residencial.' },

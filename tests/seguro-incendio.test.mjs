@@ -19,12 +19,11 @@ test('topo com 5 selos, simulação e a foto do card Incêndio', () => {
   assert.match(topo, /alt="Cozinha de apartamento alugado à noite, com detector de fumaça no teto"/);
 });
 
-test('o que é com os 3 quadros, a lista numerada e o link para o Residencial', () => {
+test('o que é enxuto: texto com o resumo e duas fotos, sem quadros', () => {
   const s = secao(html, 'o-que-e');
-  for (const t of ['Quem paga o seguro incêndio no aluguel', 'Como funciona no contrato de aluguel', 'Seguro incêndio ou seguro residencial?']) assert.match(s, new RegExp(`<h3[^>]*>${t.replace('?', '\\?')}</h3>`), t);
-  const quadro = s.slice(s.indexOf('Como funciona no contrato'));
-  assert.equal(contar(quadro.slice(quadro.indexOf('<ol'), quadro.indexOf('</ol>')), /<li[\s>]/g), 4);
-  assert.match(s, /href="\/seguro-residencial"/);
+  assert.ok(!s.includes('texto-servico__extra'), 'sem quadros');
+  assert.equal(contar(s, /<h3[\s>]/g), 0);
+  assert.ok(s.includes('Na maioria dos contratos, quem paga é o inquilino'));
   assert.equal(contar(s, /class="foto /g), 2, 'duas fotos ao lado do texto (padrão)');
 });
 
@@ -44,7 +43,7 @@ test('vantagens, passos, outras garantias, FAQ e final', () => {
   assert.equal(contar(secao(html, 'como-contratar').slice(secao(html, 'como-contratar').indexOf('<ol')), /<li[\s>]/g), 4);
   const o = secao(html, 'outras-garantias');
   for (const t of ['Seguro Fiança', 'Título de Capitalização', 'Seguro Residencial']) assert.match(o, new RegExp(`<h3[^>]*>${t}</h3>`), t);
-  assert.equal(contar(secao(html, 'faq'), /<details/g), 6);
+  assert.equal(contar(secao(html, 'faq'), /<details/g), 8);
   assert.match(secao(html, 'chamado-final'), /<h2[^>]*>Resolva o seguro do seu aluguel hoje<\/h2>/);
 });
 

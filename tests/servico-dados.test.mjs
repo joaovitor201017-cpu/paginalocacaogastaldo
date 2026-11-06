@@ -71,14 +71,15 @@ import { seguroIncendio as inc } from '../src/data/servicos/seguro-incendio.ts';
 test('Seguro Incêndio: estrutura do documento e regras do site', () => {
   assert.equal(inc.topo.h1, 'Seguro Incêndio para Locação');
   assert.equal(inc.topo.selos.length, 5);
-  assert.equal(inc.oQueE.extras.length, 3);
-  assert.equal(inc.oQueE.extras[1].lista.length, 4);
+  assert.equal(inc.oQueE.extras, undefined, 'sem quadros: o resumo vai no texto e as dúvidas no FAQ');
+  assert.equal(inc.oQueE.paragrafos.length, 3);
   assert.equal(inc.coberturas.linhas.length, 6);
   assert.equal(inc.assistencias.grupos[0].itens.length, 4);
   assert.deepEqual(inc.vantagens.grupos.map((g) => g.itens.length), [5, 4, 5]);
   assert.equal(inc.comoFunciona.passos.length, 4);
   assert.equal(inc.porQue.diferenciais.length, 4);
-  assert.equal(inc.faq.itens.length, 6, 'sem a pergunta do prazo da apólice, que ainda não tem resposta real');
+  assert.equal(inc.faq.itens.length, 8, 'com as dúvidas que saíram dos quadros; sem a do prazo da apólice');
+  for (const p of ['Como funciona o seguro incêndio no contrato de aluguel?', 'Qual a diferença entre seguro incêndio e seguro residencial?']) assert.ok(inc.faq.itens.some((f) => f.pergunta === p), p);
   const t = textos(inc).join(' | ');
   for (const proibido of ['São Bernardo do Campo, onde fica', 'com sede em São Bernardo', 'SUSEP', 'Google', '[', 'Cotar', 'Porto']) assert.ok(!t.includes(proibido), proibido);
 });
