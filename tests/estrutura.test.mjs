@@ -61,6 +61,18 @@ test('script do mapa vai uma vez só, mesmo com dois mapas na página', () => {
 
 test('menu chama a seção de produtos de Seguros', () => {
   const header = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
-  assert.match(header, /href="\/#solucoes"[^>]*>Seguros<\/a>/);
+  assert.match(header, /href="\/#solucoes"[^>]*>\s*Seguros\s*<svg[^>]*class="topo__seta/);
   assert.ok(!header.includes('>Soluções<'));
+});
+
+test('cabeçalho leva a todas as páginas do site (submenus de Seguros e Simuladores)', async () => {
+  const { lerPagina } = await import('./helpers.mjs');
+  for (const pagina of [html, lerPagina('/seguro-fianca'), lerPagina('/cotacao-seguro-incendio')]) {
+    const h = pagina.slice(pagina.indexOf('<header'), pagina.indexOf('</header>'));
+    for (const href of ['/seguro-fianca', '/titulo-de-capitalizacao', '/seguro-incendio', '/seguro-residencial', '/simulador-seguro-fianca', '/simulador-titulo-de-capitalizacao-aluguel', '/cotacao-seguro-incendio', '/cotacao-seguro-residencial', '/#imobiliarias', '/#sobre', '/#contato']) {
+      assert.ok(h.includes(`href="${href}"`), href);
+    }
+    assert.match(h, /<ul[^>]*class="topo__sub"[^>]*aria-label="Seguros"/);
+    assert.match(h, /<ul[^>]*class="topo__sub"[^>]*aria-label="Simuladores"/);
+  }
 });

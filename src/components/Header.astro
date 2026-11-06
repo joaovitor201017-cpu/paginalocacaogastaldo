@@ -1,10 +1,24 @@
 ---
 import Botao from './Botao.astro';
 import { site } from '../data/site';
+import { solucoes } from '../data/solucoes';
 import { linkWhatsApp } from '../lib/whatsapp';
 
-const links = [
-  { href: '/#solucoes', rotulo: 'Seguros' },
+// Menu principal: Seguros e Simuladores abrem submenus com todas as páginas do site.
+// Os submenus abrem com o mouse e com o teclado (foco), só com CSS: nenhum JS a mais.
+// No celular, o menu (botão ☰) mostra tudo agrupado, com rolagem.
+const links: { href: string; rotulo: string; sub?: { href: string; rotulo: string }[] }[] = [
+  { href: '/#solucoes', rotulo: 'Seguros', sub: solucoes.map((s) => ({ href: s.saibaMais, rotulo: s.titulo })) },
+  {
+    href: '/simulador-seguro-fianca',
+    rotulo: 'Simuladores',
+    sub: [
+      { href: '/simulador-seguro-fianca', rotulo: 'Simulador de Seguro Fiança' },
+      { href: '/simulador-titulo-de-capitalizacao-aluguel', rotulo: 'Simulador de Título de Capitalização' },
+      { href: '/cotacao-seguro-incendio', rotulo: 'Cotação de Seguro Incêndio' },
+      { href: '/cotacao-seguro-residencial', rotulo: 'Cotação de Seguro Residencial' },
+    ],
+  },
   { href: '/#imobiliarias', rotulo: 'Para Imobiliárias' },
   { href: '/#sobre', rotulo: 'Sobre' },
   { href: '/#contato', rotulo: 'Contato' },
@@ -21,8 +35,20 @@ const links = [
       <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
     </button>
     <nav id="nav-principal" class="topo__nav" aria-label="Principal">
-      <ul>
-        {links.map((l) => <li><a href={l.href}>{l.rotulo}</a></li>)}
+      <ul class="topo__lista">
+        {links.map((l) => (
+          <li class:list={{ 'topo__item--sub': l.sub }}>
+            <a href={l.href}>
+              {l.rotulo}
+              {l.sub && <svg class="topo__seta" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>}
+            </a>
+            {l.sub && (
+              <ul class="topo__sub" aria-label={l.rotulo}>
+                {l.sub.map((s) => <li><a href={s.href}>{s.rotulo}</a></li>)}
+              </ul>
+            )}
+          </li>
+        ))}
       </ul>
       <Botao href={linkWhatsApp(site.mensagemWhatsApp, site.whatsapp)}>Falar com um consultor</Botao>
     </nav>
@@ -58,17 +84,30 @@ const links = [
   }
   .topo__barra { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 64px; }
   .topo__logo img { display: block; width: 160px; height: auto; }
-  .topo__nav { display: flex; align-items: center; gap: 2rem; }
-  .topo__nav ul { display: flex; gap: 1.75rem; }
-  .topo__nav ul a { color: var(--marinho); text-decoration: none; font-weight: 500; font-size: 0.975rem; }
-  .topo__nav ul a:hover { color: var(--azul); }
+  .topo__nav { display: flex; align-items: center; gap: 1.75rem; }
+  .topo__lista { display: flex; gap: 1.5rem; }
+  .topo__lista > li { position: relative; }
+  .topo__nav a { color: var(--marinho); text-decoration: none; font-weight: 500; font-size: 0.975rem; }
+  .topo__lista > li > a { display: inline-flex; align-items: center; gap: 0.25rem; padding: 1.25rem 0; }
+  .topo__nav a:hover { color: var(--azul); }
   .topo__menu { display: none; background: none; border: 0; padding: 0.6rem; color: var(--marinho); cursor: pointer; }
 
-  @media (max-width: 960px) {
+  /* Submenu: abre com o mouse ou com o foco do teclado */
+  .topo__sub {
+    position: absolute; top: 100%; left: -1rem; min-width: 290px; padding: 0.5rem;
+    background: var(--branco); border: 1px solid var(--cinza-linha); border-radius: var(--raio-p); box-shadow: var(--sombra);
+    display: none;
+  }
+  .topo__item--sub:is(:hover, :focus-within) .topo__sub { display: block; }
+  .topo__item--sub:is(:hover, :focus-within) .topo__seta { transform: rotate(180deg); }
+  .topo__sub a { display: block; padding: 0.6rem 0.75rem; border-radius: 8px; font-size: 0.925rem; }
+  .topo__sub a:hover { background: var(--cinza-fundo); color: var(--marinho); }
+
+  @media (max-width: 1080px) {
     /* Sem JS a navegação fica visível abaixo do logo; com JS vira menu */
     .topo__barra { flex-wrap: wrap; }
     .topo__nav { flex-basis: 100%; flex-direction: column; align-items: stretch; padding-bottom: 1rem; }
-    .topo__nav ul { flex-direction: column; gap: 0; }
+    .topo__lista { flex-direction: column; gap: 0; }
     :global(.js) .topo__barra { flex-wrap: nowrap; }
     :global(.js) .topo__menu { display: block; }
     :global(.js) .topo__nav {
@@ -77,6 +116,8 @@ const links = [
       top: 100%;
       left: -1.25rem;
       right: -1.25rem;
+      max-height: calc(100vh - 64px);
+      overflow-y: auto;
       flex-direction: column;
       align-items: stretch;
       gap: 1rem;
@@ -86,6 +127,10 @@ const links = [
       box-shadow: var(--sombra);
     }
     :global(.js) .topo__nav.aberto { display: flex; }
-    .topo__nav ul a { display: block; padding: 0.85rem 0; border-bottom: 1px solid var(--cinza-fundo); }
+    .topo__lista > li > a { display: flex; padding: 0.85rem 0; border-bottom: 1px solid var(--cinza-fundo); }
+    .topo__seta { display: none; }
+    /* No celular os submenus ficam sempre abertos, como listas */
+    .topo__sub { display: block; position: static; min-width: 0; padding: 0.25rem 0 0.5rem 0.75rem; border: 0; box-shadow: none; }
+    .topo__sub a { padding: 0.55rem 0.5rem; color: var(--texto-suave); }
   }
 </style>

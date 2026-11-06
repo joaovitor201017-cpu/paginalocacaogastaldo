@@ -24,9 +24,14 @@ test('a medição enxerga os arquivos externos da calculadora', () => {
   assert.ok(comArquivos > soInline + 2000, `${comArquivos} vs ${soInline}`);
 });
 
-test('HTML da Home ≤ 80 KB', () => {
-  const kb = Buffer.byteLength(html) / 1024;
-  assert.ok(kb <= 80, `HTML = ${kb.toFixed(1)} KB`);
+// O que o visitante baixa é o HTML compactado (a Cloudflare entrega em brotli; o gzip é o pior caso)
+test('HTML compactado de cada página ≤ 20 KB', async () => {
+  const { gzipSync } = await import('node:zlib');
+  for (const rota of ['/', '/seguro-fianca', '/seguro-residencial', '/seguro-incendio', '/titulo-de-capitalizacao', '/simulador-seguro-fianca', '/simulador-titulo-de-capitalizacao-aluguel', '/cotacao-seguro-residencial', '/cotacao-seguro-incendio', '/politica-de-privacidade']) {
+    const h = rota === '/' ? html : lerPagina(rota);
+    const kb = gzipSync(Buffer.from(h), { level: 9 }).length / 1024;
+    assert.ok(kb <= 20, `${rota}: HTML compactado = ${kb.toFixed(1)} KB`);
+  }
 });
 
 test('nenhuma fonte externa no CSS', () => {
