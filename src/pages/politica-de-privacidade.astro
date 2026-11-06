@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Trilha from '../components/servico/Trilha.astro';
+import Pendente from '../components/Pendente.astro';
+import { site } from '../data/site';
+import { enderecoCompleto } from '../lib/endereco';
+
+// Política de Privacidade (LGPD). Rascunho escrito a partir do que o site coleta de fato:
+// formulário de contato e simulador; sem CPF; sem cookies de rastreamento; mapa só após o clique.
+// Revisar com um profissional jurídico antes de publicar. Atualizar a data a cada mudança.
+const atualizacao = '6 de novembro de 2026';
+const endereco = site.endereco ? enderecoCompleto(site.endereco) : null;
+---
+
+<BaseLayout
+  title="Política de Privacidade | Gastaldo Seguros"
+  description="Saiba quais dados a Gastaldo Seguros coleta no site, para que usa, com quem compartilha e como você pode exercer os seus direitos pela LGPD."
+  path="/politica-de-privacidade"
+>
+  <main id="conteudo" class="secao politica">
+    <div class="container politica__corpo">
+      <Trilha atual="Política de Privacidade" />
+      <h1>Política de Privacidade</h1>
+      <p class="politica__data">Atualizada em {atualizacao}.</p>
+      <p>
+        Esta política explica, em linguagem simples, como a {site.nome} trata os dados pessoais de quem usa este site,
+        de acordo com a Lei Geral de Proteção de Dados (Lei 13.709/2018, a LGPD).
+      </p>
+
+      <h2>Quem cuida dos seus dados</h2>
+      <p>
+        A {site.nome}, corretora de seguros e garantias para o aluguel, CNPJ {site.cnpj ?? <Pendente rotulo="número" />},
+        {endereco ? <> com sede na {endereco},</> : null} é a responsável (controladora) pelos dados coletados neste site.
+      </p>
+
+      <h2>Quais dados coletamos</h2>
+      <p>Só coletamos os dados que você mesmo informa:</p>
+      <ul>
+        <li><strong>No formulário de contato:</strong> nome, WhatsApp, se você é inquilino, proprietário ou imobiliária, e a mensagem que escrever.</li>
+        <li><strong>No simulador:</strong> valores do aluguel, do condomínio e do IPTU, tipo e cidade do imóvel, nome, WhatsApp, perfil e, se quiser, e-mail.</li>
+      </ul>
+      <p>
+        No site, não pedimos o seu CPF e não consultamos a sua situação de crédito. A análise de crédito, quando necessária,
+        só acontece depois, na cotação oficial, e com a sua autorização.
+      </p>
+
+      <h2>Para que usamos seus dados</h2>
+      <ul>
+        <li>Responder ao seu contato e enviar a cotação que você pediu.</li>
+        <li>Preparar e acompanhar a contratação de seguros e garantias, quando você decidir seguir.</li>
+        <li>Cumprir obrigações legais e regulatórias do mercado de seguros.</li>
+      </ul>
+      <p>
+        Usamos os dados com base no seu consentimento, dado na caixa de aceite do simulador e ao nos chamar no WhatsApp,
+        e para os procedimentos que antecedem um contrato pedido por você (art. 7º, incisos I e V, da LGPD).
+        Não usamos seus dados para outras finalidades e não vendemos dados.
+      </p>
+
+      <h2>Com quem compartilhamos</h2>
+      <p>
+        Para fazer a cotação e a contratação, os dados necessários são enviados às seguradoras e às empresas de capitalização
+        parceiras, somente quando você decide seguir com a proposta. Também podemos usar ferramentas de atendimento e de
+        armazenamento contratadas pela corretora, que tratam os dados apenas em nosso nome.
+      </p>
+
+      <h2>Por quanto tempo guardamos</h2>
+      <p>
+        Guardamos os dados enquanto forem necessários para o seu atendimento e, depois disso, pelo prazo exigido por lei
+        ou pelas regras do mercado de seguros. Quando não forem mais necessários, os dados são apagados ou anonimizados.
+      </p>
+
+      <h2>Seus direitos</h2>
+      <p>Pela LGPD, você pode, a qualquer momento:</p>
+      <ul>
+        <li>confirmar se tratamos os seus dados e ter acesso a eles;</li>
+        <li>corrigir dados incompletos, inexatos ou desatualizados;</li>
+        <li>pedir a anonimização, o bloqueio ou a eliminação de dados desnecessários;</li>
+        <li>pedir a portabilidade dos dados a outro fornecedor;</li>
+        <li>saber com quem compartilhamos os seus dados;</li>
+        <li>retirar o consentimento, sem prejuízo do que já foi feito antes.</li>
+      </ul>
+
+      <h2>Cookies e serviços de terceiros</h2>
+      <p>
+        Este site não usa cookies de publicidade nem ferramentas de rastreamento. O mapa do Google só é carregado quando
+        você clica em "Ver no mapa"; a partir daí, o Google pode usar cookies, conforme a política de privacidade dele.
+        Ao clicar nos botões de WhatsApp, você é levado ao aplicativo, que segue a política de privacidade do WhatsApp.
+      </p>
+
+      <h2>Como falar com a gente</h2>
+      <p>
+        Para exercer os seus direitos ou tirar dúvidas sobre esta política, escreva para
+        {site.email ? <a href={`mailto:${site.email}`}>{site.email}</a> : <Pendente rotulo="e-mail" />}
+        {site.telefone && <> ou ligue para {site.telefone}</>}. Respondemos o mais rápido possível, dentro dos prazos da LGPD.
+      </p>
+      <p>Esta política pode ser atualizada. A data no topo da página mostra a versão mais recente.</p>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .politica__corpo { max-width: 760px; }
+  .politica h1 { margin-bottom: 0.5rem; }
+  .politica__data { color: var(--texto-suave); font-size: 0.875rem; margin-bottom: 1.5rem; }
+  .politica h2 { font-size: 1.25rem; margin: 2.25rem 0 0.75rem; }
+  .politica ul { list-style: disc; padding-left: 1.25rem; display: grid; gap: 0.4rem; margin-bottom: 1rem; }
+  .politica li::marker { color: var(--azul-escuro); }
+</style>

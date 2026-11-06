@@ -11,9 +11,10 @@ interface Props {
   path: string;
   jsonLd?: object[];
   mensagemWhatsApp?: string; // mensagem do botão flutuante (padrão: a do site)
+  indexar?: boolean; // false: nunca indexar (ex.: página 404)
 }
 
-const { title, description, path, jsonLd = [], mensagemWhatsApp } = Astro.props;
+const { title, description, path, jsonLd = [], mensagemWhatsApp, indexar = true } = Astro.props;
 const canonical = site.dominio ? new URL(path, site.dominio).href : null;
 ---
 
@@ -27,7 +28,7 @@ const canonical = site.dominio ? new URL(path, site.dominio).href : null;
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
     {/* Sem domínio final (endereço provisório): não indexar */}
-    {!site.dominio && <meta name="robots" content="noindex, nofollow" />}
+    {(!site.dominio || !indexar) && <meta name="robots" content="noindex, nofollow" />}
     <link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#043967" />

@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Botao from '../components/Botao.astro';
+import { site } from '../data/site';
+import { solucoes } from '../data/solucoes';
+import { linkWhatsApp } from '../lib/whatsapp';
+
+// Página de "não encontrada" (a Cloudflare Pages usa o 404.html automaticamente).
+// Nunca é indexada. Leva a pessoa aos seguros, ao simulador e ao WhatsApp.
+---
+
+<BaseLayout title="Página não encontrada | Gastaldo Seguros" description="A página que você procurou não foi encontrada." path="/404" indexar={false}>
+  <main id="conteudo" class="secao nao-encontrada">
+    <div class="container nao-encontrada__corpo">
+      <h1>Página não encontrada</h1>
+      <p>Esta página não existe ou ainda está sendo preparada. Escolha um dos caminhos abaixo ou fale com a gente no WhatsApp.</p>
+      <div class="nao-encontrada__acoes">
+        <Botao href="/simulador-seguro-fianca" tamanho="g">Simular seguro fiança</Botao>
+        <Botao href={linkWhatsApp(site.mensagemWhatsApp, site.whatsapp)} variante="whatsapp" tamanho="g">Falar no WhatsApp</Botao>
+      </div>
+      <p class="nao-encontrada__titulo">Nossos seguros e garantias</p>
+      <ul class="nao-encontrada__lista">
+        {solucoes.map((s) => <li><a href={s.saibaMais}>{s.titulo}</a></li>)}
+        <li><a href="/">Página inicial</a></li>
+      </ul>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .nao-encontrada__corpo { max-width: 720px; }
+  .nao-encontrada__acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.75rem 0 2.5rem; }
+  .nao-encontrada__titulo { font-weight: 600; color: var(--marinho); margin-bottom: 0.75rem; }
+  .nao-encontrada__lista { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .nao-encontrada__lista a { display: inline-block; padding: 0.55rem 1rem; border: 1.5px solid #bccbdd; border-radius: 999px; color: var(--marinho); font-weight: 500; text-decoration: none; }
+  .nao-encontrada__lista a:hover { border-color: var(--azul-escuro); }
+</style>
