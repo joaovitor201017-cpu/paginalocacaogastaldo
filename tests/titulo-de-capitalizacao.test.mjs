@@ -57,3 +57,9 @@ test('schema, JS e links', () => {
   assert.ok(js <= 5 * 1024, `JS = ${js}`);
   assert.ok(!html.includes('href="null"'));
 });
+
+test('as duas fotos do o que é são reais', () => {
+  const s = secao(html, 'o-que-e');
+  assert.equal(contar(s, /<picture/g), 2);
+  assert.ok(!s.includes('foto__reserva'));
+});

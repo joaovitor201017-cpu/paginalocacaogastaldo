@@ -1,14 +1,15 @@
 ---
 import PaginaServico from '../components/servico/PaginaServico.astro';
 import { tituloDeCapitalizacao } from '../data/servicos/titulo-de-capitalizacao';
+import fotoDinheiroDeVolta from '../assets/fotos/titulo-dinheiro-de-volta.jpg';
+import fotoPagamento from '../assets/fotos/titulo-pagamento-pix.jpg';
 ---
 
 <PaginaServico
   servico={tituloDeCapitalizacao}
   idPassos="como-funciona"
   fotosOQueE={[
-    // Fotos a gerar: salve em src/assets/fotos/ e preencha o src (import)
-    { alt: 'Inquilino recebendo o valor do título de capitalização de volta no fim do contrato', descricao: 'Foto: dinheiro de volta no fim do contrato' },
-    { alt: 'Inquilina pagando o título de capitalização pelo celular, sem análise de crédito', descricao: 'Foto: pagamento pelo celular' },
+    { src: fotoDinheiroDeVolta, alt: 'Inquilino sorrindo ao ver no celular o valor do título de capitalização de volta', descricao: 'Foto: dinheiro de volta' },
+    { src: fotoPagamento, alt: 'Inquilina pagando o título de capitalização pelo celular, com o contrato de aluguel na mesa', descricao: 'Foto: pagamento pelo celular' },
   ]}
 />
