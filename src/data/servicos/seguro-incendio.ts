@@ -2,6 +2,7 @@ import type { Servico } from './tipos';
 
 // Texto da página "Seguro Incêndio para Imóvel Alugado no ABC" (documento do João, 2026-11-03), com as regras
 // do site: sede em Santo André; sem avaliações, logos de seguradoras e avisos internos; botões com "Simular".
+// A faixa do imóvel comercial foi retirada a pedido do João.
 // A pergunta "Em quanto tempo recebo a apólice?" fica de fora até o João informar o prazo real das parceiras.
 // Coberturas e assistências variam por seguradora: conferir com as parceiras antes de liberar ao Google.
 export const seguroIncendio: Servico = {
@@ -119,15 +120,6 @@ export const seguroIncendio: Servico = {
       },
     ],
     nota: 'A quantidade de usos por ano depende do plano e da seguradora.',
-  },
-
-  destaque: {
-    id: 'imovel-comercial',
-    titulo: 'Seguro incêndio para imóvel comercial alugado',
-    texto: 'Lojas, salas e galpões alugados também costumam ter o seguro incêndio exigido no contrato. Para imóveis comerciais, as coberturas e o cálculo mudam conforme a atividade da empresa. Fale com a gente para encontrar o seguro certo para o seu negócio.',
-    botao: 'Falar com um corretor',
-    mensagemWhatsApp: 'Olá! Preciso de um seguro incêndio para um imóvel comercial alugado.',
-    icone: 'pasta',
   },
 
   outras: { titulo: 'Outras garantias para o aluguel' },

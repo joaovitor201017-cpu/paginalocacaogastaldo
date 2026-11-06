@@ -33,9 +33,8 @@ test('coberturas, assistências e faixa do imóvel comercial', () => {
   assert.match(a, /<h2[^>]*>Assistências 24 horas<\/h2>/);
   assert.ok(a.includes('Vidraceiro'));
   assert.match(a, /href="\/cotacao-seguro-incendio"[^>]*>\s*Fazer simulação/);
-  const c = secao(html, 'imovel-comercial');
-  assert.match(c, /<h2[^>]*>Seguro incêndio para imóvel comercial alugado<\/h2>/);
-  assert.match(c, /wa\.me\/5511993226252\?text=[^"]*comercial/);
+  assert.ok(!html.includes('id="imovel-comercial"'), 'faixa do imóvel comercial removida');
+  assert.ok(!html.includes('imóvel comercial alugado</h2>'));
 });
 
 test('vantagens, passos, outras garantias, FAQ e final', () => {

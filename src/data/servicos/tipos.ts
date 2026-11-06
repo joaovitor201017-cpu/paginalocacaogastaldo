@@ -32,8 +32,6 @@ export interface Servico {
   };
   // Seção própria de assistências 24h (Residencial)
   assistencias?: { titulo: string; intro: string; grupos: { titulo?: string; itens: { rotulo: string; texto?: string }[] }[]; nota: string };
-  // Faixa de destaque com texto e botão de WhatsApp (ex.: imóvel comercial no Seguro Incêndio)
-  destaque?: { id: string; titulo: string; texto: string; botao: string; mensagemWhatsApp: string; icone: Icone };
   vantagens: { titulo: string; intro?: string; grupos: GrupoBeneficios[] };
   pagamento?: { titulo: string; texto: string; botao: Acao; link: LinkBlog };
   quemPode?: { titulo: string; texto: string; documentosTitulo: string; documentos: { rotulo: string; texto: string }[] };
