@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-11-06T00:55:07.852Z",
         "reason": "Claude: L224 é o círculo do número da etapa (border-radius 50%, sem borda); a borda de 3px fica no li pai, sem raio"
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "src/styles/simulador.css"
+        ],
+        "createdAt": "2026-11-06T15:43:20.589Z",
+        "reason": "Claude: mesma barra de progresso movida de SimuladorFianca.astro; a borda de 3px fica no li sem raio, o raio de 50% é do círculo do número, sem borda"
       }
     ]
   }
