@@ -17,7 +17,7 @@ test('topo com 5 selos, botão de simulação e uma foto (a do card Residencial)
   assert.equal(contar(topo, /<li[\s>]/g) - 2, 5, '5 selos (descontando os 2 itens da trilha)');
   assert.match(topo, /href="\/cotacao-seguro-residencial"[^>]*>\s*Simular meu seguro residencial online/);
   assert.equal(contar(topo, /<picture/g), 1);
-  assert.match(topo, /alt="Casal tomando café e conversando no sofá de casa"/);
+  assert.match(topo, /alt="Encanador consertando o vazamento embaixo da pia da cozinha"/);
 });
 
 test('ordem das seções no padrão do Seguro Fiança', () => {
@@ -91,4 +91,12 @@ test('casa e apartamento com duas imagens ao lado do texto', () => {
 
 test('assistências com botão de simulação', () => {
   assert.match(secao(html, 'assistencias'), /href="\/cotacao-seguro-residencial"[^>]*>\s*Fazer simulação/);
+});
+
+test('fotos reais: encanador no topo e casa e apartamento no o que é', () => {
+  const topo = html.slice(html.indexOf('class="hero'), html.indexOf('id="o-que-e"'));
+  assert.match(topo, /alt="Encanador consertando o vazamento embaixo da pia da cozinha"/);
+  const s = secao(html, 'o-que-e');
+  assert.equal(contar(s, /<picture/g), 2);
+  assert.ok(!s.includes('foto__reserva'));
 });

@@ -1,14 +1,15 @@
 ---
 import PaginaServico from '../components/servico/PaginaServico.astro';
 import { seguroResidencial } from '../data/servicos/seguro-residencial';
+import fotoCasa from '../assets/fotos/residencial-casa.jpg';
+import fotoApartamento from '../assets/fotos/residencial-apartamento.jpg';
 ---
 
 <PaginaServico
   servico={seguroResidencial}
   idPassos="como-contratar"
   fotosOQueE={[
-    // Fotos a gerar: salve em src/assets/fotos/ e preencha o src (import)
-    { alt: 'Casa térrea com jardim no ABC Paulista', descricao: 'Foto: casa' },
-    { alt: 'Prédio residencial de apartamentos no ABC Paulista', descricao: 'Foto: apartamento' },
+    { src: fotoCasa, alt: 'Casa térrea moderna com jardim no ABC Paulista', descricao: 'Foto: casa' },
+    { src: fotoApartamento, alt: 'Prédio residencial de apartamentos com varandas no ABC Paulista', descricao: 'Foto: apartamento' },
   ]}
 />

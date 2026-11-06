@@ -1,14 +1,15 @@
 ---
 import PaginaServico from '../components/servico/PaginaServico.astro';
 import { seguroFianca } from '../data/servicos/seguro-fianca';
+import fotoInquilina from '../assets/fotos/fianca-inquilina-contrato.jpg';
+import fotoProprietario from '../assets/fotos/fianca-proprietario.jpg';
 ---
 
 <PaginaServico
   servico={seguroFianca}
   idPassos="como-funciona"
   fotosOQueE={[
-    // Fotos a gerar: salve em src/assets/fotos/ e preencha o src (import)
-    { alt: 'Inquilino assinando o contrato de aluguel sem fiador', descricao: 'Foto: inquilino assinando o contrato' },
-    { alt: 'Proprietário com o aluguel garantido pelo seguro fiança', descricao: 'Foto: proprietário tranquilo' },
+    { src: fotoInquilina, alt: 'Inquilina assinando o contrato de aluguel sem fiador', descricao: 'Foto: inquilina assinando o contrato' },
+    { src: fotoProprietario, alt: 'Proprietário tranquilo com o aluguel garantido pelo seguro fiança', descricao: 'Foto: proprietário tranquilo' },
   ]}
 />

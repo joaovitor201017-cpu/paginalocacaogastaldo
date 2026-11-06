@@ -226,7 +226,7 @@ test('logos reais: cinza no carrossel do topo e coloridas nos cards das parceira
 
 test('card de Seguro Residencial tem foto real e nenhum card fica com reserva', () => {
   const s = secao(html, 'solucoes');
-  assert.match(s, /alt="Casal tomando café e conversando no sofá de casa"/);
+  assert.match(s, /alt="Encanador consertando o vazamento embaixo da pia da cozinha"/);
   assert.ok(!s.includes('foto__reserva'), 'sem espaços reservados nos cards');
 });
 
@@ -251,4 +251,8 @@ test('benefícios com cards mais largos e setas em cada painel', () => {
   assert.equal(contar(s, /aria-label="Próximos benefícios"/g), 3);
   const css = lerCssGerado();
   assert.match(css, /\.painel__grade[^{]*\{[^}]*grid-auto-columns:220px/);
+});
+
+test('foto do casal no sofá não aparece mais no site', () => {
+  assert.ok(!html.includes('Casal tomando café'));
 });

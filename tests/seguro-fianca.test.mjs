@@ -161,3 +161,14 @@ test('padrão das páginas de serviço: duas fotos no o que é e simulação nas
   assert.equal(contar(secao(html, 'o-que-e'), /class="foto /g), 2);
   assert.match(secao(html, 'coberturas'), /href="\/simulador-seguro-fianca"[^>]*>\s*Fazer simulação/);
 });
+
+test('fotos reais no o que é do Seguro Fiança', () => {
+  const s = secao(html, 'o-que-e');
+  assert.equal(contar(s, /<picture/g), 2);
+  assert.ok(!s.includes('foto__reserva'));
+});
+
+test('sem a foto do casal no sofá no Seguro Fiança', () => {
+  assert.ok(!html.includes('Casal tomando café'));
+  assert.match(secao(html, 'outras-garantias'), /alt="Encanador consertando o vazamento embaixo da pia da cozinha"/);
+});

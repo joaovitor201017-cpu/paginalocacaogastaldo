@@ -2,7 +2,7 @@ import type { ImageMetadata } from 'astro';
 import fotoTitulo from '../assets/fotos/card-titulo-capitalizacao.jpg';
 import fotoFianca from '../assets/fotos/card-seguro-fianca.jpg';
 import fotoIncendio from '../assets/fotos/card-seguro-incendio-cozinha.jpg';
-import fotoResidencial from '../assets/fotos/card-seguro-residencial.jpg';
+import fotoResidencial from '../assets/fotos/residencial-encanador.jpg';
 
 // As 4 soluções da Home, com as URLs definidas no PDF
 export interface Solucao {
@@ -45,6 +45,6 @@ export const solucoes: Solucao[] = [
     saibaMais: '/seguro-residencial',
     acao: { rotulo: 'Cotar', href: '/cotacao-seguro-residencial' },
     foto: 'Casal tranquilo em casa',
-    imagem: { src: fotoResidencial, alt: 'Casal tomando café e conversando no sofá de casa' },
+    imagem: { src: fotoResidencial, alt: 'Encanador consertando o vazamento embaixo da pia da cozinha' },
   },
 ];
