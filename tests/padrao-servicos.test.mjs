@@ -46,3 +46,11 @@ for (const rota of paginas) {
     assert.equal((final.match(/botao--g/g) || []).length, 2);
   });
 }
+
+test('"Por que contratar com a Gastaldo" tem as redes sociais nas 4 páginas de seguro', () => {
+  for (const rota of paginas) {
+    const html = lerPagina(rota);
+    const s = html.slice(html.indexOf('id="por-que"'), html.indexOf('</section>', html.indexOf('id="por-que"')));
+    assert.ok(s.includes('instagram.com/gastaldoseguros') && s.includes('facebook.com/gastaldoseguros'), rota);
+  }
+});
