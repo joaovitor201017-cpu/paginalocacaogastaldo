@@ -1,7 +1,7 @@
 import type { ImageMetadata } from 'astro';
 import fotoTitulo from '../assets/fotos/card-titulo-capitalizacao.jpg';
 import fotoFianca from '../assets/fotos/card-seguro-fianca.jpg';
-import fotoIncendio from '../assets/fotos/card-seguro-incendio-cozinha.jpg';
+import fotoIncendio from '../assets/fotos/incendio-extintor.jpg';
 import fotoResidencial from '../assets/fotos/residencial-encanador.jpg';
 
 // As 4 soluções da Home, com as URLs definidas no PDF
@@ -37,7 +37,7 @@ export const solucoes: Solucao[] = [
     saibaMais: '/seguro-incendio',
     acao: { rotulo: 'Cotar', href: '/cotacao-seguro-incendio' },
     foto: 'Sala de apartamento alugado, iluminada',
-    imagem: { src: fotoIncendio, alt: 'Cozinha de apartamento alugado à noite, com detector de fumaça no teto' },
+    imagem: { src: fotoIncendio, alt: 'Extintor de incêndio na parede da cozinha, com a família cozinhando ao fundo' },
   },
   {
     titulo: 'Seguro Residencial',

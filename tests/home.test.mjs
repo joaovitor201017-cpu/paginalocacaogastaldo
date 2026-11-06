@@ -210,7 +210,7 @@ test('card de Título de Capitalização tem foto real', () => {
 test('cards de Seguro Fiança e Seguro Incêndio têm foto real', () => {
   const html = lerHome();
   assert.match(html, /alt="Família recebendo as chaves do apartamento alugado com o corretor"/);
-  assert.match(html, /alt="Cozinha de apartamento alugado à noite, com detector de fumaça no teto"/);
+  assert.match(html, /alt="Extintor de incêndio na parede da cozinha, com a família cozinhando ao fundo"/);
 });
 
 test('logos reais: cinza no carrossel do topo e coloridas nos cards das parceiras', () => {

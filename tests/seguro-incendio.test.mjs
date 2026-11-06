@@ -16,7 +16,7 @@ test('topo com 5 selos, simulação e a foto do card Incêndio', () => {
   const topo = html.slice(html.indexOf('class="hero'), html.indexOf('id="o-que-e"'));
   assert.equal(contar(topo, /<li[\s>]/g) - 2, 5);
   assert.match(topo, /href="\/cotacao-seguro-incendio"[^>]*>\s*Simular meu seguro incêndio online/);
-  assert.match(topo, /alt="Cozinha de apartamento alugado à noite, com detector de fumaça no teto"/);
+  assert.match(topo, /alt="Extintor de incêndio na parede da cozinha, com a família cozinhando ao fundo"/);
 });
 
 test('o que é enxuto: texto com o resumo e duas fotos, sem quadros', () => {
@@ -51,4 +51,10 @@ test('schema, JS e links', () => {
   const js = [...html.matchAll(/<script(?![^>]*application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g)].reduce((t, m) => t + Buffer.byteLength(m[1]), 0);
   assert.ok(js <= 5 * 1024, `JS = ${js}`);
   assert.ok(!html.includes('href="null"'));
+});
+
+test('foto do vistoriador no o que é, enquadrada nas pessoas', () => {
+  const s = secao(html, 'o-que-e');
+  assert.match(s, /alt="Vistoriador da seguradora conversando com a moradora na cozinha"[^>]*style="object-position: 25%/);
+  assert.ok(!html.includes('Cozinha de apartamento alugado à noite'), 'foto antiga fora do site');
 });
