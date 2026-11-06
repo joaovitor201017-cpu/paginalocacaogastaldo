@@ -97,3 +97,25 @@ test('mensagem do lead residencial no formato do documento', () => {
   const m = mensagemLeadResidencial({ nome: 'Ana', cep: '09751-000', tipo: 'Apartamento', condicao: 'Alugado', uso: 'Moradia', opcoes: ['Danos elétricos', 'Assistência 24h'], bens: 'até R$ 20 mil', plano: 'Essencial', whatsapp: '(11) 91234-5678' });
   assert.equal(m, 'Olá! Fiz a cotação de seguro residencial no site e quero receber as propostas. Novo lead seguro residencial: Ana · CEP 09751-000 · Apartamento · Alugado · Moradia · Quer proteger: Danos elétricos, Assistência 24h · Bens: até R$ 20 mil · Plano sugerido: Essencial · WhatsApp (11) 91234-5678');
 });
+
+// --- Cotação de seguro incêndio
+import { resumoIncendio, mensagemLeadIncendio } from '../src/lib/simulador.ts';
+
+test('resumo do incêndio: cobertura informada ou a confirmar, beneficiário e extras', () => {
+  assert.deepEqual(resumoIncendio({ cobertura: 150000, beneficiario: 'Sim', extras: ['Vendaval'] }), {
+    cobertura: 'R$ 150.000', beneficiario: 'Proprietário', extras: 'Vendaval', preco: 'Enviamos o valor no WhatsApp',
+  });
+  const r = resumoIncendio({ cobertura: null, beneficiario: 'Não sei', extras: [] });
+  assert.equal(r.cobertura, 'Vamos confirmar com a imobiliária');
+  assert.equal(r.beneficiario, 'A confirmar');
+  assert.equal(r.extras, 'Nenhuma');
+  assert.equal(resumoIncendio({ cobertura: null, beneficiario: '', extras: [] }).beneficiario, 'A confirmar');
+  assert.equal(resumoIncendio({ cobertura: null, beneficiario: 'Não', extras: [] }).beneficiario, 'Não exigido');
+});
+
+test('mensagem do lead do incêndio no formato do documento', () => {
+  const m = mensagemLeadIncendio({ nome: 'Ana', perfil: 'Inquilino', cep: '09751-000', tipo: 'Apartamento', aluguel: 2000, cobertura: 150000, beneficiario: 'Sim', imobiliaria: 'GRAE', extras: ['Vendaval', 'Danos elétricos'], prazo: 'Hoje', whatsapp: '(11) 91234-5678' });
+  assert.equal(m, 'Olá! Preciso de um seguro incêndio para o meu aluguel. Novo lead seguro incêndio: Ana · Inquilino · CEP 09751-000 · Apartamento · Aluguel R$ 2.000 · Cobertura exigida R$ 150.000 · Beneficiário: Sim · Imobiliária: GRAE · Extras: Vendaval, Danos elétricos · Prazo: Hoje · WhatsApp (11) 91234-5678');
+  const vazio = mensagemLeadIncendio({ nome: 'Ana', perfil: 'Inquilino', cep: '09751-000', tipo: 'Casa', aluguel: 1500, cobertura: null, beneficiario: '', imobiliaria: '', extras: [], prazo: 'Esta semana', whatsapp: '11912345678' });
+  assert.match(vazio, /Cobertura exigida — · Beneficiário: — · Imobiliária: — · Extras: — ·/);
+});

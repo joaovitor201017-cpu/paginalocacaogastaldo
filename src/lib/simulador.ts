@@ -130,3 +130,39 @@ export function mensagemLeadResidencial(l: LeadResidencial): string {
     `Bens: ${l.bens || '—'} · Plano sugerido: ${l.plano} · WhatsApp ${l.whatsapp}`
   );
 }
+
+// --- Cotação de seguro incêndio (aba 03 do documento do João)
+// Sem faixa de preço real: o resumo mostra "Enviamos o valor no WhatsApp".
+export function resumoIncendio({ cobertura, beneficiario, extras }: { cobertura: number | null; beneficiario: string; extras: string[] }) {
+  const beneficiarios: Record<string, string> = { Sim: 'Proprietário', Não: 'Não exigido' };
+  return {
+    cobertura: cobertura ? formatarReais(cobertura).replace(/\s/g, ' ') : 'Vamos confirmar com a imobiliária',
+    beneficiario: beneficiarios[beneficiario] ?? 'A confirmar',
+    extras: extras.length ? extras.join(', ') : 'Nenhuma',
+    preco: 'Enviamos o valor no WhatsApp',
+  };
+}
+
+export interface LeadIncendio {
+  nome: string;
+  perfil: string;
+  cep: string;
+  tipo: string;
+  aluguel: number;
+  cobertura: number | null;
+  beneficiario: string;
+  imobiliaria: string;
+  extras: string[];
+  prazo: string;
+  whatsapp: string;
+}
+
+export function mensagemLeadIncendio(l: LeadIncendio): string {
+  const r = (v: number) => formatarReais(v).replace(/\s/g, ' ');
+  return (
+    'Olá! Preciso de um seguro incêndio para o meu aluguel. ' +
+    `Novo lead seguro incêndio: ${l.nome} · ${l.perfil} · CEP ${l.cep} · ${l.tipo} · Aluguel ${r(l.aluguel)} · ` +
+    `Cobertura exigida ${l.cobertura ? r(l.cobertura) : '—'} · Beneficiário: ${l.beneficiario || '—'} · Imobiliária: ${l.imobiliaria || '—'} · ` +
+    `Extras: ${l.extras.join(', ') || '—'} · Prazo: ${l.prazo} · WhatsApp ${l.whatsapp}`
+  );
+}

@@ -1,0 +1,220 @@
+---
+import { site } from '../../data/site';
+import { cidades } from '../../data/cidades';
+import { cotacaoIncendio as s } from '../../data/simuladores/seguro-incendio';
+import { numeroWhatsApp } from '../../lib/whatsapp';
+import '../../styles/simulador.css';
+
+// Formulário de cotação do seguro incêndio em 2 passos (Contrato → Seus dados) e o resumo no fim.
+const numero = numeroWhatsApp(site.whatsapp);
+const etapas = ['Contrato', 'Seus dados'];
+const resumo = [
+  { campo: 'cobertura', rotulo: 'Cobertura de incêndio' },
+  { campo: 'beneficiario', rotulo: 'Beneficiário' },
+  { campo: 'extras', rotulo: 'Coberturas extras' },
+  { campo: 'preco', rotulo: 'Preço' },
+];
+---
+
+<form class="sim" action={`https://wa.me/${numero}`} method="get" target="_blank" novalidate data-cotacao-incendio data-whatsapp={numero} data-planilha={site.planilhaLeads ?? undefined}>
+  <input type="hidden" name="text" value={s.mensagemWhatsApp} />
+
+  <ol class="sim__progresso" aria-label="Etapas da cotação">
+    {etapas.map((e, i) => <li data-etapa={i + 1} aria-current={i === 0 ? 'step' : undefined}><span>{i + 1}</span>{e}</li>)}
+  </ol>
+
+  <!-- Passo 1 -->
+  <fieldset class="sim__passo" data-passo="1">
+    <legend>Dados do contrato</legend>
+    <div class="sim__duplo">
+      <label class="sim__campo">
+        CEP do imóvel alugado
+        <input name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="09751-000" maxlength="9" required />
+        <span class="sim__erro" data-erro="cep" aria-live="polite"></span>
+      </label>
+      <label class="sim__campo">
+        Valor do aluguel (R$)
+        <input name="aluguel" inputmode="decimal" autocomplete="off" placeholder="2.000" required />
+        <span class="sim__erro" data-erro="aluguel" aria-live="polite"></span>
+      </label>
+    </div>
+    <fieldset class="sim__opcoes">
+      <legend>Tipo de imóvel</legend>
+      {['Apartamento', 'Casa', 'Comercial'].map((o) => <label><input type="radio" name="tipo" value={o} required /> {o}</label>)}
+    </fieldset>
+    <span class="sim__erro" data-erro="tipo" aria-live="polite"></span>
+    <label class="sim__campo">
+      <span>Valor de cobertura exigido no contrato (R$) <span class="sim__opcional">(opcional)</span></span>
+      <input name="cobertura" inputmode="decimal" autocomplete="off" placeholder="Ex.: 150.000" />
+      <small>Está na cláusula de seguro do contrato. Se não souber, deixe em branco</small>
+      <span class="sim__erro" data-erro="cobertura" aria-live="polite"></span>
+    </label>
+    <fieldset class="sim__opcoes">
+      <legend>O proprietário precisa ser beneficiário? <span class="sim__opcional">(opcional)</span></legend>
+      {['Sim', 'Não', 'Não sei'].map((o) => <label><input type="radio" name="beneficiario" value={o} /> {o}</label>)}
+    </fieldset>
+    <label class="sim__campo">
+      <span>Nome da imobiliária <span class="sim__opcional">(opcional)</span></span>
+      <input name="imobiliaria" autocomplete="organization" />
+      <small>Ajuda a emitir no padrão que ela pede</small>
+    </label>
+    <fieldset class="sim__opcoes extras">
+      <legend>Quero incluir também <span class="sim__opcional">(coberturas extras opcionais)</span></legend>
+      {s.extras.map((e) => <label class="extra"><input type="checkbox" name="extras" value={e} /> {e}</label>)}
+    </fieldset>
+    <label class="sim__campo">
+      Cidade
+      <select name="cidade" required>
+        <option value="">Selecione</option>
+        {cidades.map((c) => <option>{c.nome}</option>)}
+        <option>Outra cidade</option>
+      </select>
+      <span class="sim__erro" data-erro="cidade" aria-live="polite"></span>
+    </label>
+    <button type="button" class="sim__botao" data-avancar>Continuar</button>
+  </fieldset>
+
+  <!-- Passo 2 -->
+  <fieldset class="sim__passo" data-passo="2">
+    <legend>Seus dados</legend>
+    <label class="sim__campo">
+      Nome
+      <input name="nome" autocomplete="name" required />
+      <span class="sim__erro" data-erro="nome" aria-live="polite"></span>
+    </label>
+    <label class="sim__campo">
+      WhatsApp
+      <input name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="(11) 91234-5678" required />
+      <span class="sim__erro" data-erro="whatsapp" aria-live="polite"></span>
+    </label>
+    <fieldset class="sim__opcoes">
+      <legend>Você é</legend>
+      <label><input type="radio" name="perfil" value="Inquilino" required checked /> Inquilino</label>
+      <label><input type="radio" name="perfil" value="Proprietário" /> Proprietário</label>
+      <label><input type="radio" name="perfil" value="Imobiliária" /> Imobiliária</label>
+    </fieldset>
+    <fieldset class="sim__opcoes">
+      <legend>Para quando precisa da apólice?</legend>
+      {s.prazos.map((o) => <label><input type="radio" name="prazo" value={o} required /> {o}</label>)}
+    </fieldset>
+    <span class="sim__erro" data-erro="prazo" aria-live="polite"></span>
+    <label class="sim__consentimento">
+      <input type="checkbox" name="consentimento" required />
+      <span>Aceito receber o contato da Gastaldo Seguros pelo WhatsApp sobre esta cotação, conforme a <a href="/politica-de-privacidade">Política de Privacidade</a>.</span>
+    </label>
+    <span class="sim__erro" data-erro="consentimento" aria-live="polite"></span>
+    <div class="sim__acoes">
+      <button type="submit" class="sim__botao">Receber minha cotação</button>
+      <button type="button" class="sim__voltar" data-voltar>Voltar</button>
+    </div>
+    <p class="sim__seguro">Seus dados estão seguros e não são compartilhados. A cotação não pede o seu CPF.</p>
+  </fieldset>
+
+  <!-- Resultado: resumo -->
+  <div class="sim__passo sim__resultado" data-passo="3" hidden tabindex="-1">
+    <h2 class="sim__titulo">Pronto, <span data-nome>você</span>! Recebemos os dados do seu contrato</h2>
+    <dl class="resumo">
+      {resumo.map((r) => (
+        <div>
+          <dt>{r.rotulo}</dt>
+          <dd data-campo={r.campo}>—</dd>
+        </div>
+      ))}
+    </dl>
+    <p>{s.resultado.texto}</p>
+    <a class="sim__botao sim__botao--wpp" href={`https://wa.me/${numero}`} target="_blank" rel="noopener" data-falar>{s.resultado.botao}</a>
+    <button type="button" class="sim__voltar" data-voltar>Voltar e alterar os dados</button>
+  </div>
+</form>
+
+<script>
+  import { cepValido, lerValor, resumoIncendio, mensagemLeadIncendio } from '../../lib/simulador';
+
+  const form = document.querySelector<HTMLFormElement>('[data-cotacao-incendio]');
+  if (form) {
+    const $ = <T extends Element>(sel: string) => form.querySelector<T>(sel)!;
+    const $$ = (sel: string) => [...form.querySelectorAll<HTMLElement>(sel)];
+    const valor = (n: string) => String(new FormData(form).get(n) ?? '').trim();
+    const campo = (n: string) => form.elements.namedItem(n) as HTMLInputElement | null;
+
+    const ir = (n: number) => {
+      $$('[data-passo]').forEach((p) => (p.hidden = p.dataset.passo !== String(n)));
+      $$('[data-etapa]').forEach((e) => (Number(e.dataset.etapa) === Math.min(n, 2) ? e.setAttribute('aria-current', 'step') : e.removeAttribute('aria-current')));
+      const alvo = $<HTMLElement>(`[data-passo="${n}"]`);
+      (n > 2 ? alvo : alvo.querySelector<HTMLElement>('input,select'))?.focus({ preventScroll: n === 1 });
+      if (n > 1) form.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    };
+    const erro = (n: string, msg = '') => {
+      $(`[data-erro="${n}"]`).textContent = msg;
+      const c = campo(n);
+      if (c && 'setAttribute' in c) c.setAttribute('aria-invalid', String(Boolean(msg)));
+      return !msg;
+    };
+    const primeiroErro = () => form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+
+    form.classList.add('sim--js');
+    ir(1);
+    $$('[data-voltar]').forEach((b) => b.addEventListener('click', () => ir(1)));
+
+    $('[data-avancar]').addEventListener('click', () => {
+      const aluguel = lerValor(valor('aluguel'));
+      const cobertura = lerValor(valor('cobertura'));
+      const ok = [
+        erro('cep', cepValido(valor('cep')) ? '' : 'Informe o CEP com 8 números, por exemplo 09751-000.'),
+        erro('aluguel', aluguel === null ? 'Informe o valor do aluguel para continuar.' : Number.isNaN(aluguel) ? 'Digite apenas números, por exemplo 2000.' : ''),
+        erro('tipo', valor('tipo') ? '' : 'Escolha o tipo de imóvel.'),
+        erro('cobertura', Number.isNaN(cobertura) ? 'Digite apenas números, por exemplo 150000.' : ''),
+        erro('cidade', valor('cidade') ? '' : 'Escolha a cidade do imóvel.'),
+      ].every(Boolean);
+      if (ok) ir(2);
+      else primeiroErro();
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const digitos = valor('whatsapp').replace(/\D/g, '');
+      const ok = [
+        erro('nome', valor('nome') ? '' : 'Informe seu nome.'),
+        erro('whatsapp', digitos.length >= 10 && digitos.length <= 11 ? '' : 'Confira o número com DDD, por exemplo (11) 91234-5678.'),
+        erro('prazo', valor('prazo') ? '' : 'Diga para quando precisa da apólice.'),
+        erro('consentimento', campo('consentimento')?.checked ? '' : 'Marque a caixa para receber sua cotação.'),
+      ].every(Boolean);
+      if (!ok) return primeiroErro();
+
+      const extras = new FormData(form).getAll('extras').map(String);
+      const cobertura = lerValor(valor('cobertura'));
+      const lead = {
+        nome: valor('nome'),
+        perfil: valor('perfil'),
+        cep: valor('cep'),
+        tipo: valor('tipo'),
+        aluguel: lerValor(valor('aluguel')) as number,
+        cobertura: Number.isNaN(cobertura) ? null : cobertura,
+        beneficiario: valor('beneficiario'),
+        imobiliaria: valor('imobiliaria'),
+        extras,
+        prazo: valor('prazo'),
+        whatsapp: valor('whatsapp'),
+      };
+      const resumo = resumoIncendio(lead) as Record<string, string>;
+      $$('[data-nome]').forEach((n) => (n.textContent = lead.nome.split(' ')[0]));
+      $$('[data-campo]').forEach((c) => (c.textContent = resumo[c.dataset.campo!]));
+      $<HTMLAnchorElement>('[data-falar]').href = `https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(mensagemLeadIncendio(lead))}`;
+      ir(3);
+
+      // Planilha de leads (quando configurada)
+      if (form.dataset.planilha) fetch(form.dataset.planilha, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ produto: 'Seguro incêndio', ...lead, aluguel: String(lead.aluguel), cobertura: String(lead.cobertura ?? ''), extras: extras.join(', '), cidade: valor('cidade') }) }).catch(() => {});
+    });
+  }
+</script>
+
+<style>
+  .extras .extra input { position: static; opacity: 1; width: 16px; height: 16px; margin-right: 0.4rem; accent-color: var(--branco); }
+  .resumo { display: grid; gap: 0; margin: 0; border-top: 1px solid var(--cinza-linha); }
+  .resumo div { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--cinza-linha); }
+  .resumo dt { color: var(--texto-suave); font-size: 0.9rem; }
+  .resumo dd { margin: 0; color: var(--marinho); font-weight: 700; }
+  @media (max-width: 480px) {
+    .resumo div { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+  }
+</style>
