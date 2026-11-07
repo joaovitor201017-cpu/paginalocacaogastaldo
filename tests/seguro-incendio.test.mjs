@@ -5,9 +5,9 @@ import { lerPagina, contar, secao } from './helpers.mjs';
 
 const html = lerPagina('/seguro-incendio');
 
-test('SEO, noindex e um H1', () => {
+test('SEO, indexável e um H1', () => {
   assert.match(html, /<title>Seguro Incêndio para Imóvel Alugado \| Cotação Rápida<\/title>/);
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.doesNotMatch(html, /noindex/);
   assert.equal(contar(html, /<h1[\s>]/g), 1);
   assert.match(html, /<h1[^>]*>Seguro Incêndio para Locação<\/h1>/);
 });

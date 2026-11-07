@@ -14,7 +14,7 @@ test('política de privacidade existe, com H1 e as seções da LGPD', () => {
   assert.ok(html.includes('Lei 13.709/2018'));
   assert.ok(html.includes('contato@gastaldoseguros.com.br'));
   assert.ok(html.includes('não pedimos o seu CPF'));
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.doesNotMatch(html, /noindex/);
 });
 
 test('página 404 com caminhos úteis', () => {

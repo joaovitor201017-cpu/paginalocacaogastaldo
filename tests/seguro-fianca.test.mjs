@@ -6,10 +6,10 @@ import { lerPagina, contar, secao } from './helpers.mjs';
 const html = lerPagina('/seguro-fianca');
 
 // --- Task 3: SEO, trilha, topo, o que é, como funciona
-test('title, description e noindex', () => {
+test('title, description e indexável', () => {
   assert.match(html, /<title>Seguro Fiança Locatícia: Alugue sem Fiador e sem Caução<\/title>/);
   assert.match(html, /<meta name="description" content="Seguro fiança locatícia no ABC Paulista com corretora especializada\. Alugue sem fiador e sem caução\. Simule grátis e receba a cotação no WhatsApp\.">/);
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.doesNotMatch(html, /noindex/);
 });
 
 test('um único H1 com o título do documento', () => {

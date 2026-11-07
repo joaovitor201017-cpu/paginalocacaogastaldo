@@ -3,7 +3,7 @@ import type { Endereco } from '../lib/endereco';
 // Dados centrais do site. `null` = pendente (aparece marcado na página e é omitido do schema).
 export const site = {
   nome: 'Gastaldo Seguros',
-  dominio: null as string | null,
+  dominio: 'https://fianca.gastaldoseguros.com.br' as string | null,
   whatsapp: '(11) 99322-6252' as string | null,
   telefone: '(11) 99322-6252' as string | null,
   email: 'contato@gastaldoseguros.com.br' as string | null,

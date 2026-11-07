@@ -6,9 +6,9 @@ import { lerPagina, contar, secao } from './helpers.mjs';
 const html = lerPagina('/cotacao-seguro-residencial');
 const form = html.slice(html.indexOf('<form'), html.indexOf('</form>'));
 
-test('SEO, noindex, H1 e trilha Início › Seguro Residencial › Cotação', () => {
+test('SEO, indexável, H1 e trilha Início › Seguro Residencial › Cotação', () => {
   assert.match(html, /<title>Cotação de Seguro Residencial Online \| Compare Seguradoras<\/title>/);
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.doesNotMatch(html, /noindex/);
   assert.equal(contar(html, /<h1[\s>]/g), 1);
   assert.match(html, /<h1[^>]*>Cotação de Seguro Residencial: compare seguradoras em 2 minutos<\/h1>/);
   const t = html.slice(html.indexOf('aria-label="Trilha"'), html.indexOf('</nav>', html.indexOf('aria-label="Trilha"')));

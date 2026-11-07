@@ -6,9 +6,9 @@ import { lerPagina, contar, secao } from './helpers.mjs';
 const html = lerPagina('/simulador-titulo-de-capitalizacao-aluguel');
 const form = html.slice(html.indexOf('<form'), html.indexOf('</form>'));
 
-test('SEO, noindex, H1 e trilha', () => {
+test('SEO, indexável, H1 e trilha', () => {
   assert.match(html, /<title>Simulador de Título de Capitalização para Aluguel \| Grátis<\/title>/);
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.doesNotMatch(html, /noindex/);
   assert.equal(contar(html, /<h1[\s>]/g), 1);
   assert.match(html, /<h1[^>]*>Simulador de Título de Capitalização para Aluguel<\/h1>/);
   const t = html.slice(html.indexOf('aria-label="Trilha"'), html.indexOf('</nav>', html.indexOf('aria-label="Trilha"')));

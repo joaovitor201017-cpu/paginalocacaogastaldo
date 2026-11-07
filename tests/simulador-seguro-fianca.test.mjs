@@ -6,10 +6,10 @@ import { lerPagina, contar, secao } from './helpers.mjs';
 const html = lerPagina('/simulador-seguro-fianca');
 const form = html.slice(html.indexOf('<form'), html.indexOf('</form>'));
 
-test('SEO, noindex e H1', () => {
+test('SEO, indexável e H1', () => {
   assert.match(html, /<title>Simulador de Seguro Fiança: Simule Grátis em 1 Minuto<\/title>/);
   assert.match(html, /<meta name="description" content="Simule seu seguro fiança grátis e veja na hora quanto o seu aluguel fica protegido\./);
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.doesNotMatch(html, /noindex/);
   assert.equal(contar(html, /<h1[\s>]/g), 1);
   assert.match(html, /<h1[^>]*>Simulador de Seguro Fiança: simule grátis em 1 minuto<\/h1>/);
 });

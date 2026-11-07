@@ -5,9 +5,9 @@ import { lerPagina, contar, secao } from './helpers.mjs';
 
 const html = lerPagina('/titulo-de-capitalizacao');
 
-test('SEO, noindex e um H1', () => {
+test('SEO, indexável e um H1', () => {
   assert.match(html, /<title>Título de Capitalização Aluguel: Sem Fiador e Sem Análise<\/title>/);
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.doesNotMatch(html, /noindex/);
   assert.equal(contar(html, /<h1[\s>]/g), 1);
   assert.match(html, /<h1[^>]*>Título de Capitalização: alugue sem fiador e receba seu dinheiro de volta<\/h1>/);
 });

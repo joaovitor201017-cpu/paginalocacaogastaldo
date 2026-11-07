@@ -28,8 +28,8 @@ test('CSS respeita prefers-reduced-motion', () => {
   assert.match(lerCssGerado(), /prefers-reduced-motion/);
 });
 
-test('sem domínio final o site pede para não indexar', () => {
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+test('com o domínio final a Home pode ser indexada', () => {
+  assert.doesNotMatch(html, /noindex/);
 });
 
 test('páginas geradas como arquivo .html (a Cloudflare serve /rota sem redirecionar para /rota/)', async () => {
