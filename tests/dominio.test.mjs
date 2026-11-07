@@ -32,3 +32,14 @@ test('sitemap.xml lista todas as páginas (sem a 404)', () => {
   for (const rota of ROTAS) assert.ok(s.includes(`<loc>${rota === '/' ? DOMINIO + '/' : DOMINIO + rota}</loc>`), rota);
   assert.ok(!s.includes('404'));
 });
+
+test('CNPJ da Gastaldo não aparece no site (rodapé e política)', () => {
+  for (const rota of ['/', '/seguro-fianca', '/politica-de-privacidade']) {
+    const html = rota === '/' ? lerHome() : lerPagina(rota);
+    const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'));
+    assert.ok(!footer.includes('CNPJ'), `${rota}: rodapé`);
+  }
+  const politica = lerPagina('/politica-de-privacidade');
+  const main = politica.slice(politica.indexOf('<main'), politica.indexOf('</main>'));
+  assert.ok(!main.includes('CNPJ'), 'política');
+});

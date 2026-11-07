@@ -1,5 +1,4 @@
 ---
-import Pendente from './Pendente.astro';
 import RedesSociais from './RedesSociais.astro';
 import { site } from '../data/site';
 import { solucoes } from '../data/solucoes';
@@ -81,7 +80,7 @@ const ano = new Date().getFullYear();
   <div class="rodape__base">
     <div class="container rodape__base-grade">
       <RedesSociais tema="escuro" />
-      <p>© {ano} {site.nome} · CNPJ {site.cnpj ?? <Pendente rotulo="número" />}</p>
+      <p>© {ano} {site.nome}</p>
     </div>
   </div>
 </footer>
