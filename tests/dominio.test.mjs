@@ -43,3 +43,7 @@ test('CNPJ da Gastaldo não aparece no site (rodapé e política)', () => {
   const main = politica.slice(politica.indexOf('<main'), politica.indexOf('</main>'));
   assert.ok(!main.includes('CNPJ'), 'política');
 });
+
+test('arquivo de verificação do Google Search Console publicado com o nome exato', () => {
+  assert.equal(readFileSync('dist/google325e92fa280b009e.html', 'utf8').trim(), 'google-site-verification: google325e92fa280b009e.html');
+});
