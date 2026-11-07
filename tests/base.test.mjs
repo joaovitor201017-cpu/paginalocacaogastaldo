@@ -36,3 +36,13 @@ test('páginas geradas como arquivo .html (a Cloudflare serve /rota sem redireci
   const { existsSync } = await import('node:fs');
   for (const r of ['seguro-fianca', 'simulador-seguro-fianca', 'politica-de-privacidade']) assert.ok(existsSync(`dist/${r}.html`), r);
 });
+
+test('ícone da aba é o escudo da Gastaldo (não o padrão do Astro)', async () => {
+  const { existsSync } = await import('node:fs');
+  assert.ok(html.includes('<link rel="icon" href="/favicon.ico" sizes="48x48">'));
+  assert.ok(html.includes('<link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192">'));
+  assert.ok(html.includes('<link rel="apple-touch-icon" href="/apple-touch-icon.png">'));
+  assert.ok(!html.includes('favicon.svg'));
+  for (const f of ['favicon.ico', 'icon-192.png', 'apple-touch-icon.png']) assert.ok(existsSync(`dist/${f}`), f);
+  assert.ok(!existsSync('dist/favicon.svg'), 'ícone do Astro removido');
+});
